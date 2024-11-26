@@ -1,0 +1,16 @@
+{
+    "spheres": [
+        {
+            "id": "743843a3-cd20-41dc-bab3-5da2661f79cd",
+            "position":{"x": -4, "y": 0, "z": -4}
+        },
+        {
+            "id": "6680d8c3-11fa-40ea-96b1-e0c2ba4f7df5",
+            "position": {"x": -6, "y": 0, "z":-6}
+        },
+        {
+            "id": "d8934187-01fd-4d9b-bc71-1082a8ec6a4d",
+            "position": {"x": -6, "y": 0, "z": -4}
+        }
+    ]
+}
