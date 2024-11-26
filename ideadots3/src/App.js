@@ -4,8 +4,9 @@ import { useGLTF, OrbitControls } from "@react-three/drei";
 import { Html } from "@react-three/drei";
 import "./App.css";
 import API from "./Services/API";
+import ListMode from "./Component/ListMode";
 
-function Sphere({ position }) {
+function Sphere({ position, title, text }) {
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
 
@@ -24,8 +25,9 @@ function Sphere({ position }) {
       />
       <Html distanceFactor={10}>
         <div className="content">
-          hello <br />
-          world
+          {title} <br />
+          <br />
+          {text}
         </div>
       </Html>
     </mesh>
@@ -34,7 +36,7 @@ function Sphere({ position }) {
 
 function Content({ time, ...props }) {
   const apiInstance = API();
-  const [positions, setPositions] = useState([]);
+  const [spheres, setSpheres] = useState([]);
 
   useEffect(() => {
     getSphereData();
@@ -47,7 +49,7 @@ function Content({ time, ...props }) {
 
     if (spheres) {
       for (const s of spheres) {
-        setPositions((squarePositions) => [...squarePositions, s.position]);
+        setSpheres((prevs) => [...prevs, s]);
       }
     } else {
       console.log("no spheres");
@@ -55,8 +57,21 @@ function Content({ time, ...props }) {
   };
 
   const sphereList = () => {
-    return positions.map((position, i) => (
-      <Sphere key={i} position={[position.x, position.y, position.z]} />
+    return spheres.map((s, i) => (
+      <>
+        <Sphere
+          key={i}
+          position={[s.position.x, s.position.y, s.position.z]}
+          title={s.title}
+          text={s.text}
+        />
+        <Html distanceFactor={10}>
+          <div className="listcontent">
+            test <br />
+            test
+          </div>
+        </Html>
+      </>
     ));
   };
 
@@ -66,6 +81,8 @@ function Content({ time, ...props }) {
 export default function App() {
   return (
     <div style={{ height: "100vh" }}>
+      <h1>Idea Dots</h1>
+
       <Suspense fallback={<span>loading...</span>}>
         <Canvas
           dpr={[1, 2]}
