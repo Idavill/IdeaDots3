@@ -60,9 +60,9 @@
 }
 
 
-.listcontent {
+.listcontents {
   display: flex;
-  align-items: center;
+  align-items: left;
   content: "";
   position: absolute;
   top: -180px;
@@ -71,6 +71,17 @@
   width: 150px;
   background: black;
   border-radius: 5%;
+  padding-left:10px;
+  padding-top:10px;
+flex-wrap: wrap;
+flex-direction: column;
+overflow-y: scroll;
+}
+
+
+.listcontent {
+  display: flex;
+  align-items: center;
   color:white;
   padding-left:10px;
   padding-top:10px;

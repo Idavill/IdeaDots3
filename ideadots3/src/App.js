@@ -57,6 +57,7 @@ function Content({ time, ...props }) {
   };
 
   const sphereList = () => {
+    console.log(spheres.count);
     return spheres.map((s, i) => (
       <>
         <Sphere
@@ -65,17 +66,28 @@ function Content({ time, ...props }) {
           title={s.title}
           text={s.text}
         />
-        <Html distanceFactor={10}>
-          <div className="listcontent">
-            test <br />
-            test
-          </div>
-        </Html>
       </>
     ));
   };
 
-  return <>{sphereList()}</>;
+  const IdeaList = () => {
+    return spheres.map((s, i) => (
+      <>
+        <div className="listcontent">
+          {s.title} <br /> {s.text}
+        </div>
+      </>
+    ));
+  };
+
+  return (
+    <>
+      {sphereList()}{" "}
+      <Html distanceFactor={10}>
+        <div className="listcontents">{IdeaList()}</div>
+      </Html>
+    </>
+  );
 }
 
 export default function App() {
