@@ -1,14 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import React, { Suspense } from "react";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <>
+    <Suspense fallback={null}>
+      <App />
+    </Suspense>
+    <div className="header">
+      <span className="active">ART</span>
+      <span>ABOUT</span>
+      <span>VISIT</span>
+      <span>SHOP</span>
+    </div>
+  </>
 );
 
 // If you want to start measuring performance in your app, pass a function
