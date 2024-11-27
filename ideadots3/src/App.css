@@ -46,7 +46,6 @@
   padding: 10px 15px;
   border-radius: 5px;
   width: 150px;
-
 }
 
 .content::before {
@@ -78,71 +77,87 @@ overflow-y: auto;
 
 .listcontent {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   flex-direction: column;
   color:white;
-  border: 1px solid;
-  margin: 20px;
-  padding:15px;
-  border-radius: 1%;
+  border: none;
+  margin: 30px;
+  padding:20px;
+  border-radius: 2%;
 }
 
 .textbutton{
   display: flex;
+  align-items: center;
   border: 0px solid;
-  border-radius: 20%;
-  padding-left:5px;
-  padding-right:5px;
+  border-radius: 10%;
+  width:45px;
+  padding-left:9px;
+  padding-right:12px;
+  background-color:rgb(132, 132, 132);
+  font-size: 20px;
 }
 
 .textbutton:hover{
   display: flex;
   border: 0px solid;
   border-radius: 20%;
-  padding-left:5px;
-  padding-right:5px;
-  background-color:rgb(255, 193, 93);
+  background-color:rgb(221, 221, 221);
 }
 
 .texts{
   display: flex;
   flex-direction: column;
-  height:50px;
+  font-size: 20px;
 }
 
 .header {
   display:flex;
   z-index: 10;
-  flex-direction: column;
+  flex-direction: row;
   position: absolute;
-  margin:10px;
+  margin:20px;
   top: 5em;
   color: white;
-  width:500px;
-  height:500px;
+  width:700px;
+  height:600px;
   font-family: 'Josefin Sans', sans-serif;
-  text-align: center;
-  background-color: black;
+  /* text-align: left; */
+  background-color: rgb(19, 19, 19);
   border:0px solid;
   border-radius: 5%;
+}
+
+.overviewlist{
+  display:flex;
+  flex-direction: column;
+  height:50px;
+  width:300px;
+  margin-top:10px;
+  padding-top:10px;
+  margin-left:20px;
+  border-bottom:1px solid;
+  /* background-color:rgb(68, 68, 68); */
+}
+
+.overviewlist:hover{
+  background-color: rgb(55, 52, 255);
+}
+
+.overviewtext{
+  display:flex;
+  flex-direction: column;
+  margin-top:10px;
+  padding:5px;
+  font-size: 20px;
+}
+
+.overviewContainer{
+  display:flex;
+  flex-direction: column;
+  /* background-color:rgb(24, 151, 90); */
   overflow-y: auto;
 }
-
-/* .header > span {
-  padding: 0 3.25em;
-  position: relative;
-}
-
-.header > span.active::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: calc(50% - 4px);
-  transform: translate3d(-50%, 0, 0);
-  width: 20px;
-  height: 2px;
-  background: indianred;
-} */
 
 
 

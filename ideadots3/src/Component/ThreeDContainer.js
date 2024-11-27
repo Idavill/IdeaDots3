@@ -10,9 +10,21 @@ import CameraControls from "camera-controls";
 
 CameraControls.install({ THREE });
 
-function Sphere({ position, title, text, zoomToView }) {
+function Sphere({ position, title, text, zoomToView, focus }) {
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
+
+  useEffect(() => {
+    if (
+      focus.x == position[0] &&
+      focus.y == position[1] &&
+      focus.z == position[2]
+    ) {
+      click(true);
+    } else {
+      click(false);
+    }
+  }, [focus]);
 
   return (
     <mesh
@@ -24,23 +36,29 @@ function Sphere({ position, title, text, zoomToView }) {
     >
       <sphereGeometry />
       <meshStandardMaterial
-        color={hovered ? "red" : "white"}
+        color={clicked ? "rgb(55, 52, 255)" : "white"}
         roughness={0.75}
         emissive="#404057"
       />
-      <Html distanceFactor={10}>
-        <div className="content">
-          <h2>{title}</h2>
-          <h3>{text}</h3>
-        </div>
-      </Html>
+      {hovered ? (
+        <Html distanceFactor={10}>
+          <div className="content">
+            <h2>{title}</h2>
+            <h3>{text}</h3>
+          </div>
+        </Html>
+      ) : null}
     </mesh>
   );
 }
 
-function Content({ time, s, zoom, setZoom, setFocus }) {
+function Content({ time, s, zoom, setZoom, setFocus, focusSphere }) {
   const [spheres, setSpheres] = useState([]);
   const apiInstance = API();
+
+  useEffect(() => {
+    console.log("Set focus sphere: ", focusSphere);
+  }, [focusSphere]);
 
   useEffect(() => {
     getSphereData();
@@ -70,6 +88,7 @@ function Content({ time, s, zoom, setZoom, setFocus }) {
           position={[s.position.x, s.position.y, s.position.z]}
           title={s.title}
           text={s.text}
+          focus={focusSphere}
         />
       </>
     ));
@@ -77,49 +96,67 @@ function Content({ time, s, zoom, setZoom, setFocus }) {
 
   return <>{sphereList()} </>;
 }
-function CustomControls({
-  ref,
-  zoom,
-  focus,
-  pos = new THREE.Vector3(),
-  look = new THREE.Vector3(),
-}) {
-  const camera = useThree((state) => state.camera);
-  const gl = useThree((state) => state.gl);
 
-  const controls = useMemo(() => new CameraControls(camera, gl.domElement), []);
-
-  return useFrame((state, delta) => {
-    zoom ? pos.set(focus.x, focus.y, focus.z + 0.2) : pos.set(0, 0, 5);
-    zoom ? look.set(focus.x, focus.y, focus.z - 0.2) : look.set(0, 0, 4);
-
-    state.camera.position.lerp(pos, 0.5);
-    state.camera.updateProjectionMatrix();
-
-    controls.setLookAt(
-      state.camera.position.x,
-      state.camera.position.y,
-      state.camera.position.z,
-      look.x,
-      look.y,
-      look.z,
-      true
-    );
-    return controls.update(delta);
-  });
-}
-
-export default function ThreeDContainer({ spheres, cameraTarget }) {
-  const [zoom, setZoom] = useState(false);
-  const [focus, setFocus] = useState({});
+function CustomControls({ zoom, focus }) {
+  const { camera, gl } = useThree();
   const controlsRef = useRef();
 
-  // useEffect(() => {
-  //   if (cameraTarget) {
-  //     console.log("ct: ", cameraTarget.position);
-  //     setZoom(true);
-  //   }
-  // }, [cameraTarget]);
+  useEffect(() => {
+    if (controlsRef.current) {
+      controlsRef.current.enableZoom = true; // Ensure zoom is enabled
+    }
+  }, []);
+
+  useFrame((state, delta) => {
+    if (controlsRef.current) {
+      // Adjust the target based on zoom and focus
+      const target = new THREE.Vector3();
+      if (zoom) {
+        target.set(focus.x, focus.y, focus.z); // Set target to focus point
+        controlsRef.current.target.lerp(target, 0.1); // Smoothly move towards the target
+      } else {
+        controlsRef.current.target.set(0, 0, 0); // Reset target when not zooming
+      }
+
+      controlsRef.current.update(); // Update controls to apply changes
+    }
+  });
+
+  return (
+    <OrbitControls
+      ref={controlsRef}
+      camera={camera}
+      gl={gl}
+      enableRotate={true}
+      enablePan={true}
+      enableZoom={true}
+    />
+  );
+}
+
+export default function ThreeDContainer({
+  spheres,
+  cameraTarget,
+  setCameraTarget,
+  setActiveIdea,
+}) {
+  const [zoom, setZoom] = useState(false);
+  const [focus, setFocus] = useState({});
+
+  useEffect(() => {
+    if (cameraTarget) {
+      console.log("ct: ", cameraTarget.position);
+      setZoom(true);
+      setFocus(cameraTarget.position);
+    }
+  }, [cameraTarget]);
+
+  useEffect(() => {
+    if (focus) {
+      console.log("focus ", focus);
+      setActiveIdea(focus);
+    }
+  }, [focus]);
 
   return (
     <div style={{ height: "100vh" }}>
@@ -129,7 +166,7 @@ export default function ThreeDContainer({ spheres, cameraTarget }) {
         <Canvas
           dpr={[1, 2]}
           camera={{
-            position: [1, 2, 1],
+            position: [6, 4, 10],
             fov: 50,
           }}
         >
@@ -138,6 +175,7 @@ export default function ThreeDContainer({ spheres, cameraTarget }) {
             setZoom={setZoom}
             setFocus={setFocus}
             spheres={spheres}
+            focusSphere={focus}
           />
           <directionalLight position={[10, 10, 0]} intensity={1.5} />
           <directionalLight position={[-10, 10, 5]} intensity={1} />
@@ -147,12 +185,11 @@ export default function ThreeDContainer({ spheres, cameraTarget }) {
             <Model url="./Assets/untitled.gltf" />
           </Suspense>
           <OrbitControls
-            ref={controlsRef}
             enableRotate={true}
             enablePan={true}
             enableZoom={true}
           />
-          <CustomControls ref={controlsRef} zoom={zoom} focus={focus} />
+          <CustomControls zoom={zoom} focus={focus} />
         </Canvas>
       </Suspense>
     </div>
