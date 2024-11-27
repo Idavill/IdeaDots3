@@ -68,21 +68,40 @@
   top: -180px;
   left: -410px;
   height: 200px;
-  width: 150px;
+  width: 250px;
   background: black;
   border-radius: 5%;
-  padding-left:10px;
-  padding-top:10px;
+  padding:10px;
 flex-wrap: wrap;
-flex-direction: column;
-overflow-y: scroll;
+flex-direction: row;
+overflow-y: auto;
 }
 
 
 .listcontent {
   display: flex;
   align-items: center;
+  flex-direction: column;
   color:white;
   padding-left:10px;
-  padding-top:10px;
+  /* padding-top:10px; */
+  border-color: white;
+  border: 1px solid;
+  margin: 15px;
+  padding:15px;
+  border-radius: 5%;
+}
+
+.textbutton{
+  display: flex;
+  border: 0px solid;
+  border-radius: 10%;
+  padding-left:5px;
+  padding-right:5px;
+}
+
+.texts{
+  display: flex;
+  flex-direction: column;
+
 }

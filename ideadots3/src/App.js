@@ -25,9 +25,8 @@ function Sphere({ position, title, text }) {
       />
       <Html distanceFactor={10}>
         <div className="content">
-          {title} <br />
-          <br />
-          {text}
+          <h2>{title}</h2>
+          <h3>{text}</h3>
         </div>
       </Html>
     </mesh>
@@ -74,7 +73,13 @@ function Content({ time, ...props }) {
     return spheres.map((s, i) => (
       <>
         <div className="listcontent">
-          {s.title} <br /> {s.text}
+          <div className="texts">
+            <h4>{s.title}</h4>
+            <p>{s.text}</p>
+          </div>
+          <button className="textbutton" type="button">
+            Go
+          </button>
         </div>
       </>
     ));
@@ -84,7 +89,14 @@ function Content({ time, ...props }) {
     <>
       {sphereList()}{" "}
       <Html distanceFactor={10}>
-        <div className="listcontents">{IdeaList()}</div>
+        <div
+          className="listcontents"
+          transform
+          occlude
+          position={[100, 0.05, -0.09]}
+        >
+          {IdeaList()}
+        </div>
       </Html>
     </>
   );
@@ -93,7 +105,7 @@ function Content({ time, ...props }) {
 export default function App() {
   return (
     <div style={{ height: "100vh" }}>
-      <h1>Idea Dots</h1>
+      <h1 style={{ marginLeft: "40px" }}>Idea Dots</h1>
 
       <Suspense fallback={<span>loading...</span>}>
         <Canvas
@@ -115,7 +127,7 @@ export default function App() {
             autoRotatex
             autoRotateSpeed={0}
             enableRotate={true}
-            enablePan={true}
+            enablePan={false}
             enableZoom={true}
           />
         </Canvas>
