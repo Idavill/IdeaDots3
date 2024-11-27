@@ -4,7 +4,6 @@ import { useGLTF, OrbitControls } from "@react-three/drei";
 import { Html } from "@react-three/drei";
 import "./ThreeDContainer.css";
 import API from "../Services/API";
-import ListMode from "./ListMode";
 
 function Sphere({ position, title, text }) {
   const [hovered, hover] = useState(false);
@@ -72,7 +71,22 @@ function Content({ time, s }) {
   return <>{sphereList()} </>;
 }
 
-export default function ThreeDContainer({ spheres }) {
+export default function ThreeDContainer({ spheres, cameraTarget }) {
+  const [zoom, setZoom] = useState(false);
+
+  useEffect(() => {
+    if (cameraTarget) {
+      console.log("ct: ", cameraTarget.position);
+      setZoom(true);
+    }
+  }, [cameraTarget]);
+
+  useEffect(() => {
+    if (zoom) {
+      console.log("zoom");
+    }
+  }, [zoom]);
+
   return (
     <div style={{ height: "100vh" }}>
       <h1 style={{ marginLeft: "40px" }}>Idea Dots</h1>
@@ -94,10 +108,20 @@ export default function ThreeDContainer({ spheres }) {
             <Model url="./Assets/untitled.gltf" />
           </Suspense>
           <OrbitControls
+            target={
+              cameraTarget
+                ? [
+                    cameraTarget.position.x,
+                    cameraTarget.position.y,
+                    cameraTarget.position.z,
+                  ]
+                : [0, 0, 0]
+            }
+            zoom0={zoom ? 10 : 100}
             autoRotatex
             autoRotateSpeed={0}
             enableRotate={true}
-            enablePan={false}
+            enablePan={true}
             enableZoom={true}
           />
         </Canvas>
