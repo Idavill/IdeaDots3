@@ -4,20 +4,14 @@ import Draggable from "react-draggable";
 import API from "./Services/API";
 import ThreeDContainer from "./Component/ThreeDContainer.js";
 
-function Idea({ s, i, setActive, setActiveI }) {
+function Idea({ s, i, setActive, activeI }) {
   const [sphere, setSphere] = useState(s);
   const [activeIdea, setActiveIdea] = useState(false);
-
-  useEffect(() => {
-    if (setActiveI) {
-      if (setActiveI.position == s.position) {
-        console.log("matches position", s.position);
-        setActiveIdea(true);
-      } else {
-        setActiveIdea(false);
-      }
-    }
-  }, [setActiveI]);
+  const isActive =
+    activeI &&
+    activeI.x === s.position.x &&
+    activeI.y === s.position.y &&
+    activeI.z === s.position.z;
 
   const handleGo = () => {
     setActive(sphere);
@@ -27,9 +21,8 @@ function Idea({ s, i, setActive, setActiveI }) {
     <div
       key={i}
       className="listcontent"
-      // style={{ border: activeIdea ? "3px solid" : "1px solid" }}
       style={{
-        backgroundColor: activeIdea ? "rgb(55, 52, 255)" : "rgb(53, 53, 53)",
+        backgroundColor: isActive ? "rgb(55, 52, 255)" : "rgb(53, 53, 53)",
       }}
     >
       <div className="texts">
@@ -64,6 +57,7 @@ export default function App() {
   useEffect(() => {
     console.log("inside app, possibly a circle was clicked", activeIdea);
     if (activeIdea) {
+      setActiveIdea(activeIdea);
     }
   }, [activeIdea]);
 
@@ -98,7 +92,8 @@ export default function App() {
   const listContent = () => {
     return spheres.map((s, i) => (
       <Idea
-        setActiveI={activeIdea}
+        key={i} // Ensure to add a key for each item
+        activeI={activeIdea}
         setActive={(s) => setActiveSphere(s)}
         s={s}
         i={i}
