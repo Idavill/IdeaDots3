@@ -77,8 +77,8 @@ function Content({ time, s, zoom, setZoom, setFocus }) {
 
   return <>{sphereList()} </>;
 }
-
-function Controls({
+function CustomControls({
+  ref,
   zoom,
   focus,
   pos = new THREE.Vector3(),
@@ -86,7 +86,9 @@ function Controls({
 }) {
   const camera = useThree((state) => state.camera);
   const gl = useThree((state) => state.gl);
+
   const controls = useMemo(() => new CameraControls(camera, gl.domElement), []);
+
   return useFrame((state, delta) => {
     zoom ? pos.set(focus.x, focus.y, focus.z + 0.2) : pos.set(0, 0, 5);
     zoom ? look.set(focus.x, focus.y, focus.z - 0.2) : look.set(0, 0, 4);
@@ -110,13 +112,14 @@ function Controls({
 export default function ThreeDContainer({ spheres, cameraTarget }) {
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
+  const controlsRef = useRef();
 
-  useEffect(() => {
-    if (cameraTarget) {
-      console.log("ct: ", cameraTarget.position);
-      setZoom(true);
-    }
-  }, [cameraTarget]);
+  // useEffect(() => {
+  //   if (cameraTarget) {
+  //     console.log("ct: ", cameraTarget.position);
+  //     setZoom(true);
+  //   }
+  // }, [cameraTarget]);
 
   return (
     <div style={{ height: "100vh" }}>
@@ -144,23 +147,12 @@ export default function ThreeDContainer({ spheres, cameraTarget }) {
             <Model url="./Assets/untitled.gltf" />
           </Suspense>
           <OrbitControls
-            target={
-              cameraTarget
-                ? [
-                    cameraTarget.position.x,
-                    cameraTarget.position.y,
-                    cameraTarget.position.z,
-                  ]
-                : [0, 0, 0]
-            }
-            zoom0={zoom ? 10 : 100}
-            autoRotatex
-            autoRotateSpeed={0}
+            ref={controlsRef}
             enableRotate={true}
             enablePan={true}
             enableZoom={true}
           />
-          <Controls zoom={zoom} focus={focus} />
+          <CustomControls ref={controlsRef} zoom={zoom} focus={focus} />
         </Canvas>
       </Suspense>
     </div>
