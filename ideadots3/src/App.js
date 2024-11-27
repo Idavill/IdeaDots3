@@ -33,7 +33,7 @@ function Sphere({ position, title, text }) {
   );
 }
 
-function Content({ time, ...props }) {
+function Content({ time, cp, scp }) {
   const apiInstance = API();
   const [spheres, setSpheres] = useState([]);
 
@@ -69,6 +69,8 @@ function Content({ time, ...props }) {
     ));
   };
 
+  const handleGo = () => {};
+
   const IdeaList = () => {
     return spheres.map((s, i) => (
       <>
@@ -103,6 +105,8 @@ function Content({ time, ...props }) {
 }
 
 export default function App() {
+  const [cameraPosition, setCameraPosition] = useState([10, 20, 12]);
+
   return (
     <div style={{ height: "100vh" }}>
       <h1 style={{ marginLeft: "40px" }}>Idea Dots</h1>
@@ -111,11 +115,11 @@ export default function App() {
         <Canvas
           dpr={[1, 2]}
           camera={{
-            position: [2, 0, 4],
-            fov: 50,
+            position: [10, 20, 12],
+            fov: 20,
           }}
         >
-          <Content />
+          <Content cp={cameraPosition} scp={(p) => setCameraPosition(p)} />
           <directionalLight position={[10, 10, 0]} intensity={1.5} />
           <directionalLight position={[-10, 10, 5]} intensity={1} />
           <directionalLight position={[-10, 20, 0]} intensity={1.5} />
