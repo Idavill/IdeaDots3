@@ -28,10 +28,8 @@ function App() {
   const listContent = () => {
     return spheres.map((s, i) => (
       <div className="header">
-        <span className="active">ART</span>
         <span>{s.title}</span>
-        <span>VISIT</span>
-        <span>SHOP</span>
+        <span>{s.text}</span>
       </div>
     ));
   };

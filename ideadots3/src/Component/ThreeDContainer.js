@@ -69,37 +69,7 @@ function Content({ time, s }) {
     ));
   };
 
-  const IdeaList = () => {
-    return spheres.map((s, i) => (
-      <>
-        <div className="listcontent">
-          <div className="texts">
-            <h4>{s.title}</h4>
-            <p>{s.text}</p>
-          </div>
-          <button className="textbutton" type="button">
-            Go
-          </button>
-        </div>
-      </>
-    ));
-  };
-
-  return (
-    <>
-      {sphereList()}{" "}
-      <Html distanceFactor={10}>
-        <div
-          className="listcontents"
-          transform
-          occlude
-          position={[100, 0.05, -0.09]}
-        >
-          {IdeaList()}
-        </div>
-      </Html>
-    </>
-  );
+  return <>{sphereList()} </>;
 }
 
 export default function ThreeDContainer({ spheres }) {
