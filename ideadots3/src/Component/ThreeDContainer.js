@@ -1,18 +1,24 @@
-import React, { Suspense, useEffect, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import React, { Suspense, useEffect, useRef, useState, useMemo } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 import { Html } from "@react-three/drei";
 import "./ThreeDContainer.css";
 import API from "../Services/API";
+import * as THREE from "three";
+import { Vector3 } from "three";
+import CameraControls from "camera-controls";
 
-function Sphere({ position, title, text }) {
+CameraControls.install({ THREE });
+
+function Sphere({ position, title, text, zoomToView }) {
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
 
   return (
     <mesh
+      onClick={(e) => zoomToView(e.object.position)}
       position={position}
-      onClick={(event) => click(!clicked)}
+      // onClick={(event) => click(!clicked)}
       onPointerOver={(event) => (event.stopPropagation(), hover(true))}
       onPointerOut={(event) => hover(false)}
     >
@@ -32,7 +38,7 @@ function Sphere({ position, title, text }) {
   );
 }
 
-function Content({ time, s }) {
+function Content({ time, s, zoom, setZoom, setFocus }) {
   const [spheres, setSpheres] = useState([]);
   const apiInstance = API();
 
@@ -59,6 +65,7 @@ function Content({ time, s }) {
     return spheres.map((s, i) => (
       <>
         <Sphere
+          zoomToView={(focusRef) => (setZoom(!zoom), setFocus(focusRef))}
           key={i}
           position={[s.position.x, s.position.y, s.position.z]}
           title={s.title}
@@ -71,8 +78,38 @@ function Content({ time, s }) {
   return <>{sphereList()} </>;
 }
 
+function Controls({
+  zoom,
+  focus,
+  pos = new THREE.Vector3(),
+  look = new THREE.Vector3(),
+}) {
+  const camera = useThree((state) => state.camera);
+  const gl = useThree((state) => state.gl);
+  const controls = useMemo(() => new CameraControls(camera, gl.domElement), []);
+  return useFrame((state, delta) => {
+    zoom ? pos.set(focus.x, focus.y, focus.z + 0.2) : pos.set(0, 0, 5);
+    zoom ? look.set(focus.x, focus.y, focus.z - 0.2) : look.set(0, 0, 4);
+
+    state.camera.position.lerp(pos, 0.5);
+    state.camera.updateProjectionMatrix();
+
+    controls.setLookAt(
+      state.camera.position.x,
+      state.camera.position.y,
+      state.camera.position.z,
+      look.x,
+      look.y,
+      look.z,
+      true
+    );
+    return controls.update(delta);
+  });
+}
+
 export default function ThreeDContainer({ spheres, cameraTarget }) {
   const [zoom, setZoom] = useState(false);
+  const [focus, setFocus] = useState({});
 
   useEffect(() => {
     if (cameraTarget) {
@@ -80,12 +117,6 @@ export default function ThreeDContainer({ spheres, cameraTarget }) {
       setZoom(true);
     }
   }, [cameraTarget]);
-
-  useEffect(() => {
-    if (zoom) {
-      console.log("zoom");
-    }
-  }, [zoom]);
 
   return (
     <div style={{ height: "100vh" }}>
@@ -95,11 +126,16 @@ export default function ThreeDContainer({ spheres, cameraTarget }) {
         <Canvas
           dpr={[1, 2]}
           camera={{
-            position: [10, 20, 12],
-            fov: 20,
+            position: [1, 2, 1],
+            fov: 50,
           }}
         >
-          <Content spheres={spheres} />
+          <Content
+            zoom={zoom}
+            setZoom={setZoom}
+            setFocus={setFocus}
+            spheres={spheres}
+          />
           <directionalLight position={[10, 10, 0]} intensity={1.5} />
           <directionalLight position={[-10, 10, 5]} intensity={1} />
           <directionalLight position={[-10, 20, 0]} intensity={1.5} />
@@ -124,6 +160,7 @@ export default function ThreeDContainer({ spheres, cameraTarget }) {
             enablePan={true}
             enableZoom={true}
           />
+          <Controls zoom={zoom} focus={focus} />
         </Canvas>
       </Suspense>
     </div>
