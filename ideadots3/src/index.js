@@ -10,12 +10,6 @@ root.render(
     <Suspense fallback={null}>
       <App />
     </Suspense>
-    <div className="header">
-      <span className="active">ART</span>
-      <span>ABOUT</span>
-      <span>VISIT</span>
-      <span>SHOP</span>
-    </div>
   </>
 );
 
