@@ -1,8 +1,8 @@
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import "./App.css";
-import Draggable from "react-draggable";
 import API from "./Services/API";
 import ThreeDContainer from "./Component/ThreeDContainer.js";
+import Section from "./Component/ScrollSection.js";
 
 function Idea({ s, i, setActive, activeI }) {
   const [sphere, setSphere] = useState(s);
@@ -92,7 +92,7 @@ export default function App() {
   const listContent = () => {
     return spheres.map((s, i) => (
       <Idea
-        key={i} // Ensure to add a key for each item
+        key={i}
         activeI={activeIdea}
         setActive={(s) => setActiveSphere(s)}
         s={s}

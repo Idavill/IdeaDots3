@@ -39,25 +39,23 @@
   
   .content {
     padding-top: 10px;
-    transform: translate3d(calc(50% + 40px), 0, 0);
+    /* transform: translate3d(calc(50% + 40px), 0, 0); */
     text-align: left;
     background: #202035;
     color: white;
-    padding: 10px 15px;
+    padding: 10px 15px; /* Keep padding for spacing */
     border-radius: 5px;
-    width: 150px;
-  
-  }
-  
-  .content::before {
+    width: auto; /* Change width to auto to fit text */
+    display: inline-block; /* Optional: Use inline-block to fit content */
+}
+
+.content::before {
     content: "";
     position: absolute;
     top: 25px;
-    left: -40px;
     height: 1px;
-    width: 100px;
-    background: black;
-  }
+    width: auto;
+}
   
   
   

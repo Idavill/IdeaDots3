@@ -33,6 +33,7 @@ function Sphere({ position, title, text, zoomToView, focus }) {
       // onClick={(event) => click(!clicked)}
       onPointerOver={(event) => (event.stopPropagation(), hover(true))}
       onPointerOut={(event) => hover(false)}
+      scale={0.3}
     >
       <sphereGeometry />
       <meshStandardMaterial
@@ -44,7 +45,7 @@ function Sphere({ position, title, text, zoomToView, focus }) {
         <Html distanceFactor={10}>
           <div className="content">
             <h2>{title}</h2>
-            <h3>{text}</h3>
+            {/* <h3>{text}</h3> */}
           </div>
         </Html>
       ) : null}

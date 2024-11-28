@@ -2,19 +2,19 @@
     "spheres": [
         {
             "id": "743843a3-cd20-41dc-bab3-5da2661f79cd",
-            "position":{"x": -4, "y": 0, "z": -4},
+            "position":{"x": -6, "y": 0.5, "z": -6},
             "title": "Cosy Corner",
             "text": "Some more materials needs to be explored"
         },
         {
             "id": "6680d8c3-11fa-40ea-96b1-e0c2ba4f7df5",
-            "position": {"x": -6, "y": 0, "z":-6},
+            "position": {"x": -4, "y": 1, "z":-6},
             "title": "Shelf or Storage",
             "text": "Wooden to give some warmth, in light tones for sure!"
         },
         {
             "id": "d8934187-01fd-4d9b-bc71-1082a8ec6a4d",
-            "position": {"x": -6, "y": 0, "z": -4},
+            "position": {"x": -6, "y": 1.3, "z": -4},
             "title": "Material ideas",
             "text": "Lovely, I want to add some bold details here!"
         }
