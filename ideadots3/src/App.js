@@ -4,6 +4,9 @@ import API from "./Services/API";
 import ThreeDContainer from "./Component/ThreeDContainer.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import image from "./Assets/shelf.jpg";
+import Draggable from "react-draggable";
+import { Resizable } from "react-resizable";
+import { ResizableBox } from "react-resizable";
 
 function Idea({ s, i, setActive, activeI }) {
   const [sphere, setSphere] = useState(s);
@@ -85,8 +88,15 @@ export default function App() {
   const [activeSphere, setActiveSphere] = useState(null);
   const [cameraTarget, setCameraTarget] = useState(null);
   const [activeIdea, setActiveIdea] = useState(null);
-
+  const [dimensions, setDimensions] = useState({
+    width: 200,
+    height: 200,
+  });
   const apiInstance = API();
+
+  const onResize = (event, { node, size, handle }) => {
+    setDimensions({ width: size.width, height: size.height });
+  };
 
   useEffect(() => {
     console.log("inside app, possibly a circle was clicked", activeIdea);
@@ -144,26 +154,28 @@ export default function App() {
           cameraTarget={cameraTarget}
         />
       </Suspense>
-      <div className="header">
-        <div className="overviewContainer">
-          <nav id="navbar-example2" class="navbar px-3 mb-3">
-            <ul class="nav nav-pills">{overview()}</ul>
-          </nav>
-        </div>
-        <div className="overviewContainer">
-          {" "}
-          <div
-            data-bs-spy="scroll"
-            data-bs-target="#navbar-example2"
-            data-bs-root-margin="0px 0px -40%"
-            data-bs-smooth-scroll="true"
-            class="scrollspy-example p-3 rounded-2"
-            tabIndex={0}
-          >
-            {listContent()}
+      <Draggable>
+        <div className="header">
+          <div className="overviewContainer">
+            <nav id="navbar-example2" class="navbar px-3 mb-3">
+              <ul class="nav nav-pills">{overview()}</ul>
+            </nav>
+          </div>
+          <div className="overviewContainer">
+            {" "}
+            <div
+              data-bs-spy="scroll"
+              data-bs-target="#navbar-example2"
+              data-bs-root-margin="0px 0px -40%"
+              data-bs-smooth-scroll="true"
+              class="scrollspy-example p-3 rounded-2"
+              tabIndex={0}
+            >
+              {listContent()}
+            </div>
           </div>
         </div>
-      </div>
+      </Draggable>
     </>
   );
 }

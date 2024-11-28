@@ -180,14 +180,14 @@ export default function ThreeDContainer({
           <directionalLight position={[-10, 10, 5]} intensity={1} />
           <directionalLight position={[-10, 20, 0]} intensity={1.5} />
           <directionalLight position={[0, -10, 0]} intensity={0.25} />
-          <Suspense fallback={<Model url="./Assets/untitled.gltf" />}>
-            <Model url="./Assets/untitled.gltf" />
+          <Suspense fallback={<Model url="./Assets/WCPOM.gltf" />}>
+            <Model url="./Assets/WCPOM.gltf" />
           </Suspense>
-          <OrbitControls
+          {/* <OrbitControls
             enableRotate={true}
             enablePan={true}
             enableZoom={true}
-          />
+          /> */}
           <CustomControls zoom={zoom} focus={focus} />
         </Canvas>
       </Suspense>
