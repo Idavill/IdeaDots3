@@ -2,12 +2,18 @@ import React, { Suspense, useEffect, useRef, useState } from "react";
 import "./App.css";
 import API from "./Services/API";
 import ThreeDContainer from "./Component/ThreeDContainer.js";
-import Section from "./Component/ScrollSection.js";
-import "bootstrap/dist/css/bootstrap.min.css"; // Add this line
+import "bootstrap/dist/css/bootstrap.min.css";
+import image from "./Assets/shelf.jpg";
 
 function Idea({ s, i, setActive, activeI }) {
   const [sphere, setSphere] = useState(s);
   const [activeIdea, setActiveIdea] = useState(false);
+  const [img, setImg] = useState(s.img);
+
+  useEffect(() => {
+    console.log("imag ", img);
+  }, []);
+
   const isActive =
     activeI &&
     activeI.x === s.position.x &&
@@ -28,6 +34,19 @@ function Idea({ s, i, setActive, activeI }) {
     >
       <h4 id={`scrollspyHeading${i}`}>{s.title}</h4>
       <p>{s.text}</p>
+
+      {img != "" ? (
+        <div className="square">
+          <img
+            style={{ display: "flex", width: "100%", height: "auto" }} // Set width to 100% and height to auto
+            // src={process.env.PUBLIC_URL + `${s.img}`}
+            src={image}
+            class=""
+            alt="..."
+          ></img>
+        </div>
+      ) : null}
+
       <button type="button" onClick={handleGo} class="btn btn-light">
         Go
       </button>
@@ -127,7 +146,7 @@ export default function App() {
       </Suspense>
       <div className="header">
         <div className="overviewContainer">
-          <nav id="navbar-example2" class="navbar bg-body-tertiary px-3 mb-3">
+          <nav id="navbar-example2" class="navbar px-3 mb-3">
             <ul class="nav nav-pills">{overview()}</ul>
           </nav>
         </div>
@@ -138,7 +157,7 @@ export default function App() {
             data-bs-target="#navbar-example2"
             data-bs-root-margin="0px 0px -40%"
             data-bs-smooth-scroll="true"
-            class="scrollspy-example bg-body-tertiary p-3 rounded-2"
+            class="scrollspy-example p-3 rounded-2"
             tabIndex={0}
           >
             {listContent()}
