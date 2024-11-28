@@ -27,6 +27,8 @@ function Idea({ s, i, setActive, activeI }) {
     setActive(sphere);
   };
 
+  const handleRemoveIdea = () => {};
+
   return (
     <div
       key={i}
@@ -53,12 +55,33 @@ function Idea({ s, i, setActive, activeI }) {
       <button type="button" onClick={handleGo} class="btn btn-light">
         Go
       </button>
+      <button
+        type="button"
+        onClick={handleRemoveIdea}
+        class="btn btn-light headerButton"
+      >
+        -
+      </button>
     </div>
   );
 }
 
-function Overview({ s, i }) {
+function Overview({ s, i, activeSphere }) {
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    if (activeSphere) {
+      if (activeSphere.id == s.id) {
+        console.log("active sphere id ", activeSphere.id);
+        setIsActive(true);
+      } else {
+        setIsActive(true);
+      }
+    }
+  }, [activeSphere]);
+
   const handleClick = (event) => {
+    setIsActive(true);
     event.preventDefault(); // Prevent default anchor click behavior
     const target = document.getElementById(`scrollspyHeading${i}`);
     const body = document.body;
@@ -73,6 +96,9 @@ function Overview({ s, i }) {
       <li class="nav-item">
         <a
           class="nav-link"
+          style={{
+            backgroundColor: isActive ? "rgb(55, 52, 255" : "none",
+          }}
           href={`#scrollspyHeading${i}`}
           onClick={handleClick}
         >
@@ -88,15 +114,7 @@ export default function App() {
   const [activeSphere, setActiveSphere] = useState(null);
   const [cameraTarget, setCameraTarget] = useState(null);
   const [activeIdea, setActiveIdea] = useState(null);
-  const [dimensions, setDimensions] = useState({
-    width: 200,
-    height: 200,
-  });
   const apiInstance = API();
-
-  const onResize = (event, { node, size, handle }) => {
-    setDimensions({ width: size.width, height: size.height });
-  };
 
   useEffect(() => {
     console.log("inside app, possibly a circle was clicked", activeIdea);
@@ -130,7 +148,9 @@ export default function App() {
   };
 
   const overview = () => {
-    return spheres.map((s, i) => <Overview s={s} i={i}></Overview>);
+    return spheres.map((s, i) => (
+      <Overview activeSphere={activeSphere} s={s} i={i}></Overview>
+    ));
   };
 
   const listContent = () => {
@@ -145,33 +165,53 @@ export default function App() {
     ));
   };
 
+  const handleAddIdea = () => {
+    console.log("add idea");
+  };
+
+  const handleRemoveIdea = () => {
+    console.log("remove idea");
+  };
+
   return (
     <>
       <Suspense fallback={null}>
         <ThreeDContainer
-          spheres={spheres}
+          sphere={spheres}
+          setSpheres={(e) => setSpheres(e)}
           setActiveIdea={(s) => setActiveIdea(s)}
           cameraTarget={cameraTarget}
         />
       </Suspense>
       <Draggable>
-        <div className="header">
-          <div className="overviewContainer">
-            <nav id="navbar-example2" class="navbar px-3 mb-3">
-              <ul class="nav nav-pills">{overview()}</ul>
-            </nav>
-          </div>
-          <div className="overviewContainer">
-            {" "}
-            <div
-              data-bs-spy="scroll"
-              data-bs-target="#navbar-example2"
-              data-bs-root-margin="0px 0px -40%"
-              data-bs-smooth-scroll="true"
-              class="scrollspy-example p-3 rounded-2"
-              tabIndex={0}
+        <div className="mainContainer">
+          <div className="header">
+            <button
+              type="button"
+              onclick={handleAddIdea}
+              class="btn btn-light headerButton"
             >
-              {listContent()}
+              +
+            </button>
+          </div>
+          <div className="contentContainer">
+            <div className="overviewContainer">
+              <nav id="navbar-example2" class="navbar px-3 mb-3">
+                <ul class="nav nav-pills">{overview()}</ul>
+              </nav>
+            </div>
+            <div className="overviewContainer">
+              {" "}
+              <div
+                data-bs-spy="scroll"
+                data-bs-target="#navbar-example2"
+                data-bs-root-margin="0px 0px -40%"
+                data-bs-smooth-scroll="true"
+                class="scrollspy-example p-3 rounded-2"
+                tabIndex={0}
+              >
+                {listContent()}
+              </div>
             </div>
           </div>
         </div>

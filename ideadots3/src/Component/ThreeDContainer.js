@@ -53,13 +53,41 @@ function Sphere({ position, title, text, zoomToView, focus }) {
   );
 }
 
-function Content({ time, s, zoom, setZoom, setFocus, focusSphere }) {
-  const [spheres, setSpheres] = useState([]);
+function Content({
+  zoom,
+  setZoom,
+  spheres,
+  setSpheres,
+  setFocus,
+  focusSphere,
+  newSphere,
+}) {
+  //const [spheres, setSpheres] = useState([]);
   const apiInstance = API();
 
   useEffect(() => {
-    console.log("Set focus sphere: ", focusSphere);
-  }, [focusSphere]);
+    if (newSphere) {
+      addNewSphere(newSphere);
+    }
+  }, [newSphere]);
+
+  useEffect(() => {
+    if (spheres) {
+      setSpheres(spheres);
+      console.log("checkcheck");
+    }
+  }, [spheres]);
+
+  const addNewSphere = (ns) => {
+    const newS = {
+      id: "6680d8c3-11fa-40ea-96b1-e0c2ba4f7df5",
+      position: { x: ns.x, y: ns.y, z: ns.z },
+      title: "",
+      text: "",
+      img: "",
+    };
+    setSpheres((prevSpheres) => [newS, ...prevSpheres]);
+  };
 
   useEffect(() => {
     getSphereData();
@@ -136,13 +164,14 @@ function CustomControls({ zoom, focus }) {
 }
 
 export default function ThreeDContainer({
-  spheres,
+  sphere,
   cameraTarget,
-  setCameraTarget,
   setActiveIdea,
+  setSpheres,
 }) {
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
+  const [newSphere, setNewSphere] = useState(null);
 
   useEffect(() => {
     if (cameraTarget) {
@@ -159,6 +188,13 @@ export default function ThreeDContainer({
     }
   }, [focus]);
 
+  useEffect(() => {
+    console.log("checkcheck22");
+    if (sphere) {
+      //setSpheres(spheres);
+    }
+  }, [sphere]);
+
   return (
     <div style={{ height: "100vh" }}>
       <Suspense fallback={<span>loading...</span>}>
@@ -173,21 +209,21 @@ export default function ThreeDContainer({
             zoom={zoom}
             setZoom={setZoom}
             setFocus={setFocus}
-            spheres={spheres}
+            spheres={sphere}
+            setSpheres={(e) => setSpheres(e)}
             focusSphere={focus}
+            newSphere={newSphere}
           />
           <directionalLight position={[10, 10, 0]} intensity={1.5} />
           <directionalLight position={[-10, 10, 5]} intensity={1} />
           <directionalLight position={[-10, 20, 0]} intensity={1.5} />
           <directionalLight position={[0, -10, 0]} intensity={0.25} />
           <Suspense fallback={<Model url="./Assets/WCPOM.gltf" />}>
-            <Model url="./Assets/WCPOM.gltf" />
+            <Model
+              url="./Assets/WCPOM.gltf"
+              setNewSphere={(e) => setNewSphere(e)}
+            />
           </Suspense>
-          {/* <OrbitControls
-            enableRotate={true}
-            enablePan={true}
-            enableZoom={true}
-          /> */}
           <CustomControls zoom={zoom} focus={focus} />
         </Canvas>
       </Suspense>
@@ -195,11 +231,18 @@ export default function ThreeDContainer({
   );
 }
 
-function Model({ url, ...props }) {
+function Model({ url, setNewSphere }) {
   const { scene } = useGLTF(url);
+
+  const handleDoubleClick = (e) => {
+    console.log("double click", e.point);
+    setNewSphere(e.point);
+  };
+
   return (
-    <primitive object={scene} {...props}>
-      {/* Added material */}
-    </primitive>
+    <primitive
+      onDoubleClick={(e) => handleDoubleClick(e)}
+      object={scene}
+    ></primitive>
   );
 }
