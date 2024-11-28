@@ -3,6 +3,7 @@ import "./App.css";
 import API from "./Services/API";
 import ThreeDContainer from "./Component/ThreeDContainer.js";
 import Section from "./Component/ScrollSection.js";
+import "bootstrap/dist/css/bootstrap.min.css"; // Add this line
 
 function Idea({ s, i, setActive, activeI }) {
   const [sphere, setSphere] = useState(s);
@@ -25,13 +26,9 @@ function Idea({ s, i, setActive, activeI }) {
         backgroundColor: isActive ? "rgb(55, 52, 255)" : "rgb(53, 53, 53)",
       }}
     >
-      <div className="texts">
-        <h4>{s.title}</h4>
-      </div>
-      <div className="texts">
-        <p>{s.text}</p>
-      </div>
-      <button onClick={handleGo} className="textbutton">
+      <h4 id={`scrollspyHeading${i}`}>{s.title}</h4>
+      <p>{s.text}</p>
+      <button type="button" onClick={handleGo} class="btn btn-light">
         Go
       </button>
     </div>
@@ -39,10 +36,28 @@ function Idea({ s, i, setActive, activeI }) {
 }
 
 function Overview({ s, i }) {
+  const handleClick = (event) => {
+    event.preventDefault(); // Prevent default anchor click behavior
+    const target = document.getElementById(`scrollspyHeading${i}`);
+    const body = document.body;
+    console.log(body);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" }); // Smooth scroll to the target
+      window.scrollTo(2, 0);
+    }
+  };
   return (
-    <div className="overviewlist">
-      <h4 className="overviewtext">{s.title}</h4>
-    </div>
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          href={`#scrollspyHeading${i}`}
+          onClick={handleClick}
+        >
+          {s.title}
+        </a>
+      </li>
+    </ul>
   );
 }
 
@@ -111,8 +126,24 @@ export default function App() {
         />
       </Suspense>
       <div className="header">
-        <div className="overviewContainer"> {overview()}</div>
-        <div className="overviewContainer">{listContent()}</div>
+        <div className="overviewContainer">
+          <nav id="navbar-example2" class="navbar bg-body-tertiary px-3 mb-3">
+            <ul class="nav nav-pills">{overview()}</ul>
+          </nav>
+        </div>
+        <div className="overviewContainer">
+          {" "}
+          <div
+            data-bs-spy="scroll"
+            data-bs-target="#navbar-example2"
+            data-bs-root-margin="0px 0px -40%"
+            data-bs-smooth-scroll="true"
+            class="scrollspy-example bg-body-tertiary p-3 rounded-2"
+            tabIndex={0}
+          >
+            {listContent()}
+          </div>
+        </div>
       </div>
     </>
   );

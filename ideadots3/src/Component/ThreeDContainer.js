@@ -161,8 +161,6 @@ export default function ThreeDContainer({
 
   return (
     <div style={{ height: "100vh" }}>
-      <h1 style={{ marginLeft: "40px" }}>Idea Dots</h1>
-
       <Suspense fallback={<span>loading...</span>}>
         <Canvas
           dpr={[1, 2]}
