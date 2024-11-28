@@ -5,12 +5,11 @@ import ThreeDContainer from "./Component/ThreeDContainer.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import image from "./Assets/shelf.jpg";
 import Draggable from "react-draggable";
-import { Resizable } from "react-resizable";
-import { ResizableBox } from "react-resizable";
+import { v4 as uuidv4 } from "uuid";
 
-function Idea({ s, i, setActive, activeI }) {
+function Idea({ s, i, setActive, activeI, deleteThis }) {
   const [sphere, setSphere] = useState(s);
-  const [activeIdea, setActiveIdea] = useState(false);
+  // const [activeIdea, setActiveIdea] = useState(false);
   const [img, setImg] = useState(s.img);
 
   useEffect(() => {
@@ -27,7 +26,9 @@ function Idea({ s, i, setActive, activeI }) {
     setActive(sphere);
   };
 
-  const handleRemoveIdea = () => {};
+  const handleRemoveIdea = () => {
+    deleteThis(s);
+  };
 
   return (
     <div
@@ -51,37 +52,47 @@ function Idea({ s, i, setActive, activeI }) {
           ></img>
         </div>
       ) : null}
-
-      <button type="button" onClick={handleGo} class="btn btn-light">
-        Go
-      </button>
-      <button
-        type="button"
-        onClick={handleRemoveIdea}
-        class="btn btn-light headerButton"
-      >
-        -
-      </button>
+      <div className="IdeaButtons">
+        <button type="button" onClick={handleGo} class="btn btn-light">
+          Go
+        </button>
+        <button type="button" class="btn btn-light headerButton">
+          Move
+        </button>
+        <button
+          type="button"
+          onClick={handleRemoveIdea}
+          class="btn btn-light headerButton"
+        >
+          -
+        </button>
+      </div>
     </div>
   );
 }
 
-function Overview({ s, i, activeSphere }) {
-  const [isActive, setIsActive] = useState(false);
+function Overview({ s, i, activeSphere, setActiveSphere }) {
+  // const [isActive, setIsActive] = useState(
+  //   activeSphere &&
+  //     activeSphere.x === s.position.x &&
+  //     activeSphere.y === s.position.y &&
+  //     activeSphere.z === s.position.z
+  // );
 
-  useEffect(() => {
-    if (activeSphere) {
-      if (activeSphere.id == s.id) {
-        console.log("active sphere id ", activeSphere.id);
-        setIsActive(true);
-      } else {
-        setIsActive(true);
-      }
-    }
-  }, [activeSphere]);
+  // useEffect(() => {
+  //   if (activeSphere) {
+  //     if (activeSphere.id == s.id) {
+  //       console.log("active sphere id ", activeSphere.id);
+  //       //setIsActive(true);
+  //       setActiveSphere(s);
+  //     } else {
+  //       setIsActive(false);
+  //     }
+  //   }
+  // }, [activeSphere]);
 
   const handleClick = (event) => {
-    setIsActive(true);
+    setActiveSphere(s);
     event.preventDefault(); // Prevent default anchor click behavior
     const target = document.getElementById(`scrollspyHeading${i}`);
     const body = document.body;
@@ -96,9 +107,9 @@ function Overview({ s, i, activeSphere }) {
       <li class="nav-item">
         <a
           class="nav-link"
-          style={{
-            backgroundColor: isActive ? "rgb(55, 52, 255" : "none",
-          }}
+          // style={{
+          //   backgroundColor: isActive ? "rgb(55, 52, 255" : "none",
+          // }}
           href={`#scrollspyHeading${i}`}
           onClick={handleClick}
         >
@@ -136,21 +147,35 @@ export default function App() {
   }, []);
 
   const getSphereData = async () => {
-    const spheres = apiInstance.handleGetLocalSpheresJsonData();
+    if (!spheres) {
+      // maybe needs to be changed when more dynamically fetching from db
+      const spheres = apiInstance.handleGetLocalSpheresJsonData();
 
-    if (spheres) {
-      for (const s of spheres) {
-        setSpheres((prevs) => [...prevs, s]);
+      if (spheres) {
+        for (const s of spheres) {
+          setSpheres((prevs) => [...prevs, s]);
+        }
+      } else {
+        console.log("no spheres in App");
       }
-    } else {
-      console.log("no spheres in App");
     }
   };
 
   const overview = () => {
     return spheres.map((s, i) => (
-      <Overview activeSphere={activeSphere} s={s} i={i}></Overview>
+      <Overview
+        activeSphere={activeSphere}
+        setActiveSphere={(e) => setActiveSphere(e)}
+        s={s}
+        i={i}
+      ></Overview>
     ));
+  };
+
+  const deleteIdea = (s) => {
+    console.log("delete s ", s);
+    const newList = spheres.filter((sphere) => sphere.id !== s.id);
+    setSpheres(newList);
   };
 
   const listContent = () => {
@@ -161,16 +186,21 @@ export default function App() {
         setActive={(s) => setActiveSphere(s)}
         s={s}
         i={i}
+        deleteThis={(s) => deleteIdea(s)}
       ></Idea>
     ));
   };
 
   const handleAddIdea = () => {
-    console.log("add idea");
-  };
-
-  const handleRemoveIdea = () => {
-    console.log("remove idea");
+    const newS = {
+      id: uuidv4(),
+      position: { x: 0, y: 0, z: 0 },
+      title: "",
+      text: "",
+      img: "",
+    };
+    setSpheres((prevs) => [newS, ...prevs]);
+    console.log("ADD");
   };
 
   return (
@@ -188,7 +218,7 @@ export default function App() {
           <div className="header">
             <button
               type="button"
-              onclick={handleAddIdea}
+              onClick={handleAddIdea}
               class="btn btn-light headerButton"
             >
               +

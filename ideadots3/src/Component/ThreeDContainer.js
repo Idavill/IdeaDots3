@@ -33,13 +33,15 @@ function Sphere({ position, title, text, zoomToView, focus }) {
       // onClick={(event) => click(!clicked)}
       onPointerOver={(event) => (event.stopPropagation(), hover(true))}
       onPointerOut={(event) => hover(false)}
-      scale={0.3}
+      scale={0.2}
     >
       <sphereGeometry />
       <meshStandardMaterial
         color={clicked ? "rgb(55, 52, 255)" : "white"}
         roughness={0.75}
         emissive="#404057"
+        opacity={0.4}
+        transparent
       />
       {hovered ? (
         <Html distanceFactor={10}>
