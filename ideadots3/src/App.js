@@ -39,20 +39,29 @@ function Idea({ s, i, setActive, activeI, deleteThis, gizmo, setGizmo }) {
     // save to local storage
   };
 
+  const handleMoveClicked = () => {
+    if (gizmo) {
+      setGizmo(null);
+    } else {
+      setGizmo(s.id);
+    }
+  };
+
   return (
     <div
       key={i}
       onMouseOver={() => setIsActive(true)}
       onMouseLeave={() => setIsActive(false)}
-      contenteditable="true"
       onInput={(e) => editIdea(s.id, e.currentTarget.textContent)}
       className="listcontent"
       style={{
         backgroundColor: isActive ? "rgb(55, 52, 255)" : "rgb(53, 53, 53)",
       }}
     >
-      <h4 id={`scrollspyHeading${i}`}>{s.title}</h4>
-      <p>{s.text}</p>
+      <h4 id={`scrollspyHeading${i}`} contenteditable="true">
+        {s.title}
+      </h4>
+      <p contenteditable="true">{s.text}</p>
 
       {img != "" ? (
         <div className="square">
@@ -70,7 +79,7 @@ function Idea({ s, i, setActive, activeI, deleteThis, gizmo, setGizmo }) {
         </button>
         <button
           type="button"
-          onClick={() => setGizmo(true)}
+          onClick={handleMoveClicked}
           class="btn btn-light headerButton"
         >
           Move
@@ -108,10 +117,14 @@ export default function App() {
   const [activeSphere, setActiveSphere] = useState(null);
   const [cameraTarget, setCameraTarget] = useState(null);
   const [activeIdea, setActiveIdea] = useState(null);
-  const [gizmo, setGizmo] = useState(false);
+  const [gizmo, setGizmo] = useState(null);
 
   useEffect(() => {
-    console.log("gizmo: ", gizmo);
+    if (gizmo) {
+      console.log("gizmo: ", gizmo);
+    } else {
+      console.log("gizmo null");
+    }
   }, [gizmo]);
 
   useEffect(() => {
@@ -162,7 +175,7 @@ export default function App() {
     return spheres.map((s, i) => (
       <Idea
         gizmo={gizmo}
-        setGizmo={(e) => setGizmo(!gizmo)}
+        setGizmo={(e) => setGizmo(e)}
         key={i}
         activeI={activeIdea}
         setActive={(s) => setActiveSphere(s)}

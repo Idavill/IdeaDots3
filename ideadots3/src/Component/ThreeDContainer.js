@@ -9,7 +9,7 @@ import CameraControls from "camera-controls";
 
 CameraControls.install({ THREE });
 
-function Sphere({ position, title, text, zoomToView, focus }) {
+function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
 
@@ -26,31 +26,66 @@ function Sphere({ position, title, text, zoomToView, focus }) {
   }, [focus]);
 
   return (
-    <mesh
-      onClick={(e) => zoomToView(e.object.position)}
-      position={position}
-      // onClick={(event) => click(!clicked)}
-      onPointerOver={(event) => (event.stopPropagation(), hover(true))}
-      onPointerOut={(event) => hover(false)}
-      scale={0.2}
-    >
-      <sphereGeometry />
-      <meshStandardMaterial
-        color={clicked ? "rgb(55, 52, 255)" : "white"}
-        roughness={0.75}
-        emissive="#404057"
-        opacity={0.4}
-        transparent
-      />
-      {hovered ? (
-        <Html distanceFactor={10}>
-          <div className="content">
-            <h2>{title}</h2>
-            {/* <h3>{text}</h3> */}
-          </div>
-        </Html>
-      ) : null}
-    </mesh>
+    <>
+      {gizmo === id ? (
+        <PivotControls
+          activeAxes={[true, true, true]}
+          anchor={[position.x, position.y, position.z]}
+        >
+          <mesh
+            onClick={(e) => zoomToView(e.object.position)}
+            position={position}
+            // onClick={(event) => click(!clicked)}
+            onPointerOver={(event) => (event.stopPropagation(), hover(true))}
+            onPointerOut={(event) => hover(false)}
+            scale={0.2}
+          >
+            <sphereGeometry />
+            <meshStandardMaterial
+              color={clicked ? "rgb(55, 52, 255)" : "white"}
+              roughness={0.75}
+              emissive="#404057"
+              opacity={0.4}
+              transparent
+            />
+            {hovered ? (
+              <Html distanceFactor={10}>
+                <div className="content">
+                  <h2>{title}</h2>
+                  {/* <h3>{text}</h3> */}
+                </div>
+              </Html>
+            ) : null}
+          </mesh>
+        </PivotControls>
+      ) : (
+        <mesh
+          onClick={(e) => zoomToView(e.object.position)}
+          position={position}
+          // onClick={(event) => click(!clicked)}
+          onPointerOver={(event) => (event.stopPropagation(), hover(true))}
+          onPointerOut={(event) => hover(false)}
+          scale={0.2}
+        >
+          <sphereGeometry />
+          <meshStandardMaterial
+            color={clicked ? "rgb(55, 52, 255)" : "white"}
+            roughness={0.75}
+            emissive="#404057"
+            opacity={0.4}
+            transparent
+          />
+          {hovered ? (
+            <Html distanceFactor={10}>
+              <div className="content">
+                <h2>{title}</h2>
+                {/* <h3>{text}</h3> */}
+              </div>
+            </Html>
+          ) : null}
+        </mesh>
+      )}
+    </>
   );
 }
 
@@ -63,6 +98,7 @@ function Content({
   focusSphere,
   newSphere,
   scrollToIdea,
+  gizmo,
 }) {
   const apiInstance = API();
 
@@ -111,6 +147,7 @@ function Content({
     return spheres.map((s, i) => (
       <>
         <Sphere
+          gizmo={gizmo}
           zoomToView={(focusRef) => (
             setZoom(!zoom), setFocus(focusRef), scrollToIdea(s, i)
           )}
@@ -119,6 +156,7 @@ function Content({
           title={s.title}
           text={s.text}
           focus={focusSphere}
+          id={s.id}
         />
       </>
     ));
@@ -154,19 +192,16 @@ function CustomControls({ zoom, focus, gizmo }) {
 
   return (
     <>
-      {gizmo ? (
-        <PivotControls>
-          <mesh />
-        </PivotControls>
+      {!gizmo ? (
+        <OrbitControls
+          ref={controlsRef}
+          camera={camera}
+          gl={gl}
+          enableRotate={true}
+          enablePan={true}
+          enableZoom={true}
+        />
       ) : null}
-      <OrbitControls
-        ref={controlsRef}
-        camera={camera}
-        gl={gl}
-        enableRotate={true}
-        enablePan={true}
-        enableZoom={true}
-      />
     </>
   );
 }
@@ -216,6 +251,7 @@ export default function ThreeDContainer({
           }}
         >
           <Content
+            gizmo={gizmo}
             scrollToIdea={(s, i) => scrollToIdea(s, i)}
             zoom={zoom}
             setZoom={setZoom}
