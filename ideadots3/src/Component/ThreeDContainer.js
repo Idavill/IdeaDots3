@@ -6,12 +6,15 @@ import "./ThreeDContainer.css";
 import API from "../Services/API";
 import * as THREE from "three";
 import CameraControls from "camera-controls";
+import { v4 as uuidv4 } from "uuid";
 
 CameraControls.install({ THREE });
 
 function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
+  const [pos, setPos] = useState(position);
+  const meshRef = useRef();
 
   useEffect(() => {
     if (
@@ -27,42 +30,15 @@ function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
 
   return (
     <>
-      {gizmo === id ? (
-        <PivotControls
-          activeAxes={[true, true, true]}
-          anchor={[position.x, position.y, position.z]}
-        >
-          <mesh
-            onClick={(e) => zoomToView(e.object.position)}
-            position={position}
-            // onClick={(event) => click(!clicked)}
-            onPointerOver={(event) => (event.stopPropagation(), hover(true))}
-            onPointerOut={(event) => hover(false)}
-            scale={0.2}
-          >
-            <sphereGeometry />
-            <meshStandardMaterial
-              color={clicked ? "rgb(55, 52, 255)" : "white"}
-              roughness={0.75}
-              emissive="#404057"
-              opacity={0.4}
-              transparent
-            />
-            {hovered ? (
-              <Html distanceFactor={10}>
-                <div className="content">
-                  <h2>{title}</h2>
-                  {/* <h3>{text}</h3> */}
-                </div>
-              </Html>
-            ) : null}
-          </mesh>
-        </PivotControls>
-      ) : (
+      <PivotControls
+        enabled={gizmo === id ? true : false}
+        activeAxes={[true, true, true]}
+        anchor={[pos.x, pos.y, pos.z]}
+      >
         <mesh
+          ref={meshRef}
           onClick={(e) => zoomToView(e.object.position)}
-          position={position}
-          // onClick={(event) => click(!clicked)}
+          position={pos}
           onPointerOver={(event) => (event.stopPropagation(), hover(true))}
           onPointerOut={(event) => hover(false)}
           scale={0.2}
@@ -79,12 +55,11 @@ function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
             <Html distanceFactor={10}>
               <div className="content">
                 <h2>{title}</h2>
-                {/* <h3>{text}</h3> */}
               </div>
             </Html>
           ) : null}
         </mesh>
-      )}
+      </PivotControls>
     </>
   );
 }
@@ -116,7 +91,7 @@ function Content({
 
   const addNewSphere = (ns) => {
     const newS = {
-      id: "6680d8c3-11fa-40ea-96b1-e0c2ba4f7df5",
+      id: uuidv4(),
       position: { x: ns.x, y: ns.y, z: ns.z },
       title: "",
       text: "",
@@ -132,8 +107,6 @@ function Content({
 
   const getSphereData = async () => {
     const spheres = apiInstance.handleGetLocalSpheresJsonData();
-    console.log("get spheres : ", spheres);
-
     if (spheres) {
       for (const s of spheres) {
         setSpheres((prevs) => [...prevs, s]);

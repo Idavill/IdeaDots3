@@ -1,6 +1,5 @@
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import "./App.css";
-import API from "./Services/API";
 import ThreeDContainer from "./Component/ThreeDContainer.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import image from "./Assets/shelf.jpg";
@@ -34,8 +33,15 @@ function Idea({ s, i, setActive, activeI, deleteThis, gizmo, setGizmo }) {
     deleteThis(s);
   };
 
-  const editIdea = (id, textContext) => {
+  const editTitle = (id, textContext) => {
     setIsActive(true);
+    console.log(textContext);
+    // save to local storage
+  };
+  const editText = (id, textContext) => {
+    setIsActive(true);
+    console.log(textContext);
+    s.text = textContext;
     // save to local storage
   };
 
@@ -52,16 +58,24 @@ function Idea({ s, i, setActive, activeI, deleteThis, gizmo, setGizmo }) {
       key={i}
       onMouseOver={() => setIsActive(true)}
       onMouseLeave={() => setIsActive(false)}
-      onInput={(e) => editIdea(s.id, e.currentTarget.textContent)}
       className="listcontent"
       style={{
         backgroundColor: isActive ? "rgb(55, 52, 255)" : "rgb(53, 53, 53)",
       }}
     >
-      <h4 id={`scrollspyHeading${i}`} contenteditable="true">
+      <h4
+        id={`scrollspyHeading${i}`}
+        contenteditable="true"
+        onInput={(e) => editTitle(s.id, e.currentTarget.textContent)}
+      >
         {s.title}
       </h4>
-      <p contenteditable="true">{s.text}</p>
+      <p
+        contenteditable="true"
+        onInput={(e) => editText(s.id, e.currentTarget.textContent)}
+      >
+        {s.text}
+      </p>
 
       {img != "" ? (
         <div className="square">
@@ -182,6 +196,7 @@ export default function App() {
         s={s}
         i={i}
         deleteThis={(s) => deleteIdea(s)}
+        setSpheres={(e) => setSpheres(e)}
       ></Idea>
     ));
   };
