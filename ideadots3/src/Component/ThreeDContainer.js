@@ -129,7 +129,7 @@ function Content({
   return <>{sphereList()} </>;
 }
 
-function CustomControls({ zoom, focus }) {
+function CustomControls({ zoom, focus, gizmo }) {
   const { camera, gl } = useThree();
   const controlsRef = useRef();
 
@@ -155,14 +155,21 @@ function CustomControls({ zoom, focus }) {
   });
 
   return (
-    <OrbitControls
-      ref={controlsRef}
-      camera={camera}
-      gl={gl}
-      enableRotate={true}
-      enablePan={true}
-      enableZoom={true}
-    />
+    <>
+      {gizmo ? (
+        <PivotControls>
+          <mesh />
+        </PivotControls>
+      ) : null}
+      <OrbitControls
+        ref={controlsRef}
+        camera={camera}
+        gl={gl}
+        enableRotate={true}
+        enablePan={true}
+        enableZoom={true}
+      />
+    </>
   );
 }
 
