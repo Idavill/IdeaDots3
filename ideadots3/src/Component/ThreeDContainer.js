@@ -75,8 +75,6 @@ function Content({
   scrollToIdea,
   gizmo,
 }) {
-  const apiInstance = API();
-
   useEffect(() => {
     if (newSphere) {
       addNewSphere(newSphere);
@@ -100,21 +98,21 @@ function Content({
     setSpheres((prevSpheres) => [newS, ...prevSpheres]);
   };
 
-  useEffect(() => {
-    getSphereData();
-    console.log("useffect in App ");
-  }, []);
+  // useEffect(() => {
+  //   getSphereData();
+  //   console.log("useffect in App ");
+  // }, []);
 
-  const getSphereData = async () => {
-    const spheres = apiInstance.handleGetLocalSpheresJsonData();
-    if (spheres) {
-      for (const s of spheres) {
-        setSpheres((prevs) => [...prevs, s]);
-      }
-    } else {
-      console.log("no spheres in App");
-    }
-  };
+  // const getSphereData = async () => {
+  //   const spheres = apiInstance.handleGetLocalSpheresJsonData();
+  //   if (spheres) {
+  //     for (const s of spheres) {
+  //       setSpheres((prevs) => [...prevs, s]);
+  //     }
+  //   } else {
+  //     console.log("no spheres in App");
+  //   }
+  // };
 
   const sphereList = () => {
     return spheres.map((s, i) => (
