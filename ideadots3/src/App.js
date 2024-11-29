@@ -26,6 +26,8 @@ function Idea({ s, i, setActive, activeI, deleteThis }) {
     }
   }, [activeI]);
 
+  const scrollToIdea = () => {};
+
   const handleGo = () => {
     setActive(sphere);
   };
@@ -34,9 +36,20 @@ function Idea({ s, i, setActive, activeI, deleteThis }) {
     deleteThis(s);
   };
 
+  const editIdea = (id, textContext) => {
+    console.log("parameters : ", id, textContext);
+    setIsActive(true);
+
+    // save to local storage
+  };
+
   return (
     <div
       key={i}
+      onMouseOver={() => setIsActive(true)}
+      onMouseLeave={() => setIsActive(false)}
+      contenteditable="true"
+      onInput={(e) => editIdea(s.id, e.currentTarget.textContent)}
       className="listcontent"
       style={{
         backgroundColor: isActive ? "rgb(55, 52, 255)" : "rgb(53, 53, 53)",
@@ -44,13 +57,11 @@ function Idea({ s, i, setActive, activeI, deleteThis }) {
     >
       <h4 id={`scrollspyHeading${i}`}>{s.title}</h4>
       <p>{s.text}</p>
-      <input autoFocus></input>
 
       {img != "" ? (
         <div className="square">
           <img
             style={{ display: "flex", width: "100%", height: "auto" }} // Set width to 100% and height to auto
-            // src={process.env.PUBLIC_URL + `${s.img}`}
             src={image}
             class=""
             alt="..."
@@ -76,47 +87,14 @@ function Idea({ s, i, setActive, activeI, deleteThis }) {
   );
 }
 
-function Overview({ s, i, activeSphere, setActiveSphere }) {
-  // const [isActive, setIsActive] = useState(
-  //   activeSphere &&
-  //     activeSphere.x === s.position.x &&
-  //     activeSphere.y === s.position.y &&
-  //     activeSphere.z === s.position.z
-  // );
-
-  // useEffect(() => {
-  //   if (activeSphere) {
-  //     if (activeSphere.id == s.id) {
-  //       console.log("active sphere id ", activeSphere.id);
-  //       //setIsActive(true);
-  //       setActiveSphere(s);
-  //     } else {
-  //       setIsActive(false);
-  //     }
-  //   }
-  // }, [activeSphere]);
-
-  const handleClick = (event) => {
-    setActiveSphere(s);
-    event.preventDefault(); // Prevent default anchor click behavior
-    const target = document.getElementById(`scrollspyHeading${i}`);
-    const body = document.body;
-    console.log(body);
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" }); // Smooth scroll to the target
-      window.scrollTo(2, 0);
-    }
-  };
+function Overview({ s, i, activeSphere, setActiveSphere, scrollToIdea }) {
   return (
     <ul class="nav nav-pills">
       <li class="nav-item">
         <a
           class="nav-link"
-          // style={{
-          //   backgroundColor: isActive ? "rgb(55, 52, 255" : "none",
-          // }}
           href={`#scrollspyHeading${i}`}
-          onClick={handleClick}
+          onClick={() => scrollToIdea(s, i)}
         >
           {s.title}
         </a>
@@ -147,33 +125,23 @@ export default function App() {
     }
   }, [activeSphere]);
 
-  // useEffect(() => {
-  //   getSphereData();
-  // }, []);
-
-  // const getSphereData = async () => {
-  //   console.log("test");
-
-  //   if (!spheres) {
-  //     // maybe needs to be changed when more dynamically fetching from db
-  //     const spheres = apiInstance.handleGetLocalSpheresJsonData();
-
-  //     console.log("test");
-
-  //     if (spheres) {
-  //       for (const s of spheres) {
-  //         setSpheres((prevs) => [s, ...prevs]);
-  //         console.log("now sphere in json load : ", s);
-  //       }
-  //     } else {
-  //       console.log("no spheres in App");
-  //     }
-  //   }
-  // };
+  const scrollToIdea = (s, i) => {
+    setActiveSphere(s);
+    setActiveIdea(s);
+    //event.preventDefault(); // Prevent default anchor click behavior
+    const target = document.getElementById(`scrollspyHeading${i}`);
+    const body = document.body;
+    console.log(body);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" }); // Smooth scroll to the target
+      window.scrollTo(2, 0);
+    }
+  };
 
   const overview = () => {
     return spheres.map((s, i) => (
       <Overview
+        scrollToIdea={scrollToIdea}
         activeSphere={activeSphere}
         setActiveSphere={(e) => setActiveSphere(e)}
         s={s}
@@ -217,9 +185,11 @@ export default function App() {
     <>
       <Suspense fallback={null}>
         <ThreeDContainer
+          scrollToIdea={(s, i) => scrollToIdea()}
           sphere={spheres}
           setSpheres={(e) => setSpheres(e)}
           setActiveIdea={(s) => setActiveIdea(s)}
+          activeIdea={activeIdea}
           cameraTarget={cameraTarget}
         />
       </Suspense>

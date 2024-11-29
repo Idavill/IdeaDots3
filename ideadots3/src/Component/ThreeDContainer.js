@@ -63,8 +63,8 @@ function Content({
   setFocus,
   focusSphere,
   newSphere,
+  scrollToIdea,
 }) {
-  //const [spheres, setSpheres] = useState([]);
   const apiInstance = API();
 
   useEffect(() => {
@@ -113,7 +113,9 @@ function Content({
     return spheres.map((s, i) => (
       <>
         <Sphere
-          zoomToView={(focusRef) => (setZoom(!zoom), setFocus(focusRef))}
+          zoomToView={(focusRef) => (
+            setZoom(!zoom), setFocus(focusRef), scrollToIdea(s, i)
+          )}
           key={i}
           position={[s.position.x, s.position.y, s.position.z]}
           title={s.title}
@@ -166,6 +168,8 @@ function CustomControls({ zoom, focus }) {
 
 export default function ThreeDContainer({
   sphere,
+  scrollToIdea,
+  activeIdea,
   cameraTarget,
   setActiveIdea,
   setSpheres,
@@ -207,6 +211,7 @@ export default function ThreeDContainer({
           }}
         >
           <Content
+            scrollToIdea={(s, i) => scrollToIdea()}
             zoom={zoom}
             setZoom={setZoom}
             setFocus={setFocus}
