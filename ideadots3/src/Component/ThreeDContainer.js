@@ -211,7 +211,7 @@ export default function ThreeDContainer({
           }}
         >
           <Content
-            scrollToIdea={(s, i) => scrollToIdea()}
+            scrollToIdea={(s, i) => scrollToIdea(s, i)}
             zoom={zoom}
             setZoom={setZoom}
             setFocus={setFocus}

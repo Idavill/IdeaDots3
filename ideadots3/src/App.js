@@ -185,7 +185,7 @@ export default function App() {
     <>
       <Suspense fallback={null}>
         <ThreeDContainer
-          scrollToIdea={(s, i) => scrollToIdea()}
+          scrollToIdea={(s, i) => scrollToIdea(s, i)}
           sphere={spheres}
           setSpheres={(e) => setSpheres(e)}
           setActiveIdea={(s) => setActiveIdea(s)}
