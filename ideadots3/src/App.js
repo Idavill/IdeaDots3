@@ -9,18 +9,22 @@ import { v4 as uuidv4 } from "uuid";
 
 function Idea({ s, i, setActive, activeI, deleteThis }) {
   const [sphere, setSphere] = useState(s);
-  // const [activeIdea, setActiveIdea] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const [img, setImg] = useState(s.img);
 
   useEffect(() => {
     console.log("imag ", img);
-  }, []);
-
-  const isActive =
-    activeI &&
-    activeI.x === s.position.x &&
-    activeI.y === s.position.y &&
-    activeI.z === s.position.z;
+    if (
+      activeI &&
+      activeI.x === s.position.x &&
+      activeI.y === s.position.y &&
+      activeI.z === s.position.z
+    ) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [activeI]);
 
   const handleGo = () => {
     setActive(sphere);
