@@ -40,6 +40,7 @@ function Idea({ s, i, setActive, activeI, deleteThis }) {
     >
       <h4 id={`scrollspyHeading${i}`}>{s.title}</h4>
       <p>{s.text}</p>
+      <input autoFocus></input>
 
       {img != "" ? (
         <div className="square">
@@ -142,24 +143,29 @@ export default function App() {
     }
   }, [activeSphere]);
 
-  useEffect(() => {
-    getSphereData();
-  }, []);
+  // useEffect(() => {
+  //   getSphereData();
+  // }, []);
 
-  const getSphereData = async () => {
-    if (!spheres) {
-      // maybe needs to be changed when more dynamically fetching from db
-      const spheres = apiInstance.handleGetLocalSpheresJsonData();
+  // const getSphereData = async () => {
+  //   console.log("test");
 
-      if (spheres) {
-        for (const s of spheres) {
-          setSpheres((prevs) => [...prevs, s]);
-        }
-      } else {
-        console.log("no spheres in App");
-      }
-    }
-  };
+  //   if (!spheres) {
+  //     // maybe needs to be changed when more dynamically fetching from db
+  //     const spheres = apiInstance.handleGetLocalSpheresJsonData();
+
+  //     console.log("test");
+
+  //     if (spheres) {
+  //       for (const s of spheres) {
+  //         setSpheres((prevs) => [s, ...prevs]);
+  //         console.log("now sphere in json load : ", s);
+  //       }
+  //     } else {
+  //       console.log("no spheres in App");
+  //     }
+  //   }
+  // };
 
   const overview = () => {
     return spheres.map((s, i) => (

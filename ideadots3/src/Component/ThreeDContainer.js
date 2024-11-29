@@ -110,7 +110,6 @@ function Content({
   };
 
   const sphereList = () => {
-    console.log(spheres.count);
     return spheres.map((s, i) => (
       <>
         <Sphere
