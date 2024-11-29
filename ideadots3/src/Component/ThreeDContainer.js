@@ -1,11 +1,10 @@
 import React, { Suspense, useEffect, useRef, useState, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useGLTF, OrbitControls } from "@react-three/drei";
+import { useGLTF, OrbitControls, PivotControls } from "@react-three/drei";
 import { Html } from "@react-three/drei";
 import "./ThreeDContainer.css";
 import API from "../Services/API";
 import * as THREE from "three";
-import { Vector3 } from "three";
 import CameraControls from "camera-controls";
 
 CameraControls.install({ THREE });
@@ -76,7 +75,6 @@ function Content({
   useEffect(() => {
     if (spheres) {
       setSpheres(spheres);
-      console.log("checkcheck");
     }
   }, [spheres]);
 
@@ -135,7 +133,7 @@ function CustomControls({ zoom, focus, gizmo }) {
 
   useEffect(() => {
     if (controlsRef.current) {
-      controlsRef.current.enableZoom = true; // Ensure zoom is enabled
+      controlsRef.current.enableZoom = true;
     }
   }, []);
 
@@ -180,6 +178,7 @@ export default function ThreeDContainer({
   cameraTarget,
   setActiveIdea,
   setSpheres,
+  gizmo,
 }) {
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
@@ -201,7 +200,6 @@ export default function ThreeDContainer({
   }, [focus]);
 
   useEffect(() => {
-    console.log("checkcheck22");
     if (sphere) {
       //setSpheres(spheres);
     }
@@ -237,7 +235,7 @@ export default function ThreeDContainer({
               setNewSphere={(e) => setNewSphere(e)}
             />
           </Suspense>
-          <CustomControls zoom={zoom} focus={focus} />
+          <CustomControls zoom={zoom} focus={focus} gizmo={gizmo} />
         </Canvas>
       </Suspense>
     </div>

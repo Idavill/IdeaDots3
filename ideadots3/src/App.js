@@ -7,7 +7,7 @@ import image from "./Assets/shelf.jpg";
 import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
 
-function Idea({ s, i, setActive, activeI, deleteThis }) {
+function Idea({ s, i, setActive, activeI, deleteThis, gizmo, setGizmo }) {
   const [sphere, setSphere] = useState(s);
   const [isActive, setIsActive] = useState(false);
   const [img, setImg] = useState(s.img);
@@ -26,8 +26,6 @@ function Idea({ s, i, setActive, activeI, deleteThis }) {
     }
   }, [activeI]);
 
-  const scrollToIdea = () => {};
-
   const handleGo = () => {
     setActive(sphere);
   };
@@ -37,9 +35,7 @@ function Idea({ s, i, setActive, activeI, deleteThis }) {
   };
 
   const editIdea = (id, textContext) => {
-    console.log("parameters : ", id, textContext);
     setIsActive(true);
-
     // save to local storage
   };
 
@@ -72,7 +68,11 @@ function Idea({ s, i, setActive, activeI, deleteThis }) {
         <button type="button" onClick={handleGo} class="btn btn-light">
           Go
         </button>
-        <button type="button" class="btn btn-light headerButton">
+        <button
+          type="button"
+          onClick={() => setGizmo(true)}
+          class="btn btn-light headerButton"
+        >
           Move
         </button>
         <button
@@ -108,10 +108,13 @@ export default function App() {
   const [activeSphere, setActiveSphere] = useState(null);
   const [cameraTarget, setCameraTarget] = useState(null);
   const [activeIdea, setActiveIdea] = useState(null);
-  const apiInstance = API();
+  const [gizmo, setGizmo] = useState(false);
 
   useEffect(() => {
-    console.log("inside app, possibly a circle was clicked", activeIdea);
+    console.log("gizmo: ", gizmo);
+  }, [gizmo]);
+
+  useEffect(() => {
     if (activeIdea) {
       setActiveIdea(activeIdea);
     }
@@ -119,7 +122,6 @@ export default function App() {
 
   useEffect(() => {
     if (activeSphere) {
-      console.log("active sphere: ", activeSphere);
       setCameraTarget(activeSphere);
       setActiveIdea(activeSphere);
     }
@@ -159,6 +161,8 @@ export default function App() {
   const listContent = () => {
     return spheres.map((s, i) => (
       <Idea
+        gizmo={gizmo}
+        setGizmo={(e) => setGizmo(!gizmo)}
         key={i}
         activeI={activeIdea}
         setActive={(s) => setActiveSphere(s)}
@@ -185,6 +189,7 @@ export default function App() {
     <>
       <Suspense fallback={null}>
         <ThreeDContainer
+          gizmo={gizmo}
           scrollToIdea={(s, i) => scrollToIdea(s, i)}
           sphere={spheres}
           setSpheres={(e) => setSpheres(e)}
