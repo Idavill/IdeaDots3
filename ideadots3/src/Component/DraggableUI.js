@@ -1,11 +1,30 @@
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, {
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+  createContext,
+  useContext,
+} from "react";
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import image from "../Assets/shelf.jpg";
 import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
 
-function Idea({ s, i, setActive, activeI, deleteThis, gizmo, setGizmo }) {
+function Idea({
+  s,
+  i,
+  setActive,
+  activeI,
+  deleteThis,
+  gizmo,
+  setGizmo,
+  sphereArray,
+  setSphereArray,
+  titleIsChanged,
+  setTitleIsChanged,
+}) {
   const [sphere, setSphere] = useState(s);
   const [isActive, setIsActive] = useState(false);
   const [img, setImg] = useState(s.img);
@@ -58,7 +77,15 @@ function Idea({ s, i, setActive, activeI, deleteThis, gizmo, setGizmo }) {
     setIsActive(true);
     const titleId = id + "title";
     localStorage.setItem(titleId, textContext);
+    sphereArray.forEach((sp) => {
+      if (sp.id == id) {
+        sp.title = textContext;
+      }
+    });
+    setSphereArray(sphereArray);
+    setTitleIsChanged(true);
   };
+
   const editText = (id, textContext) => {
     setIsActive(true);
     s.text = textContext;
@@ -131,28 +158,29 @@ function Idea({ s, i, setActive, activeI, deleteThis, gizmo, setGizmo }) {
   );
 }
 
-function Overview({ s, i, activeSphere, setActiveSphere, scrollToIdea }) {
+function Overview({
+  s,
+  i,
+  activeSphere,
+  setActiveSphere,
+  scrollToIdea,
+  sphereArray,
+  titleIsChanged,
+}) {
   const [title, setTitle] = useState(s.title);
-  const [text, setText] = useState(s.text);
+  useEffect(() => {
+    console.log("inside overview, something about titles were changed");
+    setTitle(s.title);
+  }, [titleIsChanged]);
 
-  //TODO: this is a copy of the useEffect inside Idea. Either update live or move up to parent?
   useEffect(() => {
     const titleId = s.id + "title";
-    const textId = s.id + "text";
-
     const localStorageTitle = localStorage.getItem(titleId);
-    const localStorageText = localStorage.getItem(textId);
 
     if (localStorageTitle) {
       setTitle(localStorageTitle);
     } else {
       setTitle(s.title);
-    }
-
-    if (localStorageText) {
-      setText(localStorageText);
-    } else {
-      setText(s.text);
     }
   }, []);
 
@@ -182,6 +210,16 @@ export default function DraggableUI({
   gizmo,
   setGizmo,
 }) {
+  const [sphereArray, setSphereArray] = useState(spheres);
+  const [titleIsChanged, setTitleIsChanged] = useState(false);
+
+  useEffect(() => {
+    if (titleIsChanged) {
+      console.log("spherearray changed inside draggable UI");
+      setTitleIsChanged(false);
+    }
+  }, [titleIsChanged]);
+
   const deleteIdea = (s) => {
     console.log("delete s ", s);
     const newList = spheres.filter((sphere) => sphere.id !== s.id);
@@ -195,7 +233,9 @@ export default function DraggableUI({
         activeSphere={activeSphere}
         setActiveSphere={(e) => setActiveSphere(e)}
         s={s}
+        sphereArray={sphereArray}
         i={i}
+        titleIsChanged={titleIsChanged}
       ></Overview>
     ));
   };
@@ -224,6 +264,10 @@ export default function DraggableUI({
         i={i}
         deleteThis={(s) => deleteIdea(s)}
         setSpheres={(e) => setSpheres(e)}
+        sphereArray={spheres}
+        setSphereArray={(e) => setSphereArray(e)}
+        titleIsChanged={titleIsChanged}
+        setTitleIsChanged={(e) => setTitleIsChanged(e)}
       ></Idea>
     ));
   };
