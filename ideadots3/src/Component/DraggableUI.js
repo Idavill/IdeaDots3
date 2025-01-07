@@ -132,6 +132,30 @@ function Idea({ s, i, setActive, activeI, deleteThis, gizmo, setGizmo }) {
 }
 
 function Overview({ s, i, activeSphere, setActiveSphere, scrollToIdea }) {
+  const [title, setTitle] = useState(s.title);
+  const [text, setText] = useState(s.text);
+
+  //TODO: this is a copy of the useEffect inside Idea. Either update live or move up to parent?
+  useEffect(() => {
+    const titleId = s.id + "title";
+    const textId = s.id + "text";
+
+    const localStorageTitle = localStorage.getItem(titleId);
+    const localStorageText = localStorage.getItem(textId);
+
+    if (localStorageTitle) {
+      setTitle(localStorageTitle);
+    } else {
+      setTitle(s.title);
+    }
+
+    if (localStorageText) {
+      setText(localStorageText);
+    } else {
+      setText(s.text);
+    }
+  }, []);
+
   return (
     <ul class="nav nav-pills">
       <li class="nav-item">
@@ -140,7 +164,7 @@ function Overview({ s, i, activeSphere, setActiveSphere, scrollToIdea }) {
           href={`#scrollspyHeading${i}`}
           onClick={() => scrollToIdea(s, i)}
         >
-          {s.title}
+          {title}
         </a>
       </li>
     </ul>
