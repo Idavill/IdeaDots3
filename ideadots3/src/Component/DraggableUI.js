@@ -9,6 +9,28 @@ function Idea({ s, i, setActive, activeI, deleteThis, gizmo, setGizmo }) {
   const [sphere, setSphere] = useState(s);
   const [isActive, setIsActive] = useState(false);
   const [img, setImg] = useState(s.img);
+  const [title, setTitle] = useState(s.title);
+  const [text, setText] = useState(s.text);
+
+  useEffect(() => {
+    const titleId = s.id + "title";
+    const textId = s.id + "text";
+
+    const localStorageTitle = localStorage.getItem(titleId);
+    const localStorageText = localStorage.getItem(textId);
+
+    if (localStorageTitle) {
+      setTitle(localStorageTitle);
+    } else {
+      setTitle(s.title);
+    }
+
+    if (localStorageText) {
+      setText(localStorageText);
+    } else {
+      setText(s.text);
+    }
+  }, []);
 
   useEffect(() => {
     console.log("imag ", img);
@@ -34,14 +56,14 @@ function Idea({ s, i, setActive, activeI, deleteThis, gizmo, setGizmo }) {
 
   const editTitle = (id, textContext) => {
     setIsActive(true);
-    console.log(textContext);
-    // save to local storage
+    const titleId = id + "title";
+    localStorage.setItem(titleId, textContext);
   };
   const editText = (id, textContext) => {
     setIsActive(true);
-    console.log(textContext);
     s.text = textContext;
-    // save to local storage
+    const textId = id + "text";
+    localStorage.setItem(textId, textContext);
   };
 
   const handleMoveClicked = () => {
@@ -67,13 +89,13 @@ function Idea({ s, i, setActive, activeI, deleteThis, gizmo, setGizmo }) {
         contenteditable="true"
         onInput={(e) => editTitle(s.id, e.currentTarget.textContent)}
       >
-        {s.title}
+        {title}
       </h4>
       <p
         contenteditable="true"
         onInput={(e) => editText(s.id, e.currentTarget.textContent)}
       >
-        {s.text}
+        {text}
       </p>
 
       {img != "" ? (
