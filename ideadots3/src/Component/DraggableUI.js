@@ -24,6 +24,8 @@ function Idea({
   setSphereArray,
   titleIsChanged,
   setTitleIsChanged,
+  setTitleChangeId,
+  TitleChangeId,
 }) {
   const [sphere, setSphere] = useState(s);
   const [isActive, setIsActive] = useState(false);
@@ -84,6 +86,7 @@ function Idea({
     });
     setSphereArray(sphereArray);
     setTitleIsChanged(true);
+    setTitleChangeId(id);
   };
 
   const editText = (id, textContext) => {
@@ -166,11 +169,14 @@ function Overview({
   scrollToIdea,
   sphereArray,
   titleIsChanged,
+  titleChangeId,
 }) {
   const [title, setTitle] = useState(s.title);
   useEffect(() => {
-    console.log("inside overview, something about titles were changed");
-    setTitle(s.title);
+    if (titleChangeId == s.id) {
+      console.log("inside overview, something about titles were changed");
+      setTitle(s.title);
+    }
   }, [titleIsChanged]);
 
   useEffect(() => {
@@ -209,16 +215,18 @@ export default function DraggableUI({
   setActiveIdea,
   gizmo,
   setGizmo,
+  sphereIsChanging,
+  setSphereIsChanging,
 }) {
-  const [sphereArray, setSphereArray] = useState(spheres);
-  const [titleIsChanged, setTitleIsChanged] = useState(false);
+  //const [sphereArray, setSphereArray] = useState(spheres);
+  const [titleChangeId, setTitleChangeId] = useState("");
 
   useEffect(() => {
-    if (titleIsChanged) {
+    if (sphereIsChanging) {
       console.log("spherearray changed inside draggable UI");
-      setTitleIsChanged(false);
+      setSphereIsChanging(false);
     }
-  }, [titleIsChanged]);
+  }, [sphereIsChanging]);
 
   const deleteIdea = (s) => {
     console.log("delete s ", s);
@@ -233,9 +241,10 @@ export default function DraggableUI({
         activeSphere={activeSphere}
         setActiveSphere={(e) => setActiveSphere(e)}
         s={s}
-        sphereArray={sphereArray}
+        sphereArray={spheres}
         i={i}
-        titleIsChanged={titleIsChanged}
+        titleIsChanged={sphereIsChanging}
+        titleChangeId={titleChangeId}
       ></Overview>
     ));
   };
@@ -265,9 +274,11 @@ export default function DraggableUI({
         deleteThis={(s) => deleteIdea(s)}
         setSpheres={(e) => setSpheres(e)}
         sphereArray={spheres}
-        setSphereArray={(e) => setSphereArray(e)}
-        titleIsChanged={titleIsChanged}
-        setTitleIsChanged={(e) => setTitleIsChanged(e)}
+        setSphereArray={(e) => setSpheres(e)}
+        titleIsChanged={sphereIsChanging}
+        setTitleIsChanged={(e) => setSphereIsChanging(e)}
+        titleChangeId={titleChangeId}
+        setTitleChangeId={(e) => setTitleChangeId(e)}
       ></Idea>
     ));
   };

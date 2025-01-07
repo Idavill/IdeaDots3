@@ -10,11 +10,16 @@ import DraggableUI from "./Component/DraggableUI.js";
 
 export default function App() {
   const [spheres, setSpheres] = useState([]);
+  const [sphereIsChanging, setSphereIsChanging] = useState(false);
   const [activeSphere, setActiveSphere] = useState(null);
   const [cameraTarget, setCameraTarget] = useState(null);
   const [activeIdea, setActiveIdea] = useState(null);
   const [gizmo, setGizmo] = useState(null);
   const apiInstance = API();
+
+  useEffect(() => {
+    console.log("spheres changed");
+  }, [sphereIsChanging]);
 
   useEffect(() => {
     getSphereData();
@@ -88,6 +93,8 @@ export default function App() {
         setActiveIdea={(e) => setActiveIdea(e)}
         gizmo={gizmo}
         setGizmo={(e) => setGizmo(e)}
+        sphereIsChanging={sphereIsChanging}
+        setSphereIsChanging={(e) => setSphereIsChanging(e)}
       />
     </>
   );
