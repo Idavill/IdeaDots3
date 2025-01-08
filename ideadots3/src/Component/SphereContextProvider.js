@@ -1,4 +1,3 @@
-import { Sphere } from "@react-three/drei";
 import API from "../Services/API";
 import React, { createContext, useState, useEffect, useContext } from "react";
 
@@ -6,23 +5,32 @@ export const SphereContext = createContext();
 
 export const SphereContextProvider = ({ children }) => {
   const [spheres, setSpheres] = useState([]);
-  const value = { name: "John Doe", age: 30 };
   const apiInstance = API();
 
   useEffect(() => {
-    console.log("CONTEXT");
-    const fetchData = async () => {
-      await getSphereData();
-    };
-    fetchData();
+    getSphereData();
+    //updateDataWithLocalStorage();
   }, []);
+
+  const updateDataWithLocalStorage = () => {
+    spheres.forEach((s) => {
+      console.log("TESSST", s);
+
+      if (localStorage.getItem(s.id + "title") !== null) {
+        s.title = localStorage.getItem(s.id + "title");
+        console.log("TESSST", s.title);
+      }
+    });
+  };
 
   const getSphereData = async () => {
     const spheresFromAPI = apiInstance.handleGetLocalSpheresJsonData();
     if (spheresFromAPI) {
       for (const s of spheresFromAPI) {
-        console.log("CONTEXT", s);
-
+        if (localStorage.getItem(s.id + "title") !== null) {
+          s.title = localStorage.getItem(s.id + "title");
+          console.log("TESSST", s.title);
+        }
         setSpheres((prevs) => [...prevs, s]);
       }
     } else {
@@ -31,7 +39,9 @@ export const SphereContextProvider = ({ children }) => {
   };
 
   return (
-    <SphereContext.Provider value={spheres}>{children}</SphereContext.Provider>
+    <SphereContext.Provider value={{ spheres, setSpheres }}>
+      {children}
+    </SphereContext.Provider>
   );
 };
 

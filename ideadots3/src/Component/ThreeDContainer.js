@@ -18,37 +18,25 @@ import { SphereContext } from "./SphereContextProvider";
 
 CameraControls.install({ THREE });
 
-function Sphere({
-  position,
-  title,
-  text,
-  zoomToView,
-  focus,
-  gizmo,
-  id,
-  titleIsChanged,
-}) {
+function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
   const [sphereTitle, setSphereTitle] = useState(title);
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
   const [pos, setPos] = useState(position);
   const meshRef = useRef();
-  // const { spheres, setSpheres } = useContext(SphereContext);
   const context = useContext(SphereContext);
 
   useEffect(() => {
-    console.log("inside 3d sphere should change the title of the idea");
-  }, [titleIsChanged]);
+    console.log("IDEA");
+    context.spheres.forEach((e) => {
+      if (e.id == id) {
+        setSphereTitle(e.title);
+      }
+    });
+  }, [context]);
 
   useEffect(() => {
-    const titleId = id + "title";
-    const localStorageTitle = localStorage.getItem(titleId);
-
-    if (localStorageTitle) {
-      setSphereTitle(localStorageTitle);
-    } else {
-      setSphereTitle(title);
-    }
+    //updateTitle(id, setSphereTitle, title);
   }, []);
 
   useEffect(() => {
@@ -61,8 +49,20 @@ function Sphere({
     } else {
       click(false);
     }
-    console.log("SPHERECONTEXT: ", context);
+    console.log("SPHERECONTEXT: ", context.spheres[1]);
+    //updateTitle();
   }, [focus]);
+
+  function updateTitle(id, title) {
+    const titleId = id + "title";
+    const localStorageTitle = localStorage.getItem(titleId);
+
+    if (localStorageTitle) {
+      setSphereTitle(localStorageTitle);
+    } else {
+      setSphereTitle(title);
+    }
+  }
 
   return (
     <>
@@ -103,18 +103,13 @@ function Sphere({
 function Content({
   zoom,
   setZoom,
-  spheres,
-  setSpheres,
   setFocus,
   focusSphere,
   newSphere,
   scrollToIdea,
   gizmo,
-  titleIsChanged,
 }) {
-  useEffect(() => {
-    console.log("inside CONTENT should change the title of the idea");
-  }, [titleIsChanged]);
+  const context = useContext(SphereContext);
 
   useEffect(() => {
     if (newSphere) {
@@ -123,10 +118,10 @@ function Content({
   }, [newSphere]);
 
   useEffect(() => {
-    if (spheres) {
-      setSpheres(spheres);
+    if (context.spheres) {
+      context.setSpheres(context.spheres);
     }
-  }, [spheres]);
+  }, [context]);
 
   const addNewSphere = (ns) => {
     const newS = {
@@ -136,11 +131,11 @@ function Content({
       text: "",
       img: "",
     };
-    setSpheres((prevSpheres) => [newS, ...prevSpheres]);
+    context.setSpheres((prevSpheres) => [newS, ...prevSpheres]);
   };
 
   const sphereList = () => {
-    return spheres.map((s, i) => (
+    return context.spheres.map((s, i) => (
       <>
         <Sphere
           gizmo={gizmo}
@@ -153,7 +148,6 @@ function Content({
           text={s.text}
           focus={focusSphere}
           id={s.id}
-          titleIsChanged={titleIsChanged}
         />
       </>
     ));
@@ -204,22 +198,14 @@ function CustomControls({ zoom, focus, gizmo }) {
 }
 
 export default function ThreeDContainer({
-  sphere,
   scrollToIdea,
-  activeIdea,
   cameraTarget,
   setActiveIdea,
-  setSpheres,
   gizmo,
-  titleIsChanged,
 }) {
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
   const [newSphere, setNewSphere] = useState(null);
-
-  // useEffect(() => {
-  //   console.log("inside THREECONTAINER should change the title of the idea");
-  // }, [titleIsChanged]);
 
   useEffect(() => {
     if (cameraTarget) {
@@ -235,12 +221,6 @@ export default function ThreeDContainer({
       setActiveIdea(focus);
     }
   }, [focus]);
-
-  // useEffect(() => {
-  //   if (sphere) {
-  //     //setSpheres(spheres);
-  //   }
-  // }, [sphere]);
 
   return (
     <div style={{ height: "100vh" }}>
@@ -258,11 +238,8 @@ export default function ThreeDContainer({
             zoom={zoom}
             setZoom={setZoom}
             setFocus={setFocus}
-            spheres={sphere}
-            setSpheres={(e) => setSpheres(e)}
             focusSphere={focus}
             newSphere={newSphere}
-            titleIsChanged={titleIsChanged}
           />
 
           <directionalLight position={[10, 10, 0]} intensity={1.5} />

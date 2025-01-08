@@ -11,6 +11,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import image from "../Assets/shelf.jpg";
 import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
+import { SphereContext } from "./SphereContextProvider";
 
 function Idea({
   s,
@@ -32,6 +33,11 @@ function Idea({
   const [img, setImg] = useState(s.img);
   const [title, setTitle] = useState(s.title);
   const [text, setText] = useState(s.text);
+  const context = useContext(SphereContext);
+
+  useEffect(() => {
+    console.log("CONTEXT IS: ", context);
+  }, [context]);
 
   useEffect(() => {
     const titleId = s.id + "title";
@@ -68,13 +74,18 @@ function Idea({
   }, [activeI]);
 
   const handleGo = () => {
-    setActive(sphere);
+    context.spheres.forEach((e) => {
+      if (e.id == s.id) {
+        setActive(e); // context.spheres is not updated
+      }
+    });
   };
 
   const handleRemoveIdea = () => {
     deleteThis(s);
   };
 
+  //TODO: WHen title is edited, then context should
   const editTitle = (id, textContext) => {
     setIsActive(true);
     const titleId = id + "title";
@@ -84,6 +95,7 @@ function Idea({
         sp.title = textContext;
       }
     });
+
     setSphereArray(sphereArray);
     setTitleIsChanged(true);
     setTitleChangeId(id);
@@ -218,30 +230,29 @@ export default function DraggableUI({
   sphereIsChanging,
   setSphereIsChanging,
 }) {
-  //const [sphereArray, setSphereArray] = useState(spheres);
+  const context = useContext(SphereContext);
   const [titleChangeId, setTitleChangeId] = useState("");
 
   useEffect(() => {
     if (sphereIsChanging) {
-      console.log("spherearray changed inside draggable UI");
+      console.log("draggable UI");
       setSphereIsChanging(false);
     }
   }, [sphereIsChanging]);
 
   const deleteIdea = (s) => {
-    console.log("delete s ", s);
-    const newList = spheres.filter((sphere) => sphere.id !== s.id);
-    setSpheres(newList);
+    const newList = context.spheres.filter((sphere) => sphere.id !== s.id);
+    context.setSpheres(newList);
   };
 
   const overview = () => {
-    return spheres.map((s, i) => (
+    return context.spheres.map((s, i) => (
       <Overview
         scrollToIdea={scrollToIdea}
         activeSphere={activeSphere}
         setActiveSphere={(e) => setActiveSphere(e)}
         s={s}
-        sphereArray={spheres}
+        sphereArray={context.spheres}
         i={i}
         titleIsChanged={sphereIsChanging}
         titleChangeId={titleChangeId}
@@ -257,12 +268,11 @@ export default function DraggableUI({
       text: "",
       img: "",
     };
-    setSpheres((prevs) => [newS, ...prevs]);
-    console.log("ADD");
+    context.setSpheres((prevs) => [newS, ...prevs]);
   };
 
   const listContent = () => {
-    return spheres.map((s, i) => (
+    return context.spheres.map((s, i) => (
       <Idea
         gizmo={gizmo}
         setGizmo={(e) => setGizmo(e)}
@@ -272,9 +282,9 @@ export default function DraggableUI({
         s={s}
         i={i}
         deleteThis={(s) => deleteIdea(s)}
-        setSpheres={(e) => setSpheres(e)}
-        sphereArray={spheres}
-        setSphereArray={(e) => setSpheres(e)}
+        setSpheres={(e) => context.setSpheres(e)}
+        sphereArray={context.spheres}
+        setSphereArray={(e) => context.setSpheres(e)}
         titleIsChanged={sphereIsChanging}
         setTitleIsChanged={(e) => setSphereIsChanging(e)}
         titleChangeId={titleChangeId}
