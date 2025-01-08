@@ -1,4 +1,11 @@
-import React, { Suspense, useEffect, useRef, useState, useMemo } from "react";
+import React, {
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+  useContext,
+} from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF, OrbitControls, PivotControls } from "@react-three/drei";
 import { Html } from "@react-three/drei";
@@ -7,14 +14,42 @@ import API from "../Services/API";
 import * as THREE from "three";
 import CameraControls from "camera-controls";
 import { v4 as uuidv4 } from "uuid";
+import { SphereContext } from "./SphereContextProvider";
 
 CameraControls.install({ THREE });
 
-function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
+function Sphere({
+  position,
+  title,
+  text,
+  zoomToView,
+  focus,
+  gizmo,
+  id,
+  titleIsChanged,
+}) {
+  const [sphereTitle, setSphereTitle] = useState(title);
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
   const [pos, setPos] = useState(position);
   const meshRef = useRef();
+  // const { spheres, setSpheres } = useContext(SphereContext);
+  const context = useContext(SphereContext);
+
+  useEffect(() => {
+    console.log("inside 3d sphere should change the title of the idea");
+  }, [titleIsChanged]);
+
+  useEffect(() => {
+    const titleId = id + "title";
+    const localStorageTitle = localStorage.getItem(titleId);
+
+    if (localStorageTitle) {
+      setSphereTitle(localStorageTitle);
+    } else {
+      setSphereTitle(title);
+    }
+  }, []);
 
   useEffect(() => {
     if (
@@ -26,6 +61,7 @@ function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
     } else {
       click(false);
     }
+    console.log("SPHERECONTEXT: ", context.name);
   }, [focus]);
 
   return (
@@ -54,7 +90,7 @@ function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
           {hovered ? (
             <Html distanceFactor={10}>
               <div className="content">
-                <h2>{title}</h2>
+                <h2>{sphereTitle}</h2>
               </div>
             </Html>
           ) : null}
@@ -74,7 +110,12 @@ function Content({
   newSphere,
   scrollToIdea,
   gizmo,
+  titleIsChanged,
 }) {
+  useEffect(() => {
+    console.log("inside CONTENT should change the title of the idea");
+  }, [titleIsChanged]);
+
   useEffect(() => {
     if (newSphere) {
       addNewSphere(newSphere);
@@ -98,22 +139,6 @@ function Content({
     setSpheres((prevSpheres) => [newS, ...prevSpheres]);
   };
 
-  // useEffect(() => {
-  //   getSphereData();
-  //   console.log("useffect in App ");
-  // }, []);
-
-  // const getSphereData = async () => {
-  //   const spheres = apiInstance.handleGetLocalSpheresJsonData();
-  //   if (spheres) {
-  //     for (const s of spheres) {
-  //       setSpheres((prevs) => [...prevs, s]);
-  //     }
-  //   } else {
-  //     console.log("no spheres in App");
-  //   }
-  // };
-
   const sphereList = () => {
     return spheres.map((s, i) => (
       <>
@@ -128,6 +153,7 @@ function Content({
           text={s.text}
           focus={focusSphere}
           id={s.id}
+          titleIsChanged={titleIsChanged}
         />
       </>
     ));
@@ -185,10 +211,15 @@ export default function ThreeDContainer({
   setActiveIdea,
   setSpheres,
   gizmo,
+  titleIsChanged,
 }) {
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
   const [newSphere, setNewSphere] = useState(null);
+
+  // useEffect(() => {
+  //   console.log("inside THREECONTAINER should change the title of the idea");
+  // }, [titleIsChanged]);
 
   useEffect(() => {
     if (cameraTarget) {
@@ -205,11 +236,11 @@ export default function ThreeDContainer({
     }
   }, [focus]);
 
-  useEffect(() => {
-    if (sphere) {
-      //setSpheres(spheres);
-    }
-  }, [sphere]);
+  // useEffect(() => {
+  //   if (sphere) {
+  //     //setSpheres(spheres);
+  //   }
+  // }, [sphere]);
 
   return (
     <div style={{ height: "100vh" }}>
@@ -231,7 +262,9 @@ export default function ThreeDContainer({
             setSpheres={(e) => setSpheres(e)}
             focusSphere={focus}
             newSphere={newSphere}
+            titleIsChanged={titleIsChanged}
           />
+
           <directionalLight position={[10, 10, 0]} intensity={1.5} />
           <directionalLight position={[-10, 10, 5]} intensity={1} />
           <directionalLight position={[-10, 20, 0]} intensity={1.5} />
