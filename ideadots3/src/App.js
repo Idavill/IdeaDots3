@@ -3,7 +3,6 @@ import "./App.css";
 import ThreeDContainer from "./Component/ThreeDContainer.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import image from "./Assets/shelf.jpg";
-import API from "./Services/API";
 import DraggableUI from "./Component/DraggableUI.js";
 import { SphereContextProvider } from "./Component/SphereContextProvider.js";
 export default function App() {
@@ -12,14 +11,6 @@ export default function App() {
   const [cameraTarget, setCameraTarget] = useState(null);
   const [activeIdea, setActiveIdea] = useState(null);
   const [gizmo, setGizmo] = useState(null);
-
-  useEffect(() => {
-    if (gizmo) {
-      console.log("gizmo: ", gizmo);
-    } else {
-      console.log("gizmo null");
-    }
-  }, [gizmo]);
 
   useEffect(() => {
     if (activeIdea) {

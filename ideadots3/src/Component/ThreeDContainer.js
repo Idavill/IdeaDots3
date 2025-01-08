@@ -27,17 +27,8 @@ function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
   const context = useContext(SphereContext);
 
   useEffect(() => {
-    console.log("IDEA");
-    context.spheres.forEach((e) => {
-      if (e.id == id) {
-        setSphereTitle(e.title);
-      }
-    });
+    alignSphereTitleWithIdeaTitle();
   }, [context]);
-
-  useEffect(() => {
-    //updateTitle(id, setSphereTitle, title);
-  }, []);
 
   useEffect(() => {
     if (
@@ -50,19 +41,7 @@ function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
       click(false);
     }
     console.log("SPHERECONTEXT: ", context.spheres[1]);
-    //updateTitle();
   }, [focus]);
-
-  function updateTitle(id, title) {
-    const titleId = id + "title";
-    const localStorageTitle = localStorage.getItem(titleId);
-
-    if (localStorageTitle) {
-      setSphereTitle(localStorageTitle);
-    } else {
-      setSphereTitle(title);
-    }
-  }
 
   return (
     <>
@@ -98,6 +77,15 @@ function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
       </PivotControls>
     </>
   );
+
+  function alignSphereTitleWithIdeaTitle() {
+    console.log("IDEA");
+    context.spheres.forEach((e) => {
+      if (e.id == id) {
+        setSphereTitle(e.title);
+      }
+    });
+  }
 }
 
 function Content({
@@ -117,11 +105,12 @@ function Content({
     }
   }, [newSphere]);
 
-  useEffect(() => {
-    if (context.spheres) {
-      context.setSpheres(context.spheres);
-    }
-  }, [context]);
+  //TODO: check this is important
+  // useEffect(() => {
+  //   if (context.spheres) {
+  //     context.setSpheres(context.spheres);
+  //   }
+  // }, [context]);
 
   const addNewSphere = (ns) => {
     const newS = {

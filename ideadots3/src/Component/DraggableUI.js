@@ -1,11 +1,4 @@
-import React, {
-  Suspense,
-  useEffect,
-  useRef,
-  useState,
-  createContext,
-  useContext,
-} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import image from "../Assets/shelf.jpg";
@@ -23,21 +16,19 @@ function Idea({
   setGizmo,
   sphereArray,
   setSphereArray,
-  titleIsChanged,
   setTitleIsChanged,
   setTitleChangeId,
-  TitleChangeId,
 }) {
-  const [sphere, setSphere] = useState(s);
   const [isActive, setIsActive] = useState(false);
   const [img, setImg] = useState(s.img);
   const [title, setTitle] = useState(s.title);
   const [text, setText] = useState(s.text);
   const context = useContext(SphereContext);
 
-  useEffect(() => {
-    console.log("CONTEXT IS: ", context);
-  }, [context]);
+  //TODO: test this is important
+  // useEffect(() => {
+  //   console.log("CONTEXT IS: ", context);
+  // }, [context]);
 
   useEffect(() => {
     const titleId = s.id + "title";
@@ -60,7 +51,7 @@ function Idea({
   }, []);
 
   useEffect(() => {
-    console.log("imag ", img);
+    console.log("image : ", img);
     if (
       activeI &&
       activeI.x === s.position.x &&
@@ -73,10 +64,11 @@ function Idea({
     }
   }, [activeI]);
 
+  //TODO: test this method especially if e is updated data
   const handleGo = () => {
     context.spheres.forEach((e) => {
       if (e.id == s.id) {
-        setActive(e); // context.spheres is not updated
+        setActive(e);
       }
     });
   };
@@ -173,20 +165,10 @@ function Idea({
   );
 }
 
-function Overview({
-  s,
-  i,
-  activeSphere,
-  setActiveSphere,
-  scrollToIdea,
-  sphereArray,
-  titleIsChanged,
-  titleChangeId,
-}) {
+function Overview({ s, i, scrollToIdea, titleIsChanged, titleChangeId }) {
   const [title, setTitle] = useState(s.title);
   useEffect(() => {
     if (titleChangeId == s.id) {
-      console.log("inside overview, something about titles were changed");
       setTitle(s.title);
     }
   }, [titleIsChanged]);
@@ -221,10 +203,7 @@ export default function DraggableUI({
   activeSphere,
   setActiveSphere,
   scrollToIdea,
-  spheres,
-  setSpheres,
   activeIdea,
-  setActiveIdea,
   gizmo,
   setGizmo,
   sphereIsChanging,
@@ -235,7 +214,6 @@ export default function DraggableUI({
 
   useEffect(() => {
     if (sphereIsChanging) {
-      console.log("draggable UI");
       setSphereIsChanging(false);
     }
   }, [sphereIsChanging]);
