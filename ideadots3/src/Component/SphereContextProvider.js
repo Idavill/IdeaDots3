@@ -12,19 +12,8 @@ export const SphereContextProvider = ({ children }) => {
     //updateDataWithLocalStorage();
   }, []);
 
-  const updateDataWithLocalStorage = () => {
-    spheres.forEach((s) => {
-      console.log("TESSST", s);
-
-      if (localStorage.getItem(s.id + "title") !== null) {
-        s.title = localStorage.getItem(s.id + "title");
-        console.log("TESSST", s.title);
-      }
-    });
-  };
-
   const getSphereData = async () => {
-    const spheresFromAPI = apiInstance.handleGetLocalSpheresJsonData();
+    var spheresFromAPI = apiInstance.handleGetLocalSpheresJsonData();
     if (spheresFromAPI) {
       for (const s of spheresFromAPI) {
         if (localStorage.getItem(s.id + "title") !== null) {

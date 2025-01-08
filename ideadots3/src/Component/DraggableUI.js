@@ -5,6 +5,7 @@ import image from "../Assets/shelf.jpg";
 import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
 import { SphereContext } from "./SphereContextProvider";
+import UploadAndDisplayImage from "./UploadAndDisplayImage";
 
 function Idea({
   s,
@@ -24,13 +25,30 @@ function Idea({
   const [title, setTitle] = useState(s.title);
   const [text, setText] = useState(s.text);
   const context = useContext(SphereContext);
+  const [images, setImages] = useState([]);
 
   //TODO: test this is important
   // useEffect(() => {
   //   console.log("CONTEXT IS: ", context);
   // }, [context]);
 
+  const setTestImage = () => {
+    localStorage.setItem(s.id + "img", "lala");
+  };
+
+  const getImages = () => {
+    for (var key in localStorage) {
+      if (key.endsWith("img")) {
+        image = localStorage.getItem(key);
+        console.log("test image ", image);
+        setImages((prev) => [...prev, image]);
+      }
+    }
+  };
+
   useEffect(() => {
+    setTestImage();
+
     const titleId = s.id + "title";
     const textId = s.id + "text";
 
@@ -48,10 +66,12 @@ function Idea({
     } else {
       setText(s.text);
     }
+
+    getImages();
+    console.log("test ", images);
   }, []);
 
   useEffect(() => {
-    console.log("image : ", img);
     if (
       activeI &&
       activeI.x === s.position.x &&
@@ -121,16 +141,31 @@ function Idea({
       <h4
         id={`scrollspyHeading${i}`}
         contenteditable="true"
+        onDoubleClick={(e) => {
+          const range = document.createRange();
+          range.selectNodeContents(e.currentTarget);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }}
         onInput={(e) => editTitle(s.id, e.currentTarget.textContent)}
       >
         {title}
       </h4>
       <p
         contenteditable="true"
+        onDoubleClick={(e) => {
+          const range = document.createRange();
+          range.selectNodeContents(e.currentTarget);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }}
         onInput={(e) => editText(s.id, e.currentTarget.textContent)}
       >
         {text}
       </p>
+      <UploadAndDisplayImage />
 
       {img != "" ? (
         <div className="square">
@@ -242,11 +277,15 @@ export default function DraggableUI({
     const newS = {
       id: uuidv4(),
       position: { x: 0, y: 0, z: 0 },
-      title: "",
-      text: "",
+      title: "New Idea",
+      text: "New Idea Text",
       img: "",
     };
-    context.setSpheres((prevs) => [newS, ...prevs]);
+    context.setSpheres((prevs) => [...prevs, newS]);
+    const newSTitleID = newS.id + "title";
+    const newSTextID = newS.id + "text";
+    localStorage.setItem(newSTitleID, newS.title);
+    localStorage.setItem(newSTextID, newS.text);
   };
 
   const listContent = () => {
@@ -261,8 +300,8 @@ export default function DraggableUI({
         i={i}
         deleteThis={(s) => deleteIdea(s)}
         setSpheres={(e) => context.setSpheres(e)}
-        sphereArray={context.spheres}
-        setSphereArray={(e) => context.setSpheres(e)}
+        sphereArray={context.spheres} // redundant, need to call context.spheres inside idea
+        setSphereArray={(e) => context.setSpheres(e)} // thereby also this is reduncant
         titleIsChanged={sphereIsChanging}
         setTitleIsChanged={(e) => setSphereIsChanging(e)}
         titleChangeId={titleChangeId}
@@ -276,13 +315,13 @@ export default function DraggableUI({
       <Draggable>
         <div className="mainContainer">
           <div className="header">
-            <button
+            {/* <button
               type="button"
               onClick={handleAddIdea}
               class="btn btn-light headerButton"
             >
               +
-            </button>
+            </button> */}
           </div>
           <div className="contentContainer">
             <div className="overviewContainer">

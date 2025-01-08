@@ -116,11 +116,15 @@ function Content({
     const newS = {
       id: uuidv4(),
       position: { x: ns.x, y: ns.y, z: ns.z },
-      title: "",
-      text: "",
+      title: "New Idea",
+      text: "New Idea Text",
       img: "",
     };
-    context.setSpheres((prevSpheres) => [newS, ...prevSpheres]);
+    context.setSpheres((prevSpheres) => [...prevSpheres, newS]);
+    const newSTitleID = newS.id + "title";
+    const newSTextID = newS.id + "text";
+    localStorage.setItem(newSTitleID, newS.title);
+    localStorage.setItem(newSTextID, newS.text);
   };
 
   const sphereList = () => {
