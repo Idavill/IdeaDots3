@@ -61,7 +61,7 @@ function Sphere({
     } else {
       click(false);
     }
-    console.log("SPHERECONTEXT: ", context.name);
+    console.log("SPHERECONTEXT: ", context);
   }, [focus]);
 
   return (
