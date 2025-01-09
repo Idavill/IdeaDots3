@@ -1,10 +1,13 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 
-const Card = ({ position, lookAt }) => {
+const Card = ({ focusLabel, position, lookAt }) => {
   const ref = useRef();
 
-  // Rotate the card to always face the camera
+  useEffect(() => {
+    console.log("CARD: FOCUS LABEL : ", focusLabel);
+  }, [focusLabel]);
+
   useFrame(({ camera }) => {
     if (ref.current) {
       ref.current.lookAt(camera.position);
@@ -12,14 +15,20 @@ const Card = ({ position, lookAt }) => {
   });
 
   return (
-    <mesh ref={ref} position={position}>
-      <planeGeometry args={[1, 1.5]} /> {/* Adjust card size */}
+    <mesh ref={ref} position={focusLabel ? position : [100, 100, 100]}>
+      <planeGeometry args={[0.5, 0.8]} /> {/* Adjust card size */}
       <meshBasicMaterial color="orange" />
     </mesh>
   );
 };
 
-const CircularCards = ({ pos, count = 6, radius = 3 }) => {
+const CircularCards = ({ focusLabel, pos, count = 6, radius = 1 }) => {
+  const groupRef = useRef();
+
+  useEffect(() => {
+    console.log("CIRCULAR CARDS: FOCUS LABEL : ", focusLabel);
+  }, [focusLabel]);
+
   const cards = Array.from({ length: count }, (_, i) => {
     const angle = (i / count) * Math.PI * 2;
     const x = radius * Math.cos(angle);
@@ -29,19 +38,12 @@ const CircularCards = ({ pos, count = 6, radius = 3 }) => {
 
   return (
     <>
-      {cards.map((position, index) => (
-        <Card key={index} position={position} />
-      ))}
+      <group ref={groupRef} position={pos}>
+        {cards.map((position, index) => (
+          <Card focusLabel={focusLabel} key={index} position={position} />
+        ))}
+      </group>
     </>
   );
 };
-
-// const App = () => (
-//   <Canvas>
-//     <ambientLight />
-//     <pointLight position={[10, 10, 10]} />
-//     <CircularCards count={10} radius={5} />
-//   </Canvas>
-// );
-
 export default CircularCards;

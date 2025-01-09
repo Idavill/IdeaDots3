@@ -69,13 +69,13 @@ function Sphere({
       >
         {/* <Scene position={pos} /> */}
         {/* <ActiveCard focusLabel={!focusLabel} /> */}
-        <CircularCards position={[100, 10, 10]} />
+        <CircularCards pos={pos} focusLabel={focusLabel} />
 
         <mesh
           ref={meshRef}
           onClick={(e) => {
             zoomToView(e.object.position);
-            setFocusLabel(focusLabel);
+            setFocusLabel(!focusLabel);
           }}
           position={pos}
           onPointerOver={(event) => (event.stopPropagation(), hover(true))}
@@ -97,17 +97,14 @@ function Sphere({
                   <div className="contentLabel">
                     <h2>{sphereTitle}</h2>
                   </div>
-                  {!listActive ? (
-                    <div>
-                      <h2>test</h2>
-                    </div>
+                  {/* {!listActive ? (
                   ) : // <div className="contentImage">
                   //   <UploadAndDisplayImage
                   //     ideaId={id}
                   //     displayButtons={false}
                   //   />
                   // </div>
-                  null}
+                  null} */}
                 </div>
               </Html>
             </>
