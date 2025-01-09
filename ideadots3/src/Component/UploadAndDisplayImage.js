@@ -21,20 +21,21 @@ const UploadAndDisplayImage = ({ ideaId }) => {
       console.log("TEXT OF BLOB: ", text);
       setSelectedImage(blob);
     }
+  }
 
-    // const reader = new FileReader();
-    // reader.addEventListener("loadend", () => {
-    //   const result = reader.result();
-    //   console.log("READER RESULT : ", result);
-    // });
-    // reader.readAsArrayBuffer(blob);
+  async function updateImageInDB() {
+    //TODO: need to implement
+    //TODO: need to support several images being uploaded
+  }
+
+  async function deleteImageFromDB() {
+    await db.images.where("ideaId").equals(ideaId).delete();
   }
 
   async function storeImage(file, ideaId) {
     try {
       const img = new Image(); // Create a new Image object
       const reader = new FileReader();
-      console.log("IMG? :,", img);
 
       reader.onload = async (event) => {
         img.src = event.target.result; // Set the image source to the file data
@@ -42,7 +43,6 @@ const UploadAndDisplayImage = ({ ideaId }) => {
           const blob = await makeBlobFromImage(img); // Pass the image to makeBlobFromImage
           await db.images.put({
             ideaId: ideaId,
-            name: "Hello World",
             name: file.name, // Use the original file name
             type: file.type, // Store the MIME type of the image
             size: file.size, // Store the size of the image
@@ -69,7 +69,11 @@ const UploadAndDisplayImage = ({ ideaId }) => {
           <div className="IdeaButtons">
             <button
               class="btn btn-light"
-              onClick={() => setSelectedImage(null)}
+              onClick={(event) => {
+                setSelectedImage(null);
+                console.log(event);
+                deleteImageFromDB();
+              }}
               // TODO: reentering a photo doesn't work
             >
               Remove
@@ -81,7 +85,6 @@ const UploadAndDisplayImage = ({ ideaId }) => {
         <div className="IdeaButtons">
           <button
             className="btn btn-light"
-            //style={{ display: "block", width: "120px", height: "30px" }}
             onClick={() => document.getElementById("getFile").click()}
           >
             Image
