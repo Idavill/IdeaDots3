@@ -2,7 +2,6 @@ import React, { Suspense, useEffect, useState } from "react";
 import "./App.css";
 import ThreeDContainer from "./Component/ThreeDContainer.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import image from "./Assets/shelf.jpg";
 import DraggableUI from "./Component/DraggableUI.js";
 import { SphereContextProvider } from "./Component/SphereContextProvider.js";
 export default function App() {
@@ -11,6 +10,16 @@ export default function App() {
   const [cameraTarget, setCameraTarget] = useState(null);
   const [activeIdea, setActiveIdea] = useState(null);
   const [gizmo, setGizmo] = useState(null);
+  const [listActive, setListActive] = useState(true);
+  const [modeButtonTest, setModeButtonTest] = useState("view model-mode");
+
+  useEffect(() => {
+    if (listActive) {
+      setModeButtonTest("view model-mode");
+    } else {
+      setModeButtonTest("view list-mode");
+    }
+  }, [listActive]);
 
   useEffect(() => {
     if (activeIdea) {
@@ -41,8 +50,12 @@ export default function App() {
   return (
     <>
       <SphereContextProvider>
+        <button onClick={() => setListActive(!listActive)}>
+          {modeButtonTest}
+        </button>
         <Suspense fallback={null}>
           <ThreeDContainer
+            listActive={listActive}
             gizmo={gizmo}
             scrollToIdea={(s, i) => scrollToIdea(s, i)}
             setActiveIdea={(s) => setActiveIdea(s)}
@@ -50,17 +63,19 @@ export default function App() {
             cameraTarget={cameraTarget}
           />
         </Suspense>
-        <DraggableUI
-          activeSphere={activeSphere}
-          setActiveSphere={(e) => setActiveSphere(e)}
-          scrollToIdea={scrollToIdea}
-          activeIdea={activeIdea}
-          setActiveIdea={(e) => setActiveIdea(e)}
-          gizmo={gizmo}
-          setGizmo={(e) => setGizmo(e)}
-          sphereIsChanging={sphereIsChanging}
-          setSphereIsChanging={(e) => setSphereIsChanging(e)}
-        />
+        {listActive ? (
+          <DraggableUI
+            activeSphere={activeSphere}
+            setActiveSphere={(e) => setActiveSphere(e)}
+            scrollToIdea={scrollToIdea}
+            activeIdea={activeIdea}
+            setActiveIdea={(e) => setActiveIdea(e)}
+            gizmo={gizmo}
+            setGizmo={(e) => setGizmo(e)}
+            sphereIsChanging={sphereIsChanging}
+            setSphereIsChanging={(e) => setSphereIsChanging(e)}
+          />
+        ) : null}
       </SphereContextProvider>
     </>
   );
