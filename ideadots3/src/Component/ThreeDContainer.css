@@ -37,19 +37,38 @@
     }
   }
   
-  .content {
+  .contentLabel {
     padding-top: 10px;
     /* transform: translate3d(calc(50% + 40px), 0, 0); */
     text-align: left;
     background: #202035;
     color: white;
+    z-index: 0;
+
     padding: 10px 15px; /* Keep padding for spacing */
     border-radius: 5px;
     width: auto; /* Change width to auto to fit text */
-    display: inline-block; /* Optional: Use inline-block to fit content */
+    /* display: inline-block; Optional: Use inline-block to fit content */
 }
 
-.content::before {
+.contentImage{
+  /* background: #27ff10; */
+  /* padding-top: 10px;
+  padding-left: 50px; */
+  /* margin-bottom:100px; */
+  z-index: 10;
+  position: absolute;
+  height:700px;
+  width:700px;
+  transform: translate(-400px, -400px);
+}
+
+.contentContainer{
+  display:flex;
+
+}
+
+.contentLabel::before {
     content: "";
     position: absolute;
     top: 25px;

@@ -10,11 +10,12 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF, OrbitControls, PivotControls } from "@react-three/drei";
 import { Html } from "@react-three/drei";
 import "./ThreeDContainer.css";
-import API from "../Services/API";
 import * as THREE from "three";
 import CameraControls from "camera-controls";
 import { v4 as uuidv4 } from "uuid";
 import { SphereContext } from "./SphereContextProvider";
+import UploadAndDisplayImage from "./UploadAndDisplayImage";
+import Draggable from "react-draggable";
 
 CameraControls.install({ THREE });
 
@@ -29,11 +30,28 @@ function Sphere({
   listActive,
 }) {
   const [sphereTitle, setSphereTitle] = useState(title);
+  //const [selectedImage, setSelectedImage] = useState(null);
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
   const [pos, setPos] = useState(position);
   const meshRef = useRef();
   const context = useContext(SphereContext);
+
+  // useEffect(() => {
+  //   downloadImage(id);
+  // }, []);
+
+  // async function downloadImage(ideaId) {
+  //   const data = await db.images.where("ideaId").equals(ideaId).toArray();
+  //   var blob;
+  //   if (data[0]) {
+  //     blob = data[0].image;
+  //     console.log("3D BLOB DOWNLOAD: ", typeof blob);
+  //     const text = await new Response(blob).text();
+  //     console.log("3D TEXT OF BLOB: ", text);
+  //     setSelectedImage(blob);
+  //   }
+  // }
 
   useEffect(() => {
     alignSphereTitleWithIdeaTitle();
@@ -76,12 +94,23 @@ function Sphere({
             transparent
           />
           {hovered ? (
-            <Html distanceFactor={10}>
-              <div className="content">
-                <h2>{sphereTitle}</h2>
-                {!listActive ? <h2>{text}</h2> : null}
-              </div>
-            </Html>
+            <>
+              <Html distanceFactor={10}>
+                <div className="contentContainer">
+                  <div className="contentLabel">
+                    <h2>{sphereTitle}</h2>
+                  </div>
+                  {!listActive ? (
+                    <div className="contentImage">
+                      <UploadAndDisplayImage
+                        ideaId={id}
+                        displayButtons={false}
+                      />
+                    </div>
+                  ) : null}
+                </div>
+              </Html>
+            </>
           ) : null}
         </mesh>
       </PivotControls>
