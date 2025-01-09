@@ -19,6 +19,8 @@ import Draggable from "react-draggable";
 import { Billboard, Text, TrackballControls } from "@react-three/drei";
 import { generate } from "random-words";
 import Scene from "./ImageCards";
+import ActiveCard from "./ActiveCard";
+import CircularCards from "./CircularCards";
 
 CameraControls.install({ THREE });
 
@@ -40,22 +42,6 @@ function Sphere({
   const meshRef = useRef();
   const context = useContext(SphereContext);
   const [focusLabel, setFocusLabel] = useState(false);
-
-  // useEffect(() => {
-  //   downloadImage(id);
-  // }, []);
-
-  // async function downloadImage(ideaId) {
-  //   const data = await db.images.where("ideaId").equals(ideaId).toArray();
-  //   var blob;
-  //   if (data[0]) {
-  //     blob = data[0].image;
-  //     console.log("3D BLOB DOWNLOAD: ", typeof blob);
-  //     const text = await new Response(blob).text();
-  //     console.log("3D TEXT OF BLOB: ", text);
-  //     setSelectedImage(blob);
-  //   }
-  // }
 
   useEffect(() => {
     alignSphereTitleWithIdeaTitle();
@@ -81,13 +67,15 @@ function Sphere({
         activeAxes={[true, true, true]}
         anchor={[pos.x, pos.y, pos.z]}
       >
-        <Scene position={pos} />
+        {/* <Scene position={pos} /> */}
+        {/* <ActiveCard focusLabel={!focusLabel} /> */}
+        <CircularCards position={[100, 10, 10]} />
 
         <mesh
           ref={meshRef}
           onClick={(e) => {
             zoomToView(e.object.position);
-            setFocusLabel(!focusLabel);
+            setFocusLabel(focusLabel);
           }}
           position={pos}
           onPointerOver={(event) => (event.stopPropagation(), hover(true))}
