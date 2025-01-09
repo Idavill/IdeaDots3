@@ -16,22 +16,15 @@ import image from "/Users/idavilladsen/Desktop/IdeaDots3/ideadots3/src/Assets/ma
 
 export default function Scene({ children, pos, ...props }) {
   const ref = useRef();
-  //const scroll = useScroll();
   const [hovered, hover] = useState(null);
-  //   useFrame((state, delta) => {
-  //     //ref.current.rotation.y = -scroll.offset * (Math.PI * 2); // Rotate contents
-  //     state.events.update(); // Raycasts every frame rather than on pointer-move
-  //     easing.damp3(
-  //       state.camera.position,
-  //       [-state.pointer.x * 2, state.pointer.y * 2 + 4.5, 9],
-  //       0.3,
-  //       delta
-  //     );
-  //     state.camera.lookAt(0, 0, 0);
-  //   });
+  const amount = 5;
+  const cardArray = [1, 2, 3];
+
   return (
     <group ref={ref} {...props}>
       <Cards
+        cardArray={cardArray}
+        amount={amount}
         rotation={[0, 0, 80]}
         pos={pos}
         category="spring"
@@ -40,29 +33,6 @@ export default function Scene({ children, pos, ...props }) {
         onPointerOver={hover}
         onPointerOut={hover}
       />
-      {/* <Cards
-        category="summer"
-        from={Math.PI / 4}
-        len={Math.PI / 2}
-        position={[0, 0.4, 0]}
-        onPointerOver={hover}
-        onPointerOut={hover}
-      />
-      <Cards
-        category="autumn"
-        from={Math.PI / 4 + Math.PI / 2}
-        len={Math.PI / 2}
-        onPointerOver={hover}
-        onPointerOut={hover}
-      />
-      <Cards
-        category="winter"
-        from={Math.PI * 1.25}
-        len={Math.PI * 2 - Math.PI * 1.25}
-        position={[0, -0.4, 0]}
-        onPointerOver={hover}
-        onPointerOut={hover}
-      /> */}
       <ActiveCard hovered={hovered} />
     </group>
   );
@@ -71,57 +41,40 @@ export default function Scene({ children, pos, ...props }) {
 function Cards({
   category,
   data,
+  amount,
   from = 0,
   len = Math.PI * 2,
   radius = 5.25,
   onPointerOver,
   onPointerOut,
   pos,
-  cardPos,
+  cardArray,
   ...props
 }) {
   const [hovered, hover] = useState(null);
-  //   const amount = Math.round(len * 22);
-  const amount = 5;
-  const textPosition = from + (amount / 2 / amount) * len;
+
+  const cards = () => {
+    return cardArray.map((s, i) => (
+      <Card
+        key={from + (i / amount) * len}
+        onPointerOver={(e) => (e.stopPropagation(), hover(i), onPointerOver(i))}
+        onPointerOut={() => (hover(null), onPointerOut(null))}
+        position={(0, 0, 0)}
+        //   position={[Math.sin(angle) * radius, 0, Math.cos(angle) * radius]}
+        //rotation={[0, Math.PI / 2 + angle, 0]}
+        rotation={[0, Math.PI / 2 + (from + (i / amount) * len), 0]}
+        active={hovered !== null}
+        hovered={hovered === i}
+        //url={`/img${Math.floor(i % 10) + 1}.jpg`}
+        url={image}
+      />
+    ));
+  };
+
   return (
     <group {...props}>
-      <Billboard
-        // position={[
-        //   Math.sin(textPosition) * radius * 1.4,
-        //   0.5,
-        //   Math.cos(textPosition) * radius * 1.4,
-        // ]}
-        position={[0, 0.5, 0]}
-      >
-        {/* <Text fontSize={0.25} anchorX="center" color="black">
-          {category}
-        </Text> */}
-      </Billboard>
-      {Array.from(
-        { length: amount - 3 /* minus 3 images at the end, creates a gap */ },
-        (_, i) => {
-          const angle = from + (i / amount) * len;
-          //const angle = 10;
-          return (
-            <Card
-              key={angle}
-              onPointerOver={(e) => (
-                e.stopPropagation(), hover(i), onPointerOver(i)
-              )}
-              onPointerOut={() => (hover(null), onPointerOut(null))}
-              position={(0, 0, 0)}
-              //   position={[Math.sin(angle) * radius, 0, Math.cos(angle) * radius]}
-              //rotation={[0, Math.PI / 2 + angle, 0]}
-              rotation={[0, Math.PI / 2 + angle, 0]}
-              active={hovered !== null}
-              hovered={hovered === i}
-              //url={`/img${Math.floor(i % 10) + 1}.jpg`}
-              url={image}
-            />
-          );
-        }
-      )}
+      <Billboard position={[0, 0.5, 0]}></Billboard>
+      {cards()}
     </group>
   );
 }
