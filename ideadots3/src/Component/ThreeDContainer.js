@@ -16,6 +16,9 @@ import { v4 as uuidv4 } from "uuid";
 import { SphereContext } from "./SphereContextProvider";
 import UploadAndDisplayImage from "./UploadAndDisplayImage";
 import Draggable from "react-draggable";
+import { Billboard, Text, TrackballControls } from "@react-three/drei";
+import { generate } from "random-words";
+import Scene from "./ImageCards";
 
 CameraControls.install({ THREE });
 
@@ -36,6 +39,7 @@ function Sphere({
   const [pos, setPos] = useState(position);
   const meshRef = useRef();
   const context = useContext(SphereContext);
+  const [focusLabel, setFocusLabel] = useState(false);
 
   // useEffect(() => {
   //   downloadImage(id);
@@ -77,9 +81,14 @@ function Sphere({
         activeAxes={[true, true, true]}
         anchor={[pos.x, pos.y, pos.z]}
       >
+        <Scene position={pos} />
+
         <mesh
           ref={meshRef}
-          onClick={(e) => zoomToView(e.object.position)}
+          onClick={(e) => {
+            zoomToView(e.object.position);
+            setFocusLabel(!focusLabel);
+          }}
           position={pos}
           onPointerOver={(event) => (event.stopPropagation(), hover(true))}
           onPointerOut={(event) => hover(false)}
@@ -93,7 +102,7 @@ function Sphere({
             opacity={0.4}
             transparent
           />
-          {hovered ? (
+          {hovered || focusLabel ? (
             <>
               <Html distanceFactor={10}>
                 <div className="contentContainer">
@@ -101,13 +110,16 @@ function Sphere({
                     <h2>{sphereTitle}</h2>
                   </div>
                   {!listActive ? (
-                    <div className="contentImage">
-                      <UploadAndDisplayImage
-                        ideaId={id}
-                        displayButtons={false}
-                      />
+                    <div>
+                      <h2>test</h2>
                     </div>
-                  ) : null}
+                  ) : // <div className="contentImage">
+                  //   <UploadAndDisplayImage
+                  //     ideaId={id}
+                  //     displayButtons={false}
+                  //   />
+                  // </div>
+                  null}
                 </div>
               </Html>
             </>
