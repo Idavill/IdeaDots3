@@ -18,7 +18,16 @@ import { SphereContext } from "./SphereContextProvider";
 
 CameraControls.install({ THREE });
 
-function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
+function Sphere({
+  position,
+  title,
+  text,
+  zoomToView,
+  focus,
+  gizmo,
+  id,
+  listActive,
+}) {
   const [sphereTitle, setSphereTitle] = useState(title);
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
@@ -70,6 +79,7 @@ function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
             <Html distanceFactor={10}>
               <div className="content">
                 <h2>{sphereTitle}</h2>
+                {!listActive ? <h2>{text}</h2> : null}
               </div>
             </Html>
           ) : null}
@@ -96,6 +106,7 @@ function Content({
   newSphere,
   scrollToIdea,
   gizmo,
+  listActive,
 }) {
   const context = useContext(SphereContext);
 
@@ -104,13 +115,6 @@ function Content({
       addNewSphere(newSphere);
     }
   }, [newSphere]);
-
-  //TODO: check this is important
-  // useEffect(() => {
-  //   if (context.spheres) {
-  //     context.setSpheres(context.spheres);
-  //   }
-  // }, [context]);
 
   const addNewSphere = (ns) => {
     const newS = {
@@ -131,6 +135,7 @@ function Content({
     return context.spheres.map((s, i) => (
       <>
         <Sphere
+          listActive={listActive}
           gizmo={gizmo}
           zoomToView={(focusRef) => (
             setZoom(!zoom), setFocus(focusRef), scrollToIdea(s, i)
@@ -195,6 +200,7 @@ export default function ThreeDContainer({
   cameraTarget,
   setActiveIdea,
   gizmo,
+  listActive,
 }) {
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
@@ -226,6 +232,7 @@ export default function ThreeDContainer({
           }}
         >
           <Content
+            listActive={listActive}
             gizmo={gizmo}
             scrollToIdea={(s, i) => scrollToIdea(s, i)}
             zoom={zoom}
