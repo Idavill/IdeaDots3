@@ -21,33 +21,40 @@ function Idea({
   setTitleChangeId,
 }) {
   const [isActive, setIsActive] = useState(false);
-  const [img, setImg] = useState(s.img);
+  const [img, setImg] = useState(null); // TOOD: or s.img?
   const [title, setTitle] = useState(s.title);
   const [text, setText] = useState(s.text);
   const context = useContext(SphereContext);
   const [images, setImages] = useState([]);
 
-  //TODO: test this is important
-  // useEffect(() => {
-  //   console.log("CONTEXT IS: ", context);
-  // }, [context]);
-
-  const setTestImage = () => {
-    localStorage.setItem(s.id + "img", "lala");
-  };
-
   const getImages = () => {
+    console.log("Fetching images from localStorage...");
     for (var key in localStorage) {
+      console.log("Checking key:", key); // Log each key
       if (key.endsWith("img")) {
-        image = localStorage.getItem(key);
-        console.log("test image ", image);
-        setImages((prev) => [...prev, image]);
+        const searchString = key.replace("img", "");
+        if (searchString === s.id) {
+          const foundImage = localStorage.getItem(key);
+          console.log(
+            "Found image for ID:",
+            searchString,
+            "Value:",
+            foundImage
+          );
+          setImg(foundImage);
+          return; // Exit the function after setting the image
+        }
       }
     }
+    setImg(null); // Clear the image if not found
   };
 
   useEffect(() => {
-    setTestImage();
+    console.log("IMG HAS CHANGED", img);
+  }, [img]);
+
+  useEffect(() => {
+    getImages();
 
     const titleId = s.id + "title";
     const textId = s.id + "text";
@@ -67,7 +74,6 @@ function Idea({
       setText(s.text);
     }
 
-    getImages();
     console.log("test ", images);
   }, []);
 
@@ -165,18 +171,7 @@ function Idea({
       >
         {text}
       </p>
-      <UploadAndDisplayImage />
-
-      {img != "" ? (
-        <div className="square">
-          <img
-            style={{ display: "flex", width: "100%", height: "auto" }} // Set width to 100% and height to auto
-            src={image}
-            class=""
-            alt="..."
-          ></img>
-        </div>
-      ) : null}
+      <UploadAndDisplayImage ideaId={s.id} />
       <div className="IdeaButtons">
         <button type="button" onClick={handleGo} class="btn btn-light">
           Go
