@@ -13,9 +13,13 @@ const UploadAndDisplayImage = ({ ideaId }) => {
 
   async function downloadImage(ideaId) {
     const data = await db.images.where("ideaId").equals(ideaId).toArray();
-    if (data) {
-      const firstImage = data[0];
-      console.log("BLOB DOWNLOAD: ", firstImage);
+    var blob;
+    if (data[0]) {
+      blob = data[0].image;
+      console.log("BLOB DOWNLOAD: ", typeof blob);
+      const text = await new Response(blob).text();
+      console.log("TEXT OF BLOB: ", text);
+      setSelectedImage(blob);
     }
 
     // const reader = new FileReader();
