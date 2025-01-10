@@ -33,15 +33,21 @@ function Sphere({
   gizmo,
   id,
   listActive,
+  controlsRef,
+  currentZoom,
 }) {
   const [sphereTitle, setSphereTitle] = useState(title);
-  //const [selectedImage, setSelectedImage] = useState(null);
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
   const [pos, setPos] = useState(position);
   const meshRef = useRef();
   const context = useContext(SphereContext);
   const [focusLabel, setFocusLabel] = useState(false);
+  const [radius, setRadius] = useState(0.5);
+
+  // useEffect(() => {
+  //   setRadius(currentZoom / 2);
+  // }, [currentZoom]);
 
   useEffect(() => {
     alignSphereTitleWithIdeaTitle();
@@ -57,7 +63,6 @@ function Sphere({
     } else {
       click(false);
     }
-    console.log("SPHERECONTEXT: ", context.spheres[1]);
   }, [focus]);
 
   return (
@@ -67,9 +72,7 @@ function Sphere({
         activeAxes={[true, true, true]}
         anchor={[pos.x, pos.y, pos.z]}
       >
-        {/* <Scene position={pos} /> */}
-        {/* <ActiveCard focusLabel={!focusLabel} /> */}
-        <CircularCards pos={pos} focusLabel={focusLabel} />
+        <CircularCards radius={radius} pos={pos} focusLabel={focusLabel} />
 
         <mesh
           ref={meshRef}
@@ -133,6 +136,8 @@ function Content({
   scrollToIdea,
   gizmo,
   listActive,
+  controlsRef,
+  currentZoom,
 }) {
   const context = useContext(SphereContext);
 
@@ -172,6 +177,8 @@ function Content({
           text={s.text}
           focus={focusSphere}
           id={s.id}
+          controlsRef={controlsRef}
+          currentZoom={currentZoom}
         />
       </>
     ));
@@ -180,9 +187,23 @@ function Content({
   return <>{sphereList()} </>;
 }
 
-function CustomControls({ zoom, focus, gizmo }) {
+function CustomControls({
+  setCurrentZoom,
+  currentZoom,
+  controlsRef,
+  zoom,
+  focus,
+  gizmo,
+}) {
   const { camera, gl } = useThree();
-  const controlsRef = useRef();
+
+  useFrame(() => {
+    if (controlsRef.current) {
+      const z = controlsRef.current.object.position.z; // Get the current zoom value
+      console.log("Current Zoom: ", z); // Log or use the zoom value as needed
+      setCurrentZoom(z);
+    }
+  });
 
   useEffect(() => {
     if (controlsRef.current) {
@@ -231,6 +252,8 @@ export default function ThreeDContainer({
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
   const [newSphere, setNewSphere] = useState(null);
+  const [currentZoom, setCurrentZoom] = useState(false);
+  const controlsRef = useRef();
 
   useEffect(() => {
     if (cameraTarget) {
@@ -266,6 +289,8 @@ export default function ThreeDContainer({
             setFocus={setFocus}
             focusSphere={focus}
             newSphere={newSphere}
+            controlsRef={controlsRef}
+            currentZoom={currentZoom}
           />
 
           <directionalLight position={[10, 10, 0]} intensity={1.5} />
@@ -278,7 +303,14 @@ export default function ThreeDContainer({
               setNewSphere={(e) => setNewSphere(e)}
             />
           </Suspense>
-          <CustomControls zoom={zoom} focus={focus} gizmo={gizmo} />
+          <CustomControls
+            controlsRef={controlsRef}
+            zoom={zoom}
+            focus={focus}
+            gizmo={gizmo}
+            currentZoom={currentZoom}
+            setCurrentZoom={(z) => setCurrentZoom(z)}
+          />
         </Canvas>
       </Suspense>
     </div>

@@ -2,14 +2,12 @@ import React, { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Image, Billboard, Text } from "@react-three/drei";
 import { easing, geometry } from "maath";
+import { Html } from "@react-three/drei";
 import image from "/Users/idavilladsen/Desktop/IdeaDots3/ideadots3/src/Assets/material.jpg";
 
-const Card = ({ focusLabel, position, lookAt, ...props }) => {
+const Card = ({ i, hover, focusLabel, position, lookAt, ...props }) => {
   const cardRef = useRef();
-
-  useEffect(() => {
-    console.log("CARD: FOCUS LABEL : ", focusLabel);
-  }, [focusLabel]);
+  const [scale, setScale] = useState(1);
 
   useFrame(({ camera }) => {
     if (cardRef.current) {
@@ -19,21 +17,27 @@ const Card = ({ focusLabel, position, lookAt, ...props }) => {
 
   return (
     <>
-      {/* <mesh ref={cardRef} position={focusLabel ? position : [100, 100, 100]}>
-        <planeGeometry args={[0.5, 0.8]} /> 
-        <meshBasicMaterial color="orange" /></mesh>*/}
-
-      <group {...props}>
-        <Image
-          position={focusLabel ? position : [100, 100, 100]}
-          ref={cardRef}
-          transparent
-          radius={0.075}
-          url={image}
-          scale={[1.618, 1, 1]}
-          //side={THREE.DoubleSide}
-        />
-      </group>
+      <Html
+        position={focusLabel ? position : [100, 100, 100]}
+        distanceFactor={10}
+      >
+        <div
+          onPointerOver={() => (hover(i), setScale(1.2))}
+          onPointerLeave={() => (hover(null), setScale(1))}
+          className="contentContainer"
+          style={{ transform: `scale(${scale})` }}
+        >
+          <div className="contentLabel">
+            <img
+              style={{
+                height: "50px",
+                width: "50px",
+              }}
+              src={image}
+            ></img>
+          </div>
+        </div>
+      </Html>
     </>
   );
 };
@@ -86,13 +90,40 @@ const ActiveCard = ({ hovered, position, focusLabel, groupRef, ...props }) => {
   );
 };
 
-const CircularCards = ({
-  focusLabel,
-  pos,
-  count = 10,
-  radius = 3,
-  ...props
-}) => {
+// function Carousel({ radius = 1.4, count = 8, focusLabel, hover }) {
+//   const cards = Array.from({ length: count }, (_, i) => (
+//     <Card
+//       key={i}
+//       url={`/img${Math.floor(i % 10) + 1}_.jpg`}
+//       position={[
+//         Math.sin((i / count) * Math.PI * 2) * radius,
+//         0,
+//         Math.cos((i / count) * Math.PI * 2) * radius,
+//       ]}
+//       rotation={[0, Math.PI + (i / count) * Math.PI * 2, 0]}
+//     />
+//   ));
+
+//   return (
+//     <>
+//       <group position={[0, 0, 0]} rotation={[0, 1, 0]}>
+//         {cards.map((position, i) => (
+//           <Card
+//             // onPointerOver={(e) => (e.stopPropagation(), hover(i))}
+//             // onPointerOut={() => hover(null)}
+//             focusLabel={focusLabel}
+//             key={i}
+//             position={position}
+//             hover={(i) => hover(i)}
+//             i={i}
+//           />
+//         ))}
+//       </group>
+//     </>
+//   );
+// }
+
+const CircularCards = ({ focusLabel, pos, count = 10, radius, ...props }) => {
   const [hovered, hover] = useState(null);
   const groupRef = useRef();
 
@@ -102,6 +133,7 @@ const CircularCards = ({
 
   const cards = Array.from({ length: count }, (_, i) => {
     const angle = (i / count) * Math.PI * 2;
+    //const angle = 180;
     const x = radius * Math.cos(angle);
     const z = radius * Math.sin(angle);
     return [x, 0, z]; // y = 0 for cards on the ground plane
@@ -117,6 +149,8 @@ const CircularCards = ({
             focusLabel={focusLabel}
             key={i}
             position={position}
+            hover={(i) => hover(i)}
+            i={i}
           />
         ))}
         <ActiveCard hovered={hovered} focusLabel={focusLabel} />
