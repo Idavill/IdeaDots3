@@ -11,7 +11,7 @@ export default function ActiveCard({ focusLabel, hovered, ...props }) {
   const ref = useRef();
   const name = useMemo(() => generate({ exactly: 2 }).join(" "), [hovered]);
   useLayoutEffect(
-    () => void (ref.current.material.zoom = focusLabel ? 0.8 : 0.0),
+    () => (focusLabel ? void (ref.current.material.zoom = 0.8) : null),
     [hovered]
   );
   useFrame((state, delta) => {
