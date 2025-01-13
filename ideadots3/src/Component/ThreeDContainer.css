@@ -63,6 +63,11 @@
   transform: translate(-400px, -400px);
 }
 
+.threedImage{
+  border: 10px solid #202035;
+  border-radius: 25px;
+}
+
 .contentContainer{
   display:flex;
 

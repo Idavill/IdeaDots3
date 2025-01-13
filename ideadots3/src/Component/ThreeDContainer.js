@@ -7,20 +7,20 @@ import React, {
   useContext,
 } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useGLTF, OrbitControls, PivotControls } from "@react-three/drei";
+import {
+  useGLTF,
+  OrbitControls,
+  PivotControls,
+  DragControls,
+} from "@react-three/drei";
 import { Html } from "@react-three/drei";
 import "./ThreeDContainer.css";
 import * as THREE from "three";
 import CameraControls from "camera-controls";
 import { v4 as uuidv4 } from "uuid";
 import { SphereContext } from "./SphereContextProvider";
-import UploadAndDisplayImage from "./UploadAndDisplayImage";
-import Draggable from "react-draggable";
-import { Billboard, Text, TrackballControls } from "@react-three/drei";
-import { generate } from "random-words";
-import Scene from "./ImageCards";
-import ActiveCard from "./ActiveCard";
-import CircularCards from "./CircularCards";
+import image from "/Users/idavilladsen/Desktop/IdeaDots3/ideadots3/src/Assets/material.jpg";
+import DraggableUI from "./DraggableUI.js";
 
 CameraControls.install({ THREE });
 
@@ -44,10 +44,7 @@ function Sphere({
   const context = useContext(SphereContext);
   const [focusLabel, setFocusLabel] = useState(false);
   const [radius, setRadius] = useState(0.5);
-
-  // useEffect(() => {
-  //   setRadius(currentZoom / 2);
-  // }, [currentZoom]);
+  const [scale, setScale] = useState(1);
 
   useEffect(() => {
     alignSphereTitleWithIdeaTitle();
@@ -65,42 +62,88 @@ function Sphere({
     }
   }, [focus]);
 
+  // Make the DIV element draggable:
+  //dragElement(document.getElementById("mydiv"));
+
+  function dragElement(e) {
+    const elmnt = document.getElementById("draggable");
+    var pos1 = 0,
+      pos2 = 0,
+      pos3 = 0,
+      pos4 = 0;
+    if (document.getElementById(elmnt.id + "header")) {
+      // if present, the header is where you move the DIV from:
+      document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+    } else {
+      // otherwise, move the DIV from anywhere inside the DIV:
+      elmnt.onmousedown = dragMouseDown;
+    }
+
+    function dragMouseDown(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // get the mouse cursor position at startup:
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      // call a function whenever the cursor moves:
+      document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // calculate the new cursor position:
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      // set the element's new position:
+      elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+      elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+    }
+
+    function closeDragElement() {
+      // stop moving when mouse button is released:
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
+  }
+
   return (
     <>
-      <PivotControls
+      {/* <PivotControls
         enabled={gizmo === id ? true : false}
         activeAxes={[true, true, true]}
         anchor={[pos.x, pos.y, pos.z]}
+      > */}
+      <mesh
+        ref={meshRef}
+        onClick={(e) => {
+          zoomToView(e.object.position);
+          setFocusLabel(!focusLabel);
+        }}
+        position={pos}
+        onPointerOver={(event) => (event.stopPropagation(), hover(true))}
+        onPointerOut={(event) => hover(false)}
+        scale={0.3}
       >
-        <CircularCards radius={radius} pos={pos} focusLabel={focusLabel} />
-
-        <mesh
-          ref={meshRef}
-          onClick={(e) => {
-            zoomToView(e.object.position);
-            setFocusLabel(!focusLabel);
-          }}
-          position={pos}
-          onPointerOver={(event) => (event.stopPropagation(), hover(true))}
-          onPointerOut={(event) => hover(false)}
-          scale={0.2}
-        >
-          <sphereGeometry />
-          <meshStandardMaterial
-            color={clicked ? "rgb(55, 52, 255)" : "white"}
-            roughness={0.75}
-            emissive="#404057"
-            opacity={0.4}
-            transparent
-          />
-          {hovered || focusLabel ? (
-            <>
-              <Html distanceFactor={10}>
-                <div className="contentContainer">
-                  <div className="contentLabel">
-                    <h2>{sphereTitle}</h2>
-                  </div>
-                  {/* {!listActive ? (
+        <sphereGeometry />
+        <meshStandardMaterial
+          color={clicked ? "rgb(55, 52, 255)" : "white"}
+          roughness={0.75}
+          emissive="#404057"
+          opacity={0.4}
+          transparent
+        />
+        {hovered || focusLabel ? (
+          <>
+            <Html distanceFactor={10}>
+              <div className="contentContainer">
+                <div className="contentLabel">
+                  <h2>{sphereTitle}</h2>
+                </div>
+                {/* {!listActive ? (
                   ) : // <div className="contentImage">
                   //   <UploadAndDisplayImage
                   //     ideaId={id}
@@ -108,12 +151,43 @@ function Sphere({
                   //   />
                   // </div>
                   null} */}
+              </div>
+            </Html>
+            <Html
+              //position={focusLabel ? position : [100, 100, 100]}
+              distanceFactor={2}
+            >
+              <div
+                id="draggable"
+                style={{ position: "absolute" }}
+                onMouseDown={(e) => dragElement(e)}
+              >
+                <div
+                  onPointerOver={(i) => (hover(i), setScale(1.2))}
+                  onPointerLeave={() => (hover(null), setScale(1))}
+                  className="contentContainer"
+                  style={{
+                    translate: "200px 10px",
+                    transform: `scale(${scale})`,
+                  }}
+                >
+                  <div className="threedImage">
+                    <img
+                      style={{
+                        height: "100px",
+                        width: "100px",
+                      }}
+                      src={image}
+                    ></img>
+                  </div>
                 </div>
-              </Html>
-            </>
-          ) : null}
-        </mesh>
-      </PivotControls>
+              </div>
+            </Html>
+          </>
+        ) : null}
+      </mesh>
+
+      {/* </PivotControls> */}
     </>
   );
 
@@ -197,13 +271,13 @@ function CustomControls({
 }) {
   const { camera, gl } = useThree();
 
-  useFrame(() => {
-    if (controlsRef.current) {
-      const z = controlsRef.current.object.position.z; // Get the current zoom value
-      console.log("Current Zoom: ", z); // Log or use the zoom value as needed
-      setCurrentZoom(z);
-    }
-  });
+  // useFrame(() => {
+  //   if (controlsRef.current) {
+  //     const z = controlsRef.current.object.position.z; // Get the current zoom value
+  //     console.log("Current Zoom: ", z); // Log or use the zoom value as needed
+  //     setCurrentZoom(z);
+  //   }
+  // });
 
   useEffect(() => {
     if (controlsRef.current) {
