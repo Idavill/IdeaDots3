@@ -22,35 +22,11 @@ export default function Idea({
   const context = useContext(SphereContext);
   const [images, setImages] = useState([]);
 
-  //   const getImages = () => {
-  //     console.log("Fetching images from localStorage...");
-  //     for (var key in localStorage) {
-  //       console.log("Checking key:", key); // Log each key
-  //       if (key.endsWith("img")) {
-  //         const searchString = key.replace("img", "");
-  //         if (searchString === s.id) {
-  //           const foundImage = localStorage.getItem(key);
-  //           console.log(
-  //             "Found image for ID:",
-  //             searchString,
-  //             "Value:",
-  //             foundImage
-  //           );
-  //           setImg(foundImage);
-  //           return; // Exit the function after setting the image
-  //         }
-  //       }
-  //     }
-  //     setImg(null); // Clear the image if not found
-  //   };
-
   useEffect(() => {
     console.log("IMG HAS CHANGED", img);
   }, [img]);
 
   useEffect(() => {
-    //getImages();
-
     const titleId = s.id + "title";
     const textId = s.id + "text";
 

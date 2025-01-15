@@ -8,7 +8,6 @@ export default function DisplayImage({
   hover,
   setEnableCustomControls,
   setScale,
-  scale,
 }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -28,10 +27,6 @@ export default function DisplayImage({
       console.log("inside sphere  TEXT OF BLOB: ", text);
       setSelectedImage(blob);
     }
-  }
-
-  async function deleteImageFromDB() {
-    await db.images.where("ideaId").equals(ideaId).delete();
   }
 
   return (
