@@ -309,15 +309,7 @@ export default function DraggableUI({
     <>
       <Draggable>
         <div className="mainContainer">
-          <div className="header">
-            {/* <button
-              type="button"
-              onClick={handleAddIdea}
-              class="btn btn-light headerButton"
-            >
-              +
-            </button> */}
-          </div>
+          <div className="header"></div>
           <div className="contentContainer">
             <div className="overviewContainer">
               <nav id="navbar-example2" class="navbar px-3 mb-3">
