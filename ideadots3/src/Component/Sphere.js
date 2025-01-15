@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 //import image from "/Users/idavilladsen/Desktop/IdeaDots3/ideadots3/src/Assets/material.jpg";
-import ImageIdea from "./ImageIdea.js";
 import { SphereContext } from "./SphereContextProvider";
 import { Html } from "@react-three/drei";
 import { PivotControls } from "@react-three/drei";
@@ -96,14 +95,6 @@ export default function Sphere({
                   setScale={(e) => setScale(e)}
                   scale={scale}
                 />
-
-                {/* <ImageIdea
-                  setEnableCustomControls={setEnableCustomControls}
-                  hover={hover}
-                  scale={scale}
-                  setScale={(e) => setScale(e)}
-                  image={image}
-                /> */}
               </Html>
             </>
           ) : null}

@@ -37,13 +37,6 @@ export default function DisplayImage({
   return (
     <>
       {selectedImage && (
-        // <div>
-        //   <img
-        //     alt="not found"
-        //     width={"250px"} // TODO: needs to be flex
-        //     src={URL.createObjectURL(selectedImage)}
-        //   />
-        // </div>
         <ImageIdea
           setEnableCustomControls={setEnableCustomControls}
           hover={hover}
@@ -51,19 +44,6 @@ export default function DisplayImage({
           image={URL.createObjectURL(selectedImage)}
         />
       )}
-      {/* <div>
-        <input
-          id="getFile"
-          style={{ display: "none" }}
-          type="file"
-          name="myImage"
-          onChange={(event) => {
-            console.log(event.target.files[0]); // Log the selected file
-            setSelectedImage(event.target.files[0]); // Update the state with the selected file
-            storeImage(event.target.files[0], ideaId);
-          }}
-        />
-      </div> */}
     </>
   );
 }

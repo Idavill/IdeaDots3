@@ -15,7 +15,6 @@ export default function ImageIdea({ setEnableCustomControls, hover, image }) {
           onMouseLeave={() => setEnableCustomControls(true)}
           onMouseOver={() => setEnableCustomControls(false)}
           className="contentContainer"
-          //style={{ position: "absolute" }}
           style={{
             translate: "-500px -500px",
             transform: `scale(${scale})`,
