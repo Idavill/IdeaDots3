@@ -5,10 +5,10 @@ import { db } from "./Database";
 const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
   const [selectedImages, setSelectedImages] = useState([]);
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  //const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    downloadImage(ideaId);
+    //downloadImage(ideaId);
     downloadImages(ideaId);
   }, []);
 
@@ -16,17 +16,17 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
     console.log("SELECTED IMAGES: ", selectedImages);
   }, [selectedImages]);
 
-  async function downloadImage(ideaId) {
-    const data = await db.images.where("ideaId").equals(ideaId).toArray();
-    var blob;
-    if (data[0]) {
-      blob = data[0].image;
-      console.log("BLOB DOWNLOAD: ", typeof blob);
-      const text = await new Response(blob).text();
-      console.log("TEXT OF BLOB: ", text);
-      setSelectedImage(blob);
-    }
-  }
+  // async function downloadImage(ideaId) {
+  //   const data = await db.images.where("ideaId").equals(ideaId).toArray();
+  //   var blob;
+  //   if (data[0]) {
+  //     blob = data[0].image;
+  //     console.log("BLOB DOWNLOAD: ", typeof blob);
+  //     const text = await new Response(blob).text();
+  //     console.log("TEXT OF BLOB: ", text);
+  //     setSelectedImage(blob);
+  //   }
+  // }
 
   async function downloadImages(ideaId) {
     const data = await db.images.where("ideaId").equals(ideaId).toArray();
@@ -88,15 +88,15 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
 
   return (
     <div>
-      {selectedImage && (
+      {selectedImages && (
         <div>
           {imageList()}
-          <img
+          {/* <img
             alt="not found"
             width={"250px"} // TODO: needs to be flex
             src={URL.createObjectURL(selectedImage)}
-          />
-          {displayButtons ? (
+          /> */}
+          {/* {displayButtons ? (
             <div className="IdeaButtons">
               <button
                 class="btn btn-light"
@@ -110,7 +110,7 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
                 Remove
               </button>
             </div>
-          ) : null}
+          ) : null} */}
         </div>
       )}
       <div>
@@ -133,7 +133,7 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
           // Event handler to capture file selection and update the state
           onChange={(event) => {
             console.log(event.target.files[0]); // Log the selected file
-            setSelectedImage(event.target.files[0]); // Update the state with the selected file
+            //setSelectedImage(event.target.files[0]); // Update the state with the selected file
             addFileToImageList(event.target.files[0]);
             //setSelectedImages((prevs) => [...prevs, event.target.files[0]]);
             storeImage(event.target.files[0], ideaId);
