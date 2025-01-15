@@ -171,7 +171,7 @@ function Idea({
       >
         {text}
       </p>
-      <UploadAndDisplayImage ideaId={s.id} />
+      <UploadAndDisplayImage ideaId={s.id} displayButtons={true} />
       <div className="IdeaButtons">
         <button type="button" onClick={handleGo} class="btn btn-light">
           Go

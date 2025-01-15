@@ -4,7 +4,7 @@ import Dexie from "dexie";
 
 import { db } from "./Database";
 
-const UploadAndDisplayImage = ({ ideaId }) => {
+const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
@@ -66,30 +66,34 @@ const UploadAndDisplayImage = ({ ideaId }) => {
             width={"250px"} // TODO: needs to be flex
             src={URL.createObjectURL(selectedImage)}
           />
-          <div className="IdeaButtons">
-            <button
-              class="btn btn-light"
-              onClick={(event) => {
-                setSelectedImage(null);
-                console.log(event);
-                deleteImageFromDB();
-              }}
-              // TODO: reentering a photo doesn't work
-            >
-              Remove
-            </button>
-          </div>
+          {displayButtons ? (
+            <div className="IdeaButtons">
+              <button
+                class="btn btn-light"
+                onClick={(event) => {
+                  setSelectedImage(null);
+                  console.log(event);
+                  deleteImageFromDB();
+                }}
+                // TODO: reentering a photo doesn't work
+              >
+                Remove
+              </button>
+            </div>
+          ) : null}
         </div>
       )}
       <div>
-        <div className="IdeaButtons">
-          <button
-            className="btn btn-light"
-            onClick={() => document.getElementById("getFile").click()}
-          >
-            Image
-          </button>
-        </div>
+        {displayButtons ? (
+          <div className="IdeaButtons">
+            <button
+              className="btn btn-light"
+              onClick={() => document.getElementById("getFile").click()}
+            >
+              Image
+            </button>
+          </div>
+        ) : null}
 
         <input
           id="getFile"

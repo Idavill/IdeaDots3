@@ -1,157 +1,23 @@
-import React, {
-  Suspense,
-  useEffect,
-  useRef,
-  useState,
-  useMemo,
-  useContext,
-} from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useGLTF, OrbitControls, PivotControls } from "@react-three/drei";
-import { Html } from "@react-three/drei";
+import { useGLTF, OrbitControls } from "@react-three/drei";
 import "./ThreeDContainer.css";
-import API from "../Services/API";
 import * as THREE from "three";
 import CameraControls from "camera-controls";
-import { v4 as uuidv4 } from "uuid";
-import { SphereContext } from "./SphereContextProvider";
+import Content from "./Content";
 
 CameraControls.install({ THREE });
 
-function Sphere({ position, title, text, zoomToView, focus, gizmo, id }) {
-  const [sphereTitle, setSphereTitle] = useState(title);
-  const [hovered, hover] = useState(false);
-  const [clicked, click] = useState(false);
-  const [pos, setPos] = useState(position);
-  const meshRef = useRef();
-  const context = useContext(SphereContext);
-
-  useEffect(() => {
-    alignSphereTitleWithIdeaTitle();
-  }, [context]);
-
-  useEffect(() => {
-    if (
-      focus.x == position[0] &&
-      focus.y == position[1] &&
-      focus.z == position[2]
-    ) {
-      click(true);
-    } else {
-      click(false);
-    }
-    console.log("SPHERECONTEXT: ", context.spheres[1]);
-  }, [focus]);
-
-  return (
-    <>
-      <PivotControls
-        enabled={gizmo === id ? true : false}
-        activeAxes={[true, true, true]}
-        anchor={[pos.x, pos.y, pos.z]}
-      >
-        <mesh
-          ref={meshRef}
-          onClick={(e) => zoomToView(e.object.position)}
-          position={pos}
-          onPointerOver={(event) => (event.stopPropagation(), hover(true))}
-          onPointerOut={(event) => hover(false)}
-          scale={0.2}
-        >
-          <sphereGeometry />
-          <meshStandardMaterial
-            color={clicked ? "rgb(55, 52, 255)" : "white"}
-            roughness={0.75}
-            emissive="#404057"
-            opacity={0.4}
-            transparent
-          />
-          {hovered ? (
-            <Html distanceFactor={10}>
-              <div className="content">
-                <h2>{sphereTitle}</h2>
-              </div>
-            </Html>
-          ) : null}
-        </mesh>
-      </PivotControls>
-    </>
-  );
-
-  function alignSphereTitleWithIdeaTitle() {
-    console.log("IDEA");
-    context.spheres.forEach((e) => {
-      if (e.id == id) {
-        setSphereTitle(e.title);
-      }
-    });
-  }
-}
-
-function Content({
+function CustomControls({
+  setCurrentZoom,
+  currentZoom,
+  controlsRef,
   zoom,
-  setZoom,
-  setFocus,
-  focusSphere,
-  newSphere,
-  scrollToIdea,
+  focus,
   gizmo,
+  enableCustomControls,
 }) {
-  const context = useContext(SphereContext);
-
-  useEffect(() => {
-    if (newSphere) {
-      addNewSphere(newSphere);
-    }
-  }, [newSphere]);
-
-  //TODO: check this is important
-  // useEffect(() => {
-  //   if (context.spheres) {
-  //     context.setSpheres(context.spheres);
-  //   }
-  // }, [context]);
-
-  const addNewSphere = (ns) => {
-    const newS = {
-      id: uuidv4(),
-      position: { x: ns.x, y: ns.y, z: ns.z },
-      title: "New Idea",
-      text: "New Idea Text",
-      img: "",
-    };
-    context.setSpheres((prevSpheres) => [...prevSpheres, newS]);
-    const newSTitleID = newS.id + "title";
-    const newSTextID = newS.id + "text";
-    localStorage.setItem(newSTitleID, newS.title);
-    localStorage.setItem(newSTextID, newS.text);
-  };
-
-  const sphereList = () => {
-    return context.spheres.map((s, i) => (
-      <>
-        <Sphere
-          gizmo={gizmo}
-          zoomToView={(focusRef) => (
-            setZoom(!zoom), setFocus(focusRef), scrollToIdea(s, i)
-          )}
-          key={i}
-          position={[s.position.x, s.position.y, s.position.z]}
-          title={s.title}
-          text={s.text}
-          focus={focusSphere}
-          id={s.id}
-        />
-      </>
-    ));
-  };
-
-  return <>{sphereList()} </>;
-}
-
-function CustomControls({ zoom, focus, gizmo }) {
   const { camera, gl } = useThree();
-  const controlsRef = useRef();
 
   useEffect(() => {
     if (controlsRef.current) {
@@ -161,7 +27,6 @@ function CustomControls({ zoom, focus, gizmo }) {
 
   useFrame((state, delta) => {
     if (controlsRef.current) {
-      // Adjust the target based on zoom and focus
       const target = new THREE.Vector3();
       if (zoom) {
         target.set(focus.x, focus.y, focus.z); // Set target to focus point
@@ -181,7 +46,7 @@ function CustomControls({ zoom, focus, gizmo }) {
           ref={controlsRef}
           camera={camera}
           gl={gl}
-          enableRotate={true}
+          enableRotate={enableCustomControls ? true : false}
           enablePan={true}
           enableZoom={true}
         />
@@ -195,10 +60,14 @@ export default function ThreeDContainer({
   cameraTarget,
   setActiveIdea,
   gizmo,
+  listActive,
 }) {
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
   const [newSphere, setNewSphere] = useState(null);
+  const [currentZoom, setCurrentZoom] = useState(false);
+  const controlsRef = useRef();
+  const [enableCustomControls, setEnableCustomControls] = useState(true);
 
   useEffect(() => {
     if (cameraTarget) {
@@ -226,6 +95,7 @@ export default function ThreeDContainer({
           }}
         >
           <Content
+            listActive={listActive}
             gizmo={gizmo}
             scrollToIdea={(s, i) => scrollToIdea(s, i)}
             zoom={zoom}
@@ -233,6 +103,10 @@ export default function ThreeDContainer({
             setFocus={setFocus}
             focusSphere={focus}
             newSphere={newSphere}
+            controlsRef={controlsRef}
+            currentZoom={currentZoom}
+            enableCustomControls={enableCustomControls}
+            setEnableCustomControls={(e) => setEnableCustomControls(e)}
           />
 
           <directionalLight position={[10, 10, 0]} intensity={1.5} />
@@ -245,7 +119,15 @@ export default function ThreeDContainer({
               setNewSphere={(e) => setNewSphere(e)}
             />
           </Suspense>
-          <CustomControls zoom={zoom} focus={focus} gizmo={gizmo} />
+          <CustomControls
+            controlsRef={controlsRef}
+            zoom={zoom}
+            focus={focus}
+            gizmo={gizmo}
+            currentZoom={currentZoom}
+            setCurrentZoom={(z) => setCurrentZoom(z)}
+            enableCustomControls={enableCustomControls}
+          />
         </Canvas>
       </Suspense>
     </div>
