@@ -78,7 +78,11 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
 
   const imageList = () => {
     return selectedImages.map((src) => (
-      <img src={URL.createObjectURL(src)}></img>
+      <img
+        alt="not found"
+        width={"250px"} // TODO: needs to be flex
+        src={URL.createObjectURL(src)}
+      ></img>
     ));
   };
 
