@@ -27,10 +27,10 @@ export default function Overview({
   }, []);
 
   return (
-    <ul class="nav nav-pills">
-      <li class="nav-item">
+    <ul className="nav nav-pills">
+      <li className="nav-item">
         <a
-          class="nav-link"
+          className="nav-link"
           href={`#scrollspyHeading${i}`}
           onClick={() => scrollToIdea(s, i)}
         >
