@@ -5,28 +5,13 @@ import { db } from "./Database";
 const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
   const [selectedImages, setSelectedImages] = useState([]);
 
-  //const [selectedImage, setSelectedImage] = useState(null);
-
   useEffect(() => {
-    //downloadImage(ideaId);
     downloadImages(ideaId);
   }, []);
 
   useEffect(() => {
     console.log("SELECTED IMAGES: ", selectedImages);
   }, [selectedImages]);
-
-  // async function downloadImage(ideaId) {
-  //   const data = await db.images.where("ideaId").equals(ideaId).toArray();
-  //   var blob;
-  //   if (data[0]) {
-  //     blob = data[0].image;
-  //     console.log("BLOB DOWNLOAD: ", typeof blob);
-  //     const text = await new Response(blob).text();
-  //     console.log("TEXT OF BLOB: ", text);
-  //     setSelectedImage(blob);
-  //   }
-  // }
 
   async function downloadImages(ideaId) {
     const data = await db.images.where("ideaId").equals(ideaId).toArray();
@@ -80,6 +65,7 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
     return selectedImages.map((src) => (
       <img
         alt="not found"
+        style={{ paddingBottom: "20px" }}
         width={"250px"} // TODO: needs to be flex
         src={URL.createObjectURL(src)}
       ></img>
@@ -88,31 +74,7 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
 
   return (
     <div>
-      {selectedImages && (
-        <div>
-          {imageList()}
-          {/* <img
-            alt="not found"
-            width={"250px"} // TODO: needs to be flex
-            src={URL.createObjectURL(selectedImage)}
-          /> */}
-          {/* {displayButtons ? (
-            <div className="IdeaButtons">
-              <button
-                class="btn btn-light"
-                onClick={(event) => {
-                  setSelectedImage(null);
-                  console.log(event);
-                  deleteImageFromDB();
-                }}
-                // TODO: reentering a photo doesn't work
-              >
-                Remove
-              </button>
-            </div>
-          ) : null} */}
-        </div>
-      )}
+      {selectedImages && <div>{imageList()}</div>}
       <div>
         {displayButtons ? (
           <div className="IdeaButtons">
@@ -130,26 +92,15 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
           style={{ display: "none" }}
           type="file"
           name="myImage"
-          // Event handler to capture file selection and update the state
           onChange={(event) => {
             console.log(event.target.files[0]); // Log the selected file
-            //setSelectedImage(event.target.files[0]); // Update the state with the selected file
             addFileToImageList(event.target.files[0]);
-            //setSelectedImages((prevs) => [...prevs, event.target.files[0]]);
             storeImage(event.target.files[0], ideaId);
           }}
         />
       </div>
     </div>
   );
-
-  function makeBlob() {
-    const obj = { hello: "world" };
-    const blob = new Blob([JSON.stringify(obj, null, 2)], {
-      type: "application/json",
-    });
-    return blob;
-  }
 
   async function addFileToImageList(file) {
     try {
