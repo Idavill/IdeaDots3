@@ -30,10 +30,6 @@ export default function Sphere({
   const [scale, setScale] = useState(3);
 
   useEffect(() => {
-    console.log("ID IS : ", id);
-  }, []);
-
-  useEffect(() => {
     alignSphereTitleWithIdeaTitle();
   }, [context]);
 

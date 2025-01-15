@@ -3,11 +3,18 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { db } from "./Database";
 
 const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
+  const [selectedImages, setSelectedImages] = useState([]);
+
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     downloadImage(ideaId);
+    downloadImages(ideaId);
   }, []);
+
+  useEffect(() => {
+    console.log("SELECTED IMAGES: ", selectedImages);
+  }, [selectedImages]);
 
   async function downloadImage(ideaId) {
     const data = await db.images.where("ideaId").equals(ideaId).toArray();
@@ -18,6 +25,20 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
       const text = await new Response(blob).text();
       console.log("TEXT OF BLOB: ", text);
       setSelectedImage(blob);
+    }
+  }
+
+  async function downloadImages(ideaId) {
+    const data = await db.images.where("ideaId").equals(ideaId).toArray();
+    var blob;
+    if (data.length > 0) {
+      for (var i in data) {
+        blob = data[0].image;
+        console.log("BLOB DOWNLOAD: ", typeof blob);
+        const text = await new Response(blob).text();
+        console.log("TEXT OF BLOB: ", text);
+        setSelectedImages((prevs) => [...prevs, blob]);
+      }
     }
   }
 
@@ -102,6 +123,8 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
           onChange={(event) => {
             console.log(event.target.files[0]); // Log the selected file
             setSelectedImage(event.target.files[0]); // Update the state with the selected file
+            addFileToImageList(event.target.files[0]);
+            //setSelectedImages((prevs) => [...prevs, event.target.files[0]]);
             storeImage(event.target.files[0], ideaId);
           }}
         />
@@ -115,6 +138,24 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
       type: "application/json",
     });
     return blob;
+  }
+
+  async function addFileToImageList(file) {
+    try {
+      const img = new Image(); // Create a new Image object
+      const reader = new FileReader();
+
+      reader.onload = async (event) => {
+        img.src = event.target.result; // Set the image source to the file data
+        img.onload = async () => {
+          const blob = await makeBlobFromImage(img); // Pass the image to makeBlobFromImage
+          setSelectedImages((prevs) => [...prevs, blob]);
+        };
+      };
+      reader.readAsDataURL(file); // Read the file as a data URL
+    } catch (error) {
+      console.log("Didn't store data in indexDB with error: ", error);
+    }
   }
 
   async function makeBlobFromImage(img) {
