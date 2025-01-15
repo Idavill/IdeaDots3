@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Dexie from "dexie";
-
 import { db } from "./Database";
 
 const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {

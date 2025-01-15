@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Draggable from "react-draggable";
 
 export default function ImageIdea({ setEnableCustomControls, hover, image }) {
-  const [scale, setScale] = useState(3);
+  const [scale, setScale] = useState(5);
 
   return (
     <div>
@@ -25,8 +25,8 @@ export default function ImageIdea({ setEnableCustomControls, hover, image }) {
             <img
               draggable={false}
               style={{
-                height: "200px",
-                width: "200px",
+                height: "400px",
+                width: "400px",
               }}
               src={image}
             ></img>

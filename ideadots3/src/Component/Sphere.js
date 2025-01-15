@@ -4,6 +4,7 @@ import ImageIdea from "./ImageIdea.js";
 import { SphereContext } from "./SphereContextProvider";
 import { Html } from "@react-three/drei";
 import { PivotControls } from "@react-three/drei";
+import DisplayImage from "./DisplayImageThreeD.js";
 
 export default function Sphere({
   position,
@@ -28,6 +29,10 @@ export default function Sphere({
   const context = useContext(SphereContext);
   const [focusLabel, setFocusLabel] = useState(false);
   const [scale, setScale] = useState(3);
+
+  useEffect(() => {
+    console.log("ID IS : ", id);
+  }, []);
 
   useEffect(() => {
     alignSphereTitleWithIdeaTitle();
@@ -84,13 +89,21 @@ export default function Sphere({
                 position={focusLabel ? position : [100, 100, 100]}
                 distanceFactor={2}
               >
-                <ImageIdea
+                <DisplayImage
+                  ideaId={id}
+                  hover={hover}
+                  setEnableCustomControls={setEnableCustomControls}
+                  setScale={(e) => setScale(e)}
+                  scale={scale}
+                />
+
+                {/* <ImageIdea
                   setEnableCustomControls={setEnableCustomControls}
                   hover={hover}
                   scale={scale}
                   setScale={(e) => setScale(e)}
                   image={image}
-                />
+                /> */}
               </Html>
             </>
           ) : null}

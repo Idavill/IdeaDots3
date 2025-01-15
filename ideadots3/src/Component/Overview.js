@@ -8,6 +8,7 @@ export default function Overview({
   titleChangeId,
 }) {
   const [title, setTitle] = useState(s.title);
+
   useEffect(() => {
     if (titleChangeId == s.id) {
       setTitle(s.title);
