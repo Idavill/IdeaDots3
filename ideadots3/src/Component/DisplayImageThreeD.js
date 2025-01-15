@@ -9,11 +9,9 @@ export default function DisplayImage({
   setEnableCustomControls,
   setScale,
 }) {
-  //const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImages, setSelectedImages] = useState([]);
 
   useEffect(() => {
-    //downloadImage(ideaId);
     downloadImages(ideaId);
   }, []);
 
@@ -41,34 +39,5 @@ export default function DisplayImage({
       ></img>
     ));
   };
-
-  // async function downloadImage(ideaId) {
-  //   const data = await db.images.where("ideaId").equals(ideaId).toArray();
-  //   console.log("inside sphere try to download img for : ", ideaId);
-
-  //   var blob;
-  //   if (data[0]) {
-  //     blob = data[0].image;
-  //     console.log("inside sphere BLOB DOWNLOAD: ", typeof blob);
-  //     const text = await new Response(blob).text();
-  //     console.log("inside sphere  TEXT OF BLOB: ", text);
-  //     setSelectedImage(blob);
-  //   }
-  // }
-
-  return (
-    <>
-      {selectedImages && (
-        <div>
-          {imageList()}
-          {/* <ImageIdea
-            setEnableCustomControls={setEnableCustomControls}
-            hover={hover}
-            setScale={(e) => setScale(e)}
-            image={URL.createObjectURL(selectedImage)}
-          /> */}
-        </div>
-      )}
-    </>
-  );
+  return <>{selectedImages && <div>{imageList()}</div>}</>;
 }
