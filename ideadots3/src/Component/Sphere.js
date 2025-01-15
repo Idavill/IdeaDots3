@@ -77,17 +77,15 @@ export default function Sphere({
           />
           {hovered || focusLabel ? (
             <>
-              <Html distanceFactor={10}>
+              <Html
+                position={focusLabel ? position : [100, 100, 100]}
+                distanceFactor={10}
+              >
                 <div className="contentContainer">
                   <div className="contentLabel">
                     <h2>{sphereTitle}</h2>
                   </div>
                 </div>
-              </Html>
-              <Html
-                position={focusLabel ? position : [100, 100, 100]}
-                distanceFactor={2}
-              >
                 <DisplayImage
                   ideaId={id}
                   hover={hover}
