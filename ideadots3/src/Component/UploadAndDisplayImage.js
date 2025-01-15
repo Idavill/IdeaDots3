@@ -32,8 +32,8 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
     const data = await db.images.where("ideaId").equals(ideaId).toArray();
     var blob;
     if (data.length > 0) {
-      for (var i in data) {
-        blob = data[0].image;
+      for (let i = 0; i < data.length; i++) {
+        blob = data[i].image;
         console.log("BLOB DOWNLOAD: ", typeof blob);
         const text = await new Response(blob).text();
         console.log("TEXT OF BLOB: ", text);
@@ -76,10 +76,17 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
     }
   }
 
+  const imageList = () => {
+    return selectedImages.map((src) => (
+      <img src={URL.createObjectURL(src)}></img>
+    ));
+  };
+
   return (
     <div>
       {selectedImage && (
         <div>
+          {imageList()}
           <img
             alt="not found"
             width={"250px"} // TODO: needs to be flex
