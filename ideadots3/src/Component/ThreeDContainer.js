@@ -35,6 +35,8 @@ function Sphere({
   listActive,
   controlsRef,
   currentZoom,
+  enableCustomControls,
+  setEnableCustomControls,
 }) {
   const [sphereTitle, setSphereTitle] = useState(title);
   const [hovered, hover] = useState(false);
@@ -44,7 +46,7 @@ function Sphere({
   const context = useContext(SphereContext);
   const [focusLabel, setFocusLabel] = useState(false);
   const [radius, setRadius] = useState(0.5);
-  const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(3);
 
   useEffect(() => {
     alignSphereTitleWithIdeaTitle();
@@ -61,9 +63,6 @@ function Sphere({
       click(false);
     }
   }, [focus]);
-
-  // Make the DIV element draggable:
-  //dragElement(document.getElementById("mydiv"));
 
   function dragElement(e) {
     const elmnt = document.getElementById("draggable");
@@ -94,10 +93,23 @@ function Sphere({
       e = e || window.event;
       e.preventDefault();
       // calculate the new cursor position:
+      //pos1 = pos3 - e.clientX;
+      //pos2 = pos4 - e.clientY;
+      //pos3 = e.clientX;
+      //pos4 = e.clientY;
+
       pos1 = pos3 - e.clientX;
       pos2 = pos4 - e.clientY;
       pos3 = e.clientX;
       pos4 = e.clientY;
+
+      console.log("pos 1: ", pos1);
+      console.log("pos 2: ", pos2);
+
+      console.log("pos 3: ", pos3);
+
+      console.log("pos 4: ", pos4);
+
       // set the element's new position:
       elmnt.style.top = elmnt.offsetTop - pos2 + "px";
       elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
@@ -160,25 +172,30 @@ function Sphere({
               <div
                 id="draggable"
                 style={{ position: "absolute" }}
-                onMouseDown={(e) => dragElement(e)}
+                onMouseDown={(e) => (
+                  dragElement(e), setEnableCustomControls(false)
+                )}
+                onMouseUp={(e) => setEnableCustomControls(true)}
               >
-                <div
-                  onPointerOver={(i) => (hover(i), setScale(1.2))}
-                  onPointerLeave={() => (hover(null), setScale(1))}
-                  className="contentContainer"
-                  style={{
-                    translate: "200px 10px",
-                    transform: `scale(${scale})`,
-                  }}
-                >
-                  <div className="threedImage">
-                    <img
-                      style={{
-                        height: "100px",
-                        width: "100px",
-                      }}
-                      src={image}
-                    ></img>
+                <div id="draggableheader">
+                  <div
+                    onPointerOver={(i) => (hover(i), setScale(4))}
+                    onPointerLeave={() => (hover(null), setScale(3))}
+                    className="contentContainer"
+                    style={{
+                      translate: "200px 10px",
+                      transform: `scale(${scale})`,
+                    }}
+                  >
+                    <div className="threedImage">
+                      <img
+                        style={{
+                          height: "100px",
+                          width: "100px",
+                        }}
+                        src={image}
+                      ></img>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -212,6 +229,8 @@ function Content({
   listActive,
   controlsRef,
   currentZoom,
+  enableCustomControls,
+  setEnableCustomControls,
 }) {
   const context = useContext(SphereContext);
 
@@ -253,6 +272,8 @@ function Content({
           id={s.id}
           controlsRef={controlsRef}
           currentZoom={currentZoom}
+          enableCustomControls={enableCustomControls}
+          setEnableCustomControls={(e) => setEnableCustomControls(e)}
         />
       </>
     ));
@@ -268,6 +289,7 @@ function CustomControls({
   zoom,
   focus,
   gizmo,
+  enableCustomControls,
 }) {
   const { camera, gl } = useThree();
 
@@ -302,7 +324,7 @@ function CustomControls({
 
   return (
     <>
-      {!gizmo ? (
+      {!gizmo && enableCustomControls ? (
         <OrbitControls
           ref={controlsRef}
           camera={camera}
@@ -328,6 +350,7 @@ export default function ThreeDContainer({
   const [newSphere, setNewSphere] = useState(null);
   const [currentZoom, setCurrentZoom] = useState(false);
   const controlsRef = useRef();
+  const [enableCustomControls, setEnableCustomControls] = useState(true);
 
   useEffect(() => {
     if (cameraTarget) {
@@ -365,6 +388,8 @@ export default function ThreeDContainer({
             newSphere={newSphere}
             controlsRef={controlsRef}
             currentZoom={currentZoom}
+            enableCustomControls={enableCustomControls}
+            setEnableCustomControls={(e) => setEnableCustomControls(e)}
           />
 
           <directionalLight position={[10, 10, 0]} intensity={1.5} />
@@ -384,6 +409,7 @@ export default function ThreeDContainer({
             gizmo={gizmo}
             currentZoom={currentZoom}
             setCurrentZoom={(z) => setCurrentZoom(z)}
+            enableCustomControls={enableCustomControls}
           />
         </Canvas>
       </Suspense>
