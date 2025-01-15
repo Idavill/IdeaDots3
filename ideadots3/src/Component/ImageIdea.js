@@ -11,9 +11,9 @@ export default function ImageIdea({ setEnableCustomControls, hover, image }) {
           onPointerOver={(i) => (hover(i), setScale(4))}
           onPointerLeave={() => (hover(null), setScale(3))}
           onMouseDown={() => setEnableCustomControls(false)}
-          onMouseOver={() => setEnableCustomControls(false)}
           onMouseUp={() => setEnableCustomControls(true)}
           onMouseLeave={() => setEnableCustomControls(true)}
+          onMouseOver={() => setEnableCustomControls(false)}
           className="contentContainer"
           //style={{ position: "absolute" }}
           style={{

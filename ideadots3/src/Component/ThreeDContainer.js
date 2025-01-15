@@ -235,12 +235,12 @@ function CustomControls({
 
   return (
     <>
-      {!gizmo && enableCustomControls ? (
+      {!gizmo ? (
         <OrbitControls
           ref={controlsRef}
           camera={camera}
           gl={gl}
-          enableRotate={true}
+          enableRotate={enableCustomControls ? true : false}
           enablePan={true}
           enableZoom={true}
         />
