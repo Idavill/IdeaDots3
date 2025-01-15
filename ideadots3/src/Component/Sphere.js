@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
-import image from "/Users/idavilladsen/Desktop/IdeaDots3/ideadots3/src/Assets/material.jpg";
+//import image from "/Users/idavilladsen/Desktop/IdeaDots3/ideadots3/src/Assets/material.jpg";
 import ImageIdea from "./ImageIdea.js";
 import { SphereContext } from "./SphereContextProvider";
 import { Html } from "@react-three/drei";
@@ -18,6 +18,7 @@ export default function Sphere({
   currentZoom,
   enableCustomControls,
   setEnableCustomControls,
+  image,
 }) {
   const [sphereTitle, setSphereTitle] = useState(title);
   const [hovered, hover] = useState(false);
@@ -26,7 +27,6 @@ export default function Sphere({
   const meshRef = useRef();
   const context = useContext(SphereContext);
   const [focusLabel, setFocusLabel] = useState(false);
-  const [radius, setRadius] = useState(0.5);
   const [scale, setScale] = useState(3);
 
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function Sphere({
                 </div>
               </Html>
               <Html
-                //position={focusLabel ? position : [100, 100, 100]}
+                position={focusLabel ? position : [100, 100, 100]}
                 distanceFactor={2}
               >
                 <ImageIdea

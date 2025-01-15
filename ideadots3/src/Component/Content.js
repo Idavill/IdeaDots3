@@ -59,6 +59,7 @@ export default function Content({
           currentZoom={currentZoom}
           enableCustomControls={enableCustomControls}
           setEnableCustomControls={(e) => setEnableCustomControls(e)}
+          image={s.img}
         />
       </>
     ));
