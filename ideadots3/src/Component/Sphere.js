@@ -40,7 +40,7 @@ export default function Sphere({
   //TODO: insteda useeffect
   useFrame(() => {
     if (controlsRef.current) {
-      console.log(controlsRef.current.object.position);
+      //console.log(controlsRef.current.object.position);
       setDistanceFactorForZoom(controlsRef.current.object.position); // OrbitControls object.zoom
     }
   });
