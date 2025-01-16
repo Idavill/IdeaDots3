@@ -8,6 +8,7 @@ export default function DisplayImage({
   hover,
   setEnableCustomControls,
   setScale,
+  clicked,
   startingPosition = [0, 0],
 }) {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -33,8 +34,8 @@ export default function DisplayImage({
 
   function scatterImages() {
     const scattered = [];
-    const padding = 20;
-    const maxAttempts = 100;
+    const padding = 10;
+    const maxAttempts = 50;
 
     if (!Array.isArray(startingPosition) || startingPosition.length < 2) {
       console.error("Invalid startingPosition:", startingPosition);
@@ -94,6 +95,7 @@ export default function DisplayImage({
           image={URL.createObjectURL(src)}
           left={left}
           top={top}
+          clicked={clicked}
         />
       </>
     ));

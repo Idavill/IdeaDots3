@@ -47,7 +47,8 @@
 
     padding: 10px 15px; /* Keep padding for spacing */
     border-radius: 5px;
-    width: auto; /* Change width to auto to fit text */
+    width:auto;
+    /*width: auto; /* Change width to auto to fit text */
     /* display: inline-block; Optional: Use inline-block to fit content */
 }
 
@@ -64,7 +65,8 @@
 }
 
 .threedImage{
-  border: 40px solid #202035;
+  border: 10px solid #202035;
+  background-color:  #202035;
   border-radius: 25px;
 }
 

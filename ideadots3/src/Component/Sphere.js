@@ -54,9 +54,11 @@ export default function Sphere({
     if (activeSphereId !== id) {
       setActiveSphereId(id);
       setFocusLabel(true);
+      click(true);
     } else {
       setActiveSphereId(null);
       setFocusLabel(false);
+      click(false);
     }
   };
 
@@ -93,10 +95,11 @@ export default function Sphere({
               </div>
             </div>
           </Html>
-          {hovered || activeSphereId === id ? (
+          {hovered || activeSphereId === id ? ( // clicked?
             <>
               <Html
-                position={focusLabel ? position : [100, 100, 100]}
+                //position={focusLabel ? position : [100, 100, 100]}
+                position={clicked || hovered ? position : [100, 100, 100]}
                 distanceFactor={10}
               >
                 <div className="contentContainer">
@@ -107,6 +110,7 @@ export default function Sphere({
                 <DisplayImage
                   ideaId={id}
                   hover={hover}
+                  clicked={clicked}
                   setEnableCustomControls={setEnableCustomControls}
                   setScale={(e) => setScale(e)}
                   scale={scale}

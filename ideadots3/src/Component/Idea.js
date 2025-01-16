@@ -23,6 +23,10 @@ export default function Idea({
   const [images, setImages] = useState([]);
 
   useEffect(() => {
+    console.log("TESTSSS", s.id);
+  }, [s]);
+
+  useEffect(() => {
     console.log("IMG HAS CHANGED", img);
   }, [img]);
 
