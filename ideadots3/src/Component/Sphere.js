@@ -4,6 +4,7 @@ import { SphereContext } from "./SphereContextProvider";
 import { Html } from "@react-three/drei";
 import { PivotControls } from "@react-three/drei";
 import DisplayImage from "./DisplayImageThreeD.js";
+import useComponentVisible from "./useComponentIsVisible.js";
 
 export default function Sphere({
   position,
@@ -28,6 +29,7 @@ export default function Sphere({
   const context = useContext(SphereContext);
   const [focusLabel, setFocusLabel] = useState(false);
   const [scale, setScale] = useState(3);
+  const { ref, isComponentVisible } = useComponentVisible(true);
 
   useEffect(() => {
     alignSphereTitleWithIdeaTitle();
@@ -71,6 +73,16 @@ export default function Sphere({
             opacity={0.4}
             transparent
           />
+          <Html
+            position={hovered ? position : [100, 100, 100]}
+            distanceFactor={10}
+          >
+            <div className="contentContainer">
+              <div className="contentLabel">
+                <h2>{sphereTitle}</h2>
+              </div>
+            </div>
+          </Html>
           {hovered || focusLabel ? (
             <>
               <Html
