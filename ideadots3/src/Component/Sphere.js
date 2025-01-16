@@ -29,7 +29,7 @@ export default function Sphere({
   const context = useContext(SphereContext);
   const [focusLabel, setFocusLabel] = useState(false);
   const [scale, setScale] = useState(3);
-  const { ref, isComponentVisible } = useComponentVisible(true);
+  // const { ref, isComponentVisible } = useComponentVisible(true);
 
   useEffect(() => {
     alignSphereTitleWithIdeaTitle();
