@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
-//import image from "/Users/idavilladsen/Desktop/IdeaDots3/ideadots3/src/Assets/material.jpg";
 import { SphereContext } from "./SphereContextProvider";
 import { Html } from "@react-three/drei";
 import { PivotControls } from "@react-three/drei";
 import DisplayImage from "./DisplayImageThreeD.js";
-import useComponentVisible from "./useComponentIsVisible.js";
+import { useFrame } from "@react-three/fiber"; // Ensure this import is correct
 
 export default function Sphere({
   position,
@@ -15,8 +14,8 @@ export default function Sphere({
   gizmo,
   id,
   // listActive,
-  // controlsRef,
-  // currentZoom,
+  controlsRef,
+  currentZoom,
   // enableCustomControls,
   setEnableCustomControls,
   // image,
@@ -31,7 +30,26 @@ export default function Sphere({
   const context = useContext(SphereContext);
   const [focusLabel, setFocusLabel] = useState(false);
   const [scale, setScale] = useState(3);
-  // const { ref, isComponentVisible } = useComponentVisible(true);
+  const [distanceFactorForZoom, setDistanceFactorForZoom] = useState(10);
+
+  useEffect(() => {
+    console.log("REF: ", currentZoom);
+  }, [currentZoom]);
+
+  // Update the zoom value on each frame
+  //TODO: insteda useeffect
+  useFrame(() => {
+    if (controlsRef.current) {
+      console.log(controlsRef.current.object.position);
+      setDistanceFactorForZoom(controlsRef.current.object.position); // OrbitControls object.zoom
+    }
+  });
+
+  // useEffect(() => {
+  //   if (controlsRef.current) {
+  //     console.log("HEY");
+  //   }
+  // }, [controlsRef.current]);
 
   useEffect(() => {
     alignSphereTitleWithIdeaTitle();
@@ -87,7 +105,7 @@ export default function Sphere({
           />
           <Html
             position={hovered ? position : [100, 100, 100]}
-            distanceFactor={10}
+            distanceFactor={distanceFactorForZoom}
           >
             <div className="contentContainer">
               <div className="contentLabel">
@@ -100,7 +118,7 @@ export default function Sphere({
               <Html
                 //position={focusLabel ? position : [100, 100, 100]}
                 position={clicked || hovered ? position : [100, 100, 100]}
-                distanceFactor={10}
+                distanceFactor={distanceFactorForZoom}
               >
                 <div className="contentContainer">
                   <div className="contentLabel">

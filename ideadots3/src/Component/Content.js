@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
+
 import { v4 as uuidv4 } from "uuid";
 import { SphereContext } from "./SphereContextProvider";
 import Sphere from "./Sphere";
@@ -14,6 +15,7 @@ export default function Content({
   listActive,
   controlsRef,
   currentZoom,
+  setCurrentZoom,
   enableCustomControls,
   setEnableCustomControls,
 }) {
