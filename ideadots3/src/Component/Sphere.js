@@ -14,12 +14,14 @@ export default function Sphere({
   focus,
   gizmo,
   id,
-  listActive,
-  controlsRef,
-  currentZoom,
-  enableCustomControls,
+  // listActive,
+  // controlsRef,
+  // currentZoom,
+  // enableCustomControls,
   setEnableCustomControls,
-  image,
+  // image,
+  activeSphereId,
+  setActiveSphereId,
 }) {
   const [sphereTitle, setSphereTitle] = useState(title);
   const [hovered, hover] = useState(false);
@@ -47,6 +49,17 @@ export default function Sphere({
     }
   }, [focus]);
 
+  const handleClick = (e) => {
+    zoomToView(e.object.position);
+    if (activeSphereId !== id) {
+      setActiveSphereId(id);
+      setFocusLabel(true);
+    } else {
+      setActiveSphereId(null);
+      setFocusLabel(false);
+    }
+  };
+
   return (
     <>
       <PivotControls
@@ -56,10 +69,7 @@ export default function Sphere({
       >
         <mesh
           ref={meshRef}
-          onClick={(e) => {
-            zoomToView(e.object.position);
-            setFocusLabel(!focusLabel);
-          }}
+          onClick={handleClick}
           position={pos}
           onPointerOver={(event) => (event.stopPropagation(), hover(true))}
           onPointerOut={(event) => hover(false)}
@@ -83,7 +93,7 @@ export default function Sphere({
               </div>
             </div>
           </Html>
-          {hovered || focusLabel ? (
+          {hovered || activeSphereId === id ? (
             <>
               <Html
                 position={focusLabel ? position : [100, 100, 100]}

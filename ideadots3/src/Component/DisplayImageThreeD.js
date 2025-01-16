@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { db } from "./Database";
-import ImageIdea from "./ImageIdea";
-
+import Explosion from "./Explosion";
 export default function DisplayImage({
   ideaId,
   hover,
