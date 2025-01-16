@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import Draggable from "react-draggable";
 
-export default function ImageIdea({ setEnableCustomControls, hover, image }) {
+export default function ImageIdea({
+  setEnableCustomControls,
+  hover,
+  image,
+  left,
+  top,
+}) {
   const [scale, setScale] = useState(5);
 
   return (
@@ -15,9 +21,16 @@ export default function ImageIdea({ setEnableCustomControls, hover, image }) {
           onMouseLeave={() => setEnableCustomControls(true)}
           onMouseOver={() => setEnableCustomControls(false)}
           className="contentContainer"
+          // style={{
+          //   translate: "-500px -500px",
+          //   transform: `scale(${scale})`,
+          // }}
           style={{
-            translate: "-500px -500px",
-            transform: `scale(${scale})`,
+            position: "absolute",
+            left: `${left}px`,
+            top: `${top}px`,
+            paddingBottom: "20px",
+            width: "250px",
           }}
         >
           <div className="threedImage">
