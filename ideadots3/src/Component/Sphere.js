@@ -103,7 +103,7 @@ export default function Sphere({
             opacity={0.4}
             transparent
           />
-          <Html
+          {/* <Html
             position={hovered ? position : [100, 100, 100]}
             distanceFactor={distanceFactorForZoom}
           >
@@ -112,7 +112,7 @@ export default function Sphere({
                 <h2>{sphereTitle}</h2>
               </div>
             </div>
-          </Html>
+          </Html> */}
           {hovered || activeSphereId === id ? ( // clicked?
             <>
               <Html
