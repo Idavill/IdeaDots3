@@ -7,7 +7,6 @@ export default function DisplayImage({
   ideaId,
   hover,
   setEnableCustomControls,
-  setScale,
   clicked,
   startingPosition = [0, 0],
 }) {

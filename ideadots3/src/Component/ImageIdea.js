@@ -9,6 +9,10 @@ export default function ImageIdea({
   top,
   clicked,
 }) {
+  const handleMoveImage = (e) => {
+    console.log("position:::", e.currentTarget);
+  };
+
   return (
     <div style={{ position: "fixed", width: "500px" }}>
       {clicked && (
@@ -16,7 +20,9 @@ export default function ImageIdea({
           <div
             onPointerOver={() => hover(true)}
             onPointerLeave={() => hover(false)}
-            onMouseDown={() => setEnableCustomControls(false)}
+            onMouseDown={(e) => (
+              setEnableCustomControls(false), handleMoveImage(e)
+            )}
             onMouseUp={() => setEnableCustomControls(true)}
             onMouseLeave={() => setEnableCustomControls(true)}
             onMouseOver={() => setEnableCustomControls(false)}
