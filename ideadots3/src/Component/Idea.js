@@ -6,7 +6,6 @@ import Button from "./Button";
 export default function Idea({
   s,
   i,
-  setActiveSphere,
   setActiveIdea,
   activeIdea,
   deleteIdea,
@@ -34,11 +33,9 @@ export default function Idea({
     setIsActive(activeIdea.id === s.id ? true : false);
   }, [activeIdea.position]);
 
-  //TODO: test this method especially if e is updated data
   const handleGo = () => {
     context.spheres.forEach((contextSphere) => {
       if (contextSphere.id == s.id) {
-        //setActiveSphere(contextSphere);
         setActiveIdea(contextSphere);
       }
     });
