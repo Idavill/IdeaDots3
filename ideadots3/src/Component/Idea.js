@@ -2,26 +2,25 @@ import React, { useEffect, useState, useContext } from "react";
 import { SphereContext } from "./SphereContextProvider";
 import UploadAndDisplayImage from "./UploadAndDisplayImage";
 import Button from "./Button";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Idea({
   s,
   i,
-  setActive,
-  activeI,
-  deleteThis,
+  setActiveSphere,
+  activePosition,
+  deleteIdea,
   gizmo,
   setGizmo,
-  sphereArray,
-  setSphereArray,
+  //sphereArray,
+  //setSphereArray,
   setTitleIsChanged,
   setTitleChangeId,
 }) {
   const [isActive, setIsActive] = useState(false);
-  //const [img, setImg] = useState(null); // TOOD: or s.img?
   const [title, setTitle] = useState(s.title);
   const [text, setText] = useState(s.text);
   const context = useContext(SphereContext);
-  //const [images, setImages] = useState([]);
 
   useEffect(() => {
     const titleId = s.id + "title";
@@ -34,15 +33,15 @@ export default function Idea({
   }, []);
 
   useEffect(() => {
-    setIsActive(activeIdMatchesIdea() ? true : false);
-  }, [activeI]);
+    setIsActive(activePositiondMatchesIdea() ? true : false);
+  }, [activePosition]);
 
-  function activeIdMatchesIdea() {
+  function activePositiondMatchesIdea() {
     return (
-      activeI &&
-      activeI.x === s.position.x &&
-      activeI.y === s.position.y &&
-      activeI.z === s.position.z
+      activePosition &&
+      activePosition.x === s.position.x &&
+      activePosition.y === s.position.y &&
+      activePosition.z === s.position.z
     );
   }
 
@@ -50,13 +49,13 @@ export default function Idea({
   const handleGo = () => {
     context.spheres.forEach((contextSphere) => {
       if (contextSphere.id == s.id) {
-        setActive(contextSphere);
+        setActiveSphere(contextSphere);
       }
     });
   };
 
   const handleRemoveIdea = () => {
-    deleteThis(s);
+    deleteIdea(s);
   };
 
   //TODO: WHen title is edited, then context should
@@ -64,13 +63,14 @@ export default function Idea({
     setIsActive(true);
     const titleId = id + "title";
     localStorage.setItem(titleId, textContext);
-    sphereArray.forEach((sp) => {
+    context.spheres.forEach((sp) => {
       if (sp.id == id) {
         sp.title = textContext;
       }
     });
 
-    setSphereArray(sphereArray);
+    //setSphereArray(sphereArray);
+    //context.setSpheres(context.spheres); // redundant?
     setTitleIsChanged(true);
     setTitleChangeId(id);
   };

@@ -67,14 +67,14 @@ export default function DraggableUI({
         gizmo={gizmo}
         setGizmo={(e) => setGizmo(e)}
         key={i}
-        activeI={activeIdea}
-        setActive={(s) => setActiveSphere(s)}
+        activePosition={activeIdea}
+        setActiveSphere={(s) => setActiveSphere(s)}
         s={s}
         i={i}
-        deleteThis={(s) => deleteIdea(s)}
-        setSpheres={(e) => context.setSpheres(e)}
-        sphereArray={context.spheres} // redundant, need to call context.spheres inside idea
-        setSphereArray={(e) => context.setSpheres(e)} // thereby also this is reduncant
+        deleteIdea={(s) => deleteIdea(s)}
+        //setSpheres={(e) => context.setSpheres(e)}
+        //sphereArray={context.spheres} // redundant, need to call context.spheres inside idea
+        //setSphereArray={(e) => context.setSpheres(e)} // thereby also this is reduncant
         titleIsChanged={sphereIsChanging}
         setTitleIsChanged={(e) => setSphereIsChanging(e)}
         titleChangeId={titleChangeId}
