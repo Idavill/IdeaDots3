@@ -4,17 +4,18 @@ import ThreeDContainer from "./Component/ThreeDContainer.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DraggableUI from "./Component/DraggableUI.js";
 import { SphereContextProvider } from "./Component/SphereContextProvider.js";
+import Header from "./Component/Header.js";
 
 export default function App() {
   const [titleIsChanged, setTitleIsChanged] = useState(false);
   const [cameraTarget, setCameraTarget] = useState(null);
-  const [activeIdea, setActiveIdea] = useState(null); // could be the same as
+  const [activeIdea, setActiveIdea] = useState(null);
   const [gizmo, setGizmo] = useState(null);
   const [isListModeActive, setIsListModeActive] = useState(false);
-  const [modeButtonTest, setModeButtonTest] = useState("view model-mode");
+  const [viewModeButton, setViewModeButton] = useState("view model-mode");
 
   useEffect(() => {
-    setModeButtonTest(isListModeActive ? "view model-mode" : "view list-mode");
+    setViewModeButton(isListModeActive ? "view model-mode" : "view list-mode");
   }, [isListModeActive]);
 
   useEffect(() => {
@@ -39,9 +40,12 @@ export default function App() {
   return (
     <>
       <SphereContextProvider>
-        <button onClick={() => setIsListModeActive(!isListModeActive)}>
-          {modeButtonTest}
-        </button>
+        <Header
+          activeIdea={activeIdea}
+          viewModeButton={viewModeButton}
+          isListModeActive={isListModeActive}
+          setIsListModeActive={setIsListModeActive}
+        />
         <Suspense fallback={null}>
           <ThreeDContainer
             isListModeActive={isListModeActive}
