@@ -41,6 +41,7 @@ export default function Sphere({
   useFrame(() => {
     if (controlsRef.current) {
       //console.log(controlsRef.current.object.position);
+      //const zoomFactor = controlsRef.current.object.position;
       setDistanceFactorForZoom(controlsRef.current.object.position); // OrbitControls object.zoom
     }
   });
@@ -103,28 +104,32 @@ export default function Sphere({
             opacity={0.4}
             transparent
           />
-          {/* <Html
-            position={hovered ? position : [100, 100, 100]}
-            distanceFactor={distanceFactorForZoom}
-          >
-            <div className="contentContainer">
-              <div className="contentLabel">
-                <h2>{sphereTitle}</h2>
+          {hovered || clicked ? (
+            <Html
+              //position={clicked ? [-100, -100] : position}
+              position={position}
+              distanceFactor={distanceFactorForZoom}
+            >
+              <div className="contentContainer">
+                <div className="contentLabel">
+                  <h2>{sphereTitle}</h2>
+                </div>
               </div>
-            </div>
-          </Html> */}
+            </Html>
+          ) : null}
           {hovered || activeSphereId === id ? ( // clicked?
             <>
               <Html
-                //position={focusLabel ? position : [100, 100, 100]}
                 position={clicked || hovered ? position : [100, 100, 100]}
-                distanceFactor={distanceFactorForZoom}
+                distanceFactor={distanceFactorForZoom * distanceFactorForZoom}
               >
-                <div className="contentContainer">
-                  <div className="contentLabel">
-                    <h2>{sphereTitle}</h2>
+                {/* {clicked && (
+                  <div className="contentContainer">
+                    <div className="contentLabel">
+                      <h2>{sphereTitle}</h2>
+                    </div>
                   </div>
-                </div>
+                )} */}
                 <DisplayImage
                   ideaId={id}
                   hover={hover}
