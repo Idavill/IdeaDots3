@@ -7,6 +7,7 @@ export default function Idea({
   s,
   i,
   setActiveSphere,
+  setActiveIdea,
   activePosition,
   deleteIdea,
   gizmo,
@@ -47,6 +48,7 @@ export default function Idea({
     context.spheres.forEach((contextSphere) => {
       if (contextSphere.id == s.id) {
         setActiveSphere(contextSphere);
+        setActiveIdea(contextSphere);
       }
     });
   };

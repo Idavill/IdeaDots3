@@ -8,7 +8,8 @@ import Idea from "./Idea";
 import Overview from "./Overview";
 
 export default function DraggableUI({
-  activeSphere,
+  //activeSphere,
+  setActiveIdea,
   setActiveSphere,
   scrollToIdea,
   activeIdea,
@@ -35,10 +36,10 @@ export default function DraggableUI({
     return context.spheres.map((s, i) => (
       <Overview
         scrollToIdea={scrollToIdea}
-        activeSphere={activeSphere}
-        setActiveSphere={(e) => setActiveSphere(e)}
+        //activeIdea={activeIdea}
+        //setActiveIdea={(e) => setActiveIdea(e)}
         s={s}
-        sphereArray={context.spheres}
+        sphereArray={context.spheres} // redundant?
         i={i}
         titleIsChanged={sphereIsChanging}
         titleChangeId={titleChangeId}
@@ -68,6 +69,7 @@ export default function DraggableUI({
         setGizmo={(e) => setGizmo(e)}
         key={i}
         activePosition={activeIdea}
+        setActiveIdea={(s) => setActiveIdea(s)}
         setActiveSphere={(s) => setActiveSphere(s)}
         s={s}
         i={i}

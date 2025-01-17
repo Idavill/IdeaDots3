@@ -4,11 +4,11 @@ import ThreeDContainer from "./Component/ThreeDContainer.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DraggableUI from "./Component/DraggableUI.js";
 import { SphereContextProvider } from "./Component/SphereContextProvider.js";
+
 export default function App() {
   const [sphereIsChanging, setSphereIsChanging] = useState(false);
-  const [activeSphere, setActiveSphere] = useState(null);
   const [cameraTarget, setCameraTarget] = useState(null);
-  const [activeIdea, setActiveIdea] = useState(null);
+  const [activeIdea, setActiveIdea] = useState(null); // could be the same as
   const [gizmo, setGizmo] = useState(null);
   const [listActive, setListActive] = useState(false);
   const [modeButtonTest, setModeButtonTest] = useState("view model-mode");
@@ -22,20 +22,13 @@ export default function App() {
   }, [listActive]);
 
   useEffect(() => {
-    if (activeIdea) {
+    if (activeIdea && activeIdea.position) {
       setActiveIdea(activeIdea);
+      setCameraTarget(activeIdea);
     }
   }, [activeIdea]);
 
-  useEffect(() => {
-    if (activeSphere) {
-      setCameraTarget(activeSphere);
-      setActiveIdea(activeSphere);
-    }
-  }, [activeSphere]);
-
   const scrollToIdea = (s, i) => {
-    setActiveSphere(s);
     setActiveIdea(s);
     //event.preventDefault(); // Prevent default anchor click behavior
     const target = document.getElementById(`scrollspyHeading${i}`);
@@ -65,8 +58,6 @@ export default function App() {
         </Suspense>
         {listActive ? (
           <DraggableUI
-            activeSphere={activeSphere}
-            setActiveSphere={(e) => setActiveSphere(e)}
             scrollToIdea={scrollToIdea}
             activeIdea={activeIdea}
             setActiveIdea={(e) => setActiveIdea(e)}
