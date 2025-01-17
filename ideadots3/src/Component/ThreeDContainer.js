@@ -10,8 +10,8 @@ CameraControls.install({ THREE });
 
 function CustomControls({
   controlsRef,
-  zoom,
-  focus,
+  //zoom,
+  //focus,
   gizmo,
   enableCustomControls,
 }) {
@@ -23,20 +23,20 @@ function CustomControls({
     }
   }, []);
 
-  useFrame((state, delta) => {
-    if (controlsRef.current) {
-      const target = new THREE.Vector3();
-      if (zoom) {
-        //console.log("ZOOM :", controlsRef.current.object.position);
-        target.set(focus.x, focus.y, focus.z); // Set target to focus point
-        controlsRef.current.target.lerp(target, 0.1); // Smoothly move towards the target
-      } else {
-        controlsRef.current.target.set(0, 0, 0); // Reset target when not zooming
-      }
+  // useFrame((state, delta) => {
+  //   if (controlsRef.current) {
+  //     const target = new THREE.Vector3();
+  //     if (zoom) {
+  //       //console.log("ZOOM :", controlsRef.current.object.position);
+  //       target.set(focus.x, focus.y, focus.z); // Set target to focus point
+  //       controlsRef.current.target.lerp(target, 0.1); // Smoothly move towards the target
+  //     } else {
+  //       controlsRef.current.target.set(0, 0, 0); // Reset target when not zooming
+  //     }
 
-      controlsRef.current.update(); // Update controls to apply changes
-    }
-  });
+  //     controlsRef.current.update(); // Update controls to apply changes
+  //   }
+  // });
 
   return (
     <>
@@ -58,6 +58,7 @@ export default function ThreeDContainer({
   scrollToIdea,
   cameraTarget,
   setActiveIdea,
+  activeIdea,
   gizmo,
   listActive,
 }) {
@@ -70,18 +71,17 @@ export default function ThreeDContainer({
 
   useEffect(() => {
     if (cameraTarget) {
-      console.log("ct: ", cameraTarget.position);
       setZoom(true);
-      setFocus(cameraTarget.position);
+      //setFocus(cameraTarget.position);
     }
   }, [cameraTarget]);
 
-  useEffect(() => {
-    if (focus) {
-      console.log("focus ", focus);
-      setActiveIdea(focus);
-    }
-  }, [focus]);
+  // useEffect(() => {
+  //   if (focus) {
+  //     console.log("focus ", focus);
+  //     setActiveIdea(focus);
+  //   }
+  // }, [focus]);
 
   return (
     <div style={{ height: "100vh" }}>
@@ -94,18 +94,20 @@ export default function ThreeDContainer({
           }}
         >
           <Content
-            listActive={listActive}
+            activeIdea={activeIdea}
+            //setActiveIdea={(e) => setActiveIdea(e)}
+            //listActive={listActive}
             gizmo={gizmo}
             scrollToIdea={(s, i) => scrollToIdea(s, i)}
             zoom={zoom}
             setZoom={setZoom}
-            setFocus={setFocus}
-            focusSphere={focus}
+            //setFocus={setFocus}
+            //focusSphere={focus}
             newSphere={newSphere}
             controlsRef={controlsRef}
-            currentZoom={currentZoom}
+            //currentZoom={currentZoom}
             setCurrentZoom={(z) => setCurrentZoom(z)}
-            enableCustomControls={enableCustomControls}
+            //enableCustomControls={enableCustomControls}
             setEnableCustomControls={(e) => setEnableCustomControls(e)}
           />
 

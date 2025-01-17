@@ -30,8 +30,10 @@ export default function Idea({
   }, []);
 
   useEffect(() => {
-    setIsActive(activeIdea.id === s.id ? true : false);
-  }, [activeIdea.position]);
+    if (activeIdea) {
+      setIsActive(activeIdea.id === s.id ? true : false);
+    }
+  }, [activeIdea]);
 
   const handleGo = () => {
     context.spheres.forEach((contextSphere) => {

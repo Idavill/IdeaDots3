@@ -5,22 +5,24 @@ import { SphereContext } from "./SphereContextProvider";
 import Sphere from "./Sphere";
 
 export default function Content({
+  activeIdea,
+  setActiveIdea,
   zoom,
   setZoom,
-  setFocus,
-  focusSphere,
+  //setFocus,
+  //focusSphere,
   newSphere,
   scrollToIdea,
   gizmo,
-  listActive,
+  //listActive,
   controlsRef,
-  currentZoom,
-  setCurrentZoom,
-  enableCustomControls,
+  //currentZoom,
+  //setCurrentZoom,
+  //enableCustomControls,
   setEnableCustomControls,
 }) {
   const context = useContext(SphereContext);
-  const [activeSphereId, setActiveSphereId] = useState(null);
+  //const [activeSphereId, setActiveSphereId] = useState(null);
 
   useEffect(() => {
     if (newSphere) {
@@ -47,24 +49,25 @@ export default function Content({
     return context.spheres.map((s, i) => (
       <>
         <Sphere
-          listActive={listActive}
+          id={s.id}
+          //listActive={listActive}
           gizmo={gizmo}
           zoomToView={(focusRef) => (
-            setZoom(!zoom), setFocus(focusRef), scrollToIdea(s, i)
+            setZoom(!zoom), /*setFocus(focusRef)*/ scrollToIdea(s, i)
           )}
           key={i}
           position={[s.position.x, s.position.y, s.position.z]}
           title={s.title}
-          text={s.text}
-          focus={focusSphere}
-          id={s.id}
+          //focus={focusSphere}
           controlsRef={controlsRef}
-          currentZoom={currentZoom}
-          enableCustomControls={enableCustomControls}
+          //currentZoom={currentZoom}
+          //enableCustomControls={enableCustomControls}
           setEnableCustomControls={(e) => setEnableCustomControls(e)}
-          image={s.img}
-          activeSphereId={activeSphereId}
-          setActiveSphereId={(e) => setActiveSphereId(e)}
+          //image={s.img}
+          activeIdea={activeIdea}
+          setActiveIdea={(e) => setActiveIdea(e)}
+          //activeSphereId={activeSphereId}
+          //setActiveSphereId={(e) => setActiveSphereId(e)}
         />
       </>
     ));
