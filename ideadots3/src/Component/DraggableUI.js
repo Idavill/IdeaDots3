@@ -8,24 +8,24 @@ import Idea from "./Idea";
 import Overview from "./Overview";
 
 export default function DraggableUI({
-  //activeSphere,
   setActiveIdea,
   setActiveSphere,
   scrollToIdea,
   activeIdea,
   gizmo,
   setGizmo,
-  sphereIsChanging,
-  setSphereIsChanging,
+  titleIsChanged,
+  //setSphereIsChanging,
+  setTitleIsChanged,
 }) {
   const context = useContext(SphereContext);
   const [titleChangeId, setTitleChangeId] = useState("");
 
   useEffect(() => {
-    if (sphereIsChanging) {
-      setSphereIsChanging(false);
+    if (titleIsChanged) {
+      setTitleIsChanged(false);
     }
-  }, [sphereIsChanging]);
+  }, [titleIsChanged]);
 
   const deleteIdea = (s) => {
     const newList = context.spheres.filter((sphere) => sphere.id !== s.id);
@@ -35,13 +35,10 @@ export default function DraggableUI({
   const overview = () => {
     return context.spheres.map((s, i) => (
       <Overview
-        scrollToIdea={scrollToIdea}
-        //activeIdea={activeIdea}
-        //setActiveIdea={(e) => setActiveIdea(e)}
         s={s}
-        sphereArray={context.spheres} // redundant?
         i={i}
-        titleIsChanged={sphereIsChanging}
+        scrollToIdea={scrollToIdea}
+        titleIsChanged={titleIsChanged}
         titleChangeId={titleChangeId}
       ></Overview>
     ));
@@ -74,11 +71,8 @@ export default function DraggableUI({
         s={s}
         i={i}
         deleteIdea={(s) => deleteIdea(s)}
-        //setSpheres={(e) => context.setSpheres(e)}
-        //sphereArray={context.spheres} // redundant, need to call context.spheres inside idea
-        //setSphereArray={(e) => context.setSpheres(e)} // thereby also this is reduncant
-        titleIsChanged={sphereIsChanging}
-        setTitleIsChanged={(e) => setSphereIsChanging(e)}
+        titleIsChanged={titleIsChanged}
+        setTitleIsChanged={(e) => setTitleIsChanged(e)}
         titleChangeId={titleChangeId}
         setTitleChangeId={(e) => setTitleChangeId(e)}
       ></Idea>

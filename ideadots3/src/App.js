@@ -6,16 +6,16 @@ import DraggableUI from "./Component/DraggableUI.js";
 import { SphereContextProvider } from "./Component/SphereContextProvider.js";
 
 export default function App() {
-  const [sphereIsChanging, setSphereIsChanging] = useState(false);
+  const [titleIsChanged, setTitleIsChanged] = useState(false);
   const [cameraTarget, setCameraTarget] = useState(null);
   const [activeIdea, setActiveIdea] = useState(null); // could be the same as
   const [gizmo, setGizmo] = useState(null);
-  const [listActive, setListActive] = useState(false);
+  const [isListModeActive, setIsListModeActive] = useState(false);
   const [modeButtonTest, setModeButtonTest] = useState("view model-mode");
 
   useEffect(() => {
-    setModeButtonTest(listActive ? "view model-mode" : "view list-mode");
-  }, [listActive]);
+    setModeButtonTest(isListModeActive ? "view model-mode" : "view list-mode");
+  }, [isListModeActive]);
 
   useEffect(() => {
     if (activeIdea && activeIdea.position) {
@@ -39,12 +39,12 @@ export default function App() {
   return (
     <>
       <SphereContextProvider>
-        <button onClick={() => setListActive(!listActive)}>
+        <button onClick={() => setIsListModeActive(!isListModeActive)}>
           {modeButtonTest}
         </button>
         <Suspense fallback={null}>
           <ThreeDContainer
-            listActive={listActive}
+            isListModeActive={isListModeActive}
             gizmo={gizmo}
             scrollToIdea={(s, i) => scrollToIdea(s, i)}
             setActiveIdea={(s) => setActiveIdea(s)}
@@ -52,15 +52,15 @@ export default function App() {
             cameraTarget={cameraTarget}
           />
         </Suspense>
-        {listActive ? (
+        {isListModeActive ? (
           <DraggableUI
             scrollToIdea={scrollToIdea}
             activeIdea={activeIdea}
             setActiveIdea={(e) => setActiveIdea(e)}
             gizmo={gizmo}
             setGizmo={(e) => setGizmo(e)}
-            sphereIsChanging={sphereIsChanging}
-            setSphereIsChanging={(e) => setSphereIsChanging(e)}
+            titleIsChanged={titleIsChanged}
+            setTitleIsChanged={(e) => setTitleIsChanged(e)}
           />
         ) : null}
       </SphereContextProvider>
