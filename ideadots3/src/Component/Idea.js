@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import { SphereContext } from "./SphereContextProvider";
 import UploadAndDisplayImage from "./UploadAndDisplayImage";
 import Button from "./Button";
-import { v4 as uuidv4 } from "uuid";
 
 export default function Idea({
   s,
@@ -12,8 +11,6 @@ export default function Idea({
   deleteIdea,
   gizmo,
   setGizmo,
-  //sphereArray,
-  //setSphereArray,
   setTitleIsChanged,
   setTitleChangeId,
 }) {
@@ -68,9 +65,6 @@ export default function Idea({
         sp.title = textContext;
       }
     });
-
-    //setSphereArray(sphereArray);
-    //context.setSpheres(context.spheres); // redundant?
     setTitleIsChanged(true);
     setTitleChangeId(id);
   };
