@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { SphereContext } from "./SphereContextProvider";
 import { Html } from "@react-three/drei";
-import { PivotControls, Billboard, Text } from "@react-three/drei";
+import { PivotControls, Billboard, Text, Image } from "@react-three/drei";
 import DisplayImage from "./DisplayImageThreeD.js";
 import { useFrame } from "@react-three/fiber"; // Ensure this import is correct
+import ThreeDImage from "./ThreeDImage.js";
 
 export default function Sphere({
   id,
@@ -13,6 +14,7 @@ export default function Sphere({
   activeIdea,
   controlsRef,
   setEnableCustomControls,
+  isThreeDModeActive,
 }) {
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
@@ -64,16 +66,30 @@ export default function Sphere({
             transparent
           />
           <>
-            <Html distanceFactor={distanceFactorForZoom}>
-              <DisplayImage
-                ideaId={id}
-                hover={hover}
-                clicked={clicked}
-                setEnableCustomControls={setEnableCustomControls}
-                setScale={(e) => setScale(e)}
-                scale={scale}
-              />
-            </Html>
+            {!isThreeDModeActive ? (
+              <Html distanceFactor={distanceFactorForZoom}>
+                <DisplayImage
+                  ideaId={id}
+                  hover={hover}
+                  clicked={clicked}
+                  setEnableCustomControls={setEnableCustomControls}
+                  setScale={(e) => setScale(e)}
+                  scale={scale}
+                />
+              </Html>
+            ) : (
+              <Billboard>
+                <Text
+                  fontSize={0.5}
+                  position={[2.15, 3.85, 0]}
+                  anchorX="left"
+                  color="black"
+                >
+                  heeeej
+                </Text>
+                <ThreeDImage ideaId={id}></ThreeDImage>
+              </Billboard>
+            )}
           </>
         </mesh>
       </PivotControls>

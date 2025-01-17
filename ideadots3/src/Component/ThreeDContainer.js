@@ -58,6 +58,7 @@ export default function ThreeDContainer({
   scrollToIdea,
   cameraTarget,
   setActiveIdea,
+  isThreeDModeActive,
   activeIdea,
   gizmo,
   listActive,
@@ -95,6 +96,7 @@ export default function ThreeDContainer({
         >
           <Content
             activeIdea={activeIdea}
+            isThreeDModeActive={isThreeDModeActive}
             //setActiveIdea={(e) => setActiveIdea(e)}
             //listActive={listActive}
             gizmo={gizmo}

@@ -12,11 +12,17 @@ export default function App() {
   const [activeIdea, setActiveIdea] = useState(null);
   const [gizmo, setGizmo] = useState(null);
   const [isListModeActive, setIsListModeActive] = useState(false);
+  const [isThreeDModeActive, setIsThreeDModeActive] = useState(false);
   const [viewModeButton, setViewModeButton] = useState("view model-mode");
+  const [viewSpatialModeButton, setViewSpatialModeButton] = useState("3D");
 
   useEffect(() => {
     setViewModeButton(isListModeActive ? "view model-mode" : "view list-mode");
   }, [isListModeActive]);
+
+  useEffect(() => {
+    setViewSpatialModeButton(isThreeDModeActive ? "3D" : "2D");
+  }, [isThreeDModeActive]);
 
   useEffect(() => {
     if (activeIdea && activeIdea.position) {
@@ -45,6 +51,9 @@ export default function App() {
           viewModeButton={viewModeButton}
           isListModeActive={isListModeActive}
           setIsListModeActive={setIsListModeActive}
+          isThreeDModeActive={isThreeDModeActive}
+          viewSpatialModeButton={viewSpatialModeButton}
+          setIsThreeDModeActive={setIsThreeDModeActive}
         />
         <Suspense fallback={null}>
           <ThreeDContainer
@@ -54,6 +63,7 @@ export default function App() {
             setActiveIdea={(s) => setActiveIdea(s)}
             activeIdea={activeIdea}
             cameraTarget={cameraTarget}
+            isThreeDModeActive={isThreeDModeActive}
           />
         </Suspense>
         {isListModeActive ? (

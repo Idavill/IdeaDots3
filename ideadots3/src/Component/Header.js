@@ -5,7 +5,10 @@ export default function Header({
   viewModeButton,
   activeIdea,
   setIsListModeActive,
+  setIsThreeDModeActive,
   isListModeActive,
+  viewSpatialModeButton,
+  isThreeDModeActive,
 }) {
   return (
     <div
@@ -22,6 +25,10 @@ export default function Header({
       <Button
         onClick={() => setIsListModeActive(!isListModeActive)}
         text={viewModeButton}
+      />
+      <Button
+        onClick={() => setIsThreeDModeActive(!isThreeDModeActive)}
+        text={viewSpatialModeButton}
       />
       <h4
         style={{
