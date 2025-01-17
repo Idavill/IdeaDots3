@@ -18,12 +18,7 @@ export default function Overview({
   useEffect(() => {
     const titleId = s.id + "title";
     const localStorageTitle = localStorage.getItem(titleId);
-
-    if (localStorageTitle) {
-      setTitle(localStorageTitle);
-    } else {
-      setTitle(s.title);
-    }
+    setTitle(localStorageTitle ? localStorageTitle : s.title);
   }, []);
 
   return (
