@@ -83,11 +83,7 @@ export default function Idea({
   };
 
   const handleMoveClicked = () => {
-    if (gizmo) {
-      setGizmo(null);
-    } else {
-      setGizmo(s.id);
-    }
+    setGizmo(gizmo ? null : s.id);
   };
 
   return (
