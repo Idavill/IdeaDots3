@@ -65,9 +65,10 @@ export default function DraggableUI({
         gizmo={gizmo}
         setGizmo={(e) => setGizmo(e)}
         key={i}
-        activePosition={activeIdea}
+        //activePosition={activeIdea}
+        activeIdea={activeIdea}
         setActiveIdea={(s) => setActiveIdea(s)}
-        setActiveSphere={(s) => setActiveSphere(s)}
+        //setActiveSphere={(s) => setActiveSphere(s)}
         s={s}
         i={i}
         deleteIdea={(s) => deleteIdea(s)}

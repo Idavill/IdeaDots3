@@ -8,7 +8,7 @@ export default function Idea({
   i,
   setActiveSphere,
   setActiveIdea,
-  activePosition,
+  activeIdea,
   deleteIdea,
   gizmo,
   setGizmo,
@@ -31,23 +31,14 @@ export default function Idea({
   }, []);
 
   useEffect(() => {
-    setIsActive(activePositiondMatchesIdea() ? true : false);
-  }, [activePosition]);
-
-  function activePositiondMatchesIdea() {
-    return (
-      activePosition &&
-      activePosition.x === s.position.x &&
-      activePosition.y === s.position.y &&
-      activePosition.z === s.position.z
-    );
-  }
+    setIsActive(activeIdea.id === s.id ? true : false);
+  }, [activeIdea.position]);
 
   //TODO: test this method especially if e is updated data
   const handleGo = () => {
     context.spheres.forEach((contextSphere) => {
       if (contextSphere.id == s.id) {
-        setActiveSphere(contextSphere);
+        //setActiveSphere(contextSphere);
         setActiveIdea(contextSphere);
       }
     });
