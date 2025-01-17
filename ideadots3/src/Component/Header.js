@@ -1,4 +1,5 @@
 import React, { Suspense, useEffect, useState } from "react";
+import Button from "./Button";
 
 export default function Header({
   viewModeButton,
@@ -18,21 +19,15 @@ export default function Header({
         padding: "20px",
       }}
     >
-      <button
-        style={{ display: "flex", width: "auto" }}
+      <Button
         onClick={() => setIsListModeActive(!isListModeActive)}
-      >
-        {viewModeButton}
-      </button>
+        text={viewModeButton}
+      />
       <h4
         style={{
           display: "flex",
           justifyContent: "right",
           alignItems: "right",
-          //position: "absolute",
-          //top: "10px",
-          //left: "50%",
-          //transform: "translate(-50%, -50%)",
           width: "auto",
         }}
       >

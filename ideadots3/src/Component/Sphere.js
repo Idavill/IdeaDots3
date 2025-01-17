@@ -8,14 +8,13 @@ import { useFrame } from "@react-three/fiber"; // Ensure this import is correct
 export default function Sphere({
   id,
   position,
-  title,
   zoomToView,
   gizmo,
   activeIdea,
   controlsRef,
   setEnableCustomControls,
 }) {
-  const [sphereTitle, setSphereTitle] = useState(title);
+  //const [sphereTitle, setSphereTitle] = useState(title);
 
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
@@ -33,9 +32,9 @@ export default function Sphere({
     }
   });
 
-  useEffect(() => {
-    alignSphereTitleWithIdeaTitle();
-  }, [context]);
+  // useEffect(() => {
+  //   alignSphereTitleWithIdeaTitle();
+  // }, [context]);
 
   useEffect(() => {
     if (activeIdea) {
@@ -85,16 +84,15 @@ export default function Sphere({
               />
             </Html>
           </>
-          {/* ) : null} */}
         </mesh>
       </PivotControls>
     </>
   );
-  function alignSphereTitleWithIdeaTitle() {
-    context.spheres.forEach((contextSphere) => {
-      if (contextSphere.id === id) {
-        setSphereTitle(contextSphere.title);
-      }
-    });
-  }
+  // function alignSphereTitleWithIdeaTitle() {
+  //   context.spheres.forEach((contextSphere) => {
+  //     if (contextSphere.id === id) {
+  //       setSphereTitle(contextSphere.title);
+  //     }
+  //   });
+  // }
 }
