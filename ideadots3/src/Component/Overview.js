@@ -27,7 +27,7 @@ export default function Overview({
         <a
           className="nav-link"
           href={`#scrollspyHeading${i}`}
-          onClick={() => scrollToIdea(s, i)}
+          onClick={(e) => scrollToIdea(s, i)}
         >
           {title}
         </a>

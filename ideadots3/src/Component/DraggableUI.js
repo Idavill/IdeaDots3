@@ -9,13 +9,11 @@ import Overview from "./Overview";
 
 export default function DraggableUI({
   setActiveIdea,
-  setActiveSphere,
   scrollToIdea,
   activeIdea,
   gizmo,
   setGizmo,
   titleIsChanged,
-  //setSphereIsChanging,
   setTitleIsChanged,
 }) {
   const context = useContext(SphereContext);
@@ -62,19 +60,15 @@ export default function DraggableUI({
   const listContent = () => {
     return context.spheres.map((s, i) => (
       <Idea
-        gizmo={gizmo}
-        setGizmo={(e) => setGizmo(e)}
-        key={i}
-        //activePosition={activeIdea}
-        activeIdea={activeIdea}
-        setActiveIdea={(s) => setActiveIdea(s)}
-        //setActiveSphere={(s) => setActiveSphere(s)}
         s={s}
         i={i}
+        key={i}
+        gizmo={gizmo}
+        setGizmo={(e) => setGizmo(e)}
+        activeIdea={activeIdea}
+        setActiveIdea={(s) => setActiveIdea(s)}
         deleteIdea={(s) => deleteIdea(s)}
-        titleIsChanged={titleIsChanged}
         setTitleIsChanged={(e) => setTitleIsChanged(e)}
-        titleChangeId={titleChangeId}
         setTitleChangeId={(e) => setTitleChangeId(e)}
       ></Idea>
     ));

@@ -9,8 +9,6 @@ import Content from "./Content";
 CameraControls.install({ THREE });
 
 function CustomControls({
-  setCurrentZoom,
-  currentZoom,
   controlsRef,
   zoom,
   focus,
