@@ -75,7 +75,7 @@ export default function DisplayImage({
   }
 
   const imageList = () => {
-    return scatteredImages.map(({ src, left, top, index }) => (
+    return scatteredImages.map(({ src, left, top }) => (
       <>
         <ImageIdea
           setEnableCustomControls={setEnableCustomControls}
@@ -102,7 +102,6 @@ export default function DisplayImage({
   );
 }
 
-// Utility functions
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
