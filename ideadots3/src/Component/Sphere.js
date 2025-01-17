@@ -75,7 +75,7 @@ export default function Sphere({
       setFocusLabel(true);
       click(true);
     } else {
-      setActiveSphereId(null);
+      //setActiveSphereId(null);
       setFocusLabel(false);
       click(false);
     }
