@@ -123,13 +123,6 @@ export default function Sphere({
                 position={clicked || hovered ? position : [100, 100, 100]}
                 distanceFactor={distanceFactorForZoom * distanceFactorForZoom}
               >
-                {/* {clicked && (
-                  <div className="contentContainer">
-                    <div className="contentLabel">
-                      <h2>{sphereTitle}</h2>
-                    </div>
-                  </div>
-                )} */}
                 <DisplayImage
                   ideaId={id}
                   hover={hover}

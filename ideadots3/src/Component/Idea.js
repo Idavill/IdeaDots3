@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { SphereContext } from "./SphereContextProvider";
 import UploadAndDisplayImage from "./UploadAndDisplayImage";
+import Button from "./Button";
 
 export default function Idea({
   s,
@@ -148,23 +149,9 @@ export default function Idea({
       </p>
       <UploadAndDisplayImage ideaId={s.id} displayButtons={true} />
       <div className="IdeaButtons">
-        <button type="button" onClick={handleGo} class="btn btn-light">
-          Go
-        </button>
-        <button
-          type="button"
-          onClick={handleMoveClicked}
-          class="btn btn-light headerButton"
-        >
-          Move
-        </button>
-        <button
-          type="button"
-          onClick={handleRemoveIdea}
-          class="btn btn-light headerButton"
-        >
-          -
-        </button>
+        <Button onClick={handleGo} text={"Go"} />
+        <Button onClick={handleMoveClicked} text={"Move"} />
+        <Button onClick={handleRemoveIdea} text={"-"} />
       </div>
     </div>
   );
