@@ -24,14 +24,6 @@ export default function Idea({
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    console.log("TESTSSS", s.id);
-  }, [s]);
-
-  useEffect(() => {
-    console.log("IMG HAS CHANGED", img);
-  }, [img]);
-
-  useEffect(() => {
     const titleId = s.id + "title";
     const textId = s.id + "text";
 
@@ -49,8 +41,6 @@ export default function Idea({
     } else {
       setText(s.text);
     }
-
-    console.log("test ", images);
   }, []);
 
   useEffect(() => {
@@ -123,26 +113,14 @@ export default function Idea({
       <h4
         id={`scrollspyHeading${i}`}
         contenteditable="true"
-        onDoubleClick={(e) => {
-          const range = document.createRange();
-          range.selectNodeContents(e.currentTarget);
-          const selection = window.getSelection();
-          selection.removeAllRanges();
-          selection.addRange(range);
-        }}
+        onDoubleClick={handleSelectAllText()}
         onInput={(e) => editTitle(s.id, e.currentTarget.textContent)}
       >
         {title}
       </h4>
       <p
         contenteditable="true"
-        onDoubleClick={(e) => {
-          const range = document.createRange();
-          range.selectNodeContents(e.currentTarget);
-          const selection = window.getSelection();
-          selection.removeAllRanges();
-          selection.addRange(range);
-        }}
+        onDoubleClick={handleSelectAllText()}
         onInput={(e) => editText(s.id, e.currentTarget.textContent)}
       >
         {text}
@@ -155,4 +133,14 @@ export default function Idea({
       </div>
     </div>
   );
+
+  function handleSelectAllText() {
+    return (e) => {
+      const range = document.createRange();
+      range.selectNodeContents(e.currentTarget);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    };
+  }
 }
