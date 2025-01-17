@@ -26,21 +26,11 @@ export default function Idea({
   useEffect(() => {
     const titleId = s.id + "title";
     const textId = s.id + "text";
-
     const localStorageTitle = localStorage.getItem(titleId);
     const localStorageText = localStorage.getItem(textId);
 
-    if (localStorageTitle) {
-      setTitle(localStorageTitle);
-    } else {
-      setTitle(s.title);
-    }
-
-    if (localStorageText) {
-      setText(localStorageText);
-    } else {
-      setText(s.text);
-    }
+    setTitle(localStorageTitle ? localStorageTitle : s.title);
+    setText(localStorageText ? localStorageText : s.text);
   }, []);
 
   useEffect(() => {
