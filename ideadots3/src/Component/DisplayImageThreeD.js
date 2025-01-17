@@ -77,18 +77,6 @@ export default function DisplayImage({
   const imageList = () => {
     return scatteredImages.map(({ src, left, top, index }) => (
       <>
-        {/* <img
-          key={index}
-          alt="not found"
-          style={{
-            position: "absolute",
-            left: `${left}px`,
-            top: `${top}px`,
-            paddingBottom: "20px",
-            width: "250px",
-          }}
-          src={URL.createObjectURL(src)}
-        /> */}
         <ImageIdea
           setEnableCustomControls={setEnableCustomControls}
           hover={hover}

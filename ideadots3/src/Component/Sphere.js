@@ -14,27 +14,20 @@ export default function Sphere({
   controlsRef,
   setEnableCustomControls,
 }) {
-  //const [sphereTitle, setSphereTitle] = useState(title);
-
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
   const [pos, setPos] = useState(position);
   const meshRef = useRef();
-  const context = useContext(SphereContext);
+  //const context = useContext(SphereContext);
   const [scale, setScale] = useState(3);
   const [distanceFactorForZoom, setDistanceFactorForZoom] = useState(10);
 
   //TODO: insteda useeffect
   useFrame(() => {
     if (controlsRef.current) {
-      //const zoomFactor = controlsRef.current.object.position;
       setDistanceFactorForZoom(controlsRef.current.object.position); // OrbitControls object.zoom
     }
   });
-
-  // useEffect(() => {
-  //   alignSphereTitleWithIdeaTitle();
-  // }, [context]);
 
   useEffect(() => {
     if (activeIdea) {
@@ -44,9 +37,7 @@ export default function Sphere({
 
   const handleClick = (e) => {
     zoomToView(e.object.position);
-    if (activeIdea) {
-      click(activeIdea.id === id ? true : false);
-    }
+    click(!clicked);
   };
 
   return (
@@ -88,11 +79,4 @@ export default function Sphere({
       </PivotControls>
     </>
   );
-  // function alignSphereTitleWithIdeaTitle() {
-  //   context.spheres.forEach((contextSphere) => {
-  //     if (contextSphere.id === id) {
-  //       setSphereTitle(contextSphere.title);
-  //     }
-  //   });
-  // }
 }
