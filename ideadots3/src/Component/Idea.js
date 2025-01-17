@@ -17,11 +17,11 @@ export default function Idea({
   setTitleChangeId,
 }) {
   const [isActive, setIsActive] = useState(false);
-  const [img, setImg] = useState(null); // TOOD: or s.img?
+  //const [img, setImg] = useState(null); // TOOD: or s.img?
   const [title, setTitle] = useState(s.title);
   const [text, setText] = useState(s.text);
   const context = useContext(SphereContext);
-  const [images, setImages] = useState([]);
+  //const [images, setImages] = useState([]);
 
   useEffect(() => {
     const titleId = s.id + "title";
@@ -34,23 +34,23 @@ export default function Idea({
   }, []);
 
   useEffect(() => {
-    if (
+    setIsActive(activeIdMatchesIdea() ? true : false);
+  }, [activeI]);
+
+  function activeIdMatchesIdea() {
+    return (
       activeI &&
       activeI.x === s.position.x &&
       activeI.y === s.position.y &&
       activeI.z === s.position.z
-    ) {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-  }, [activeI]);
+    );
+  }
 
   //TODO: test this method especially if e is updated data
   const handleGo = () => {
-    context.spheres.forEach((e) => {
-      if (e.id == s.id) {
-        setActive(e);
+    context.spheres.forEach((contextSphere) => {
+      if (contextSphere.id == s.id) {
+        setActive(contextSphere);
       }
     });
   };
