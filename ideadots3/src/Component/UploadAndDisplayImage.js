@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Dexie from "dexie";
-
 import { db } from "./Database";
+import { v4 as uuidv4 } from "uuid";
 
 const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const inputId = `file-input-${ideaId}`;
 
   useEffect(() => {
-    downloadImage(ideaId);
-  }, []);
+    downloadImages(ideaId);
+  }, [ideaId]);
 
-  async function downloadImage(ideaId) {
+  useEffect(() => {
+    console.log("SELECTED IMAGES: ", selectedImages);
+  }, [selectedImages]);
+
+  async function downloadImages(ideaId) {
     const data = await db.images.where("ideaId").equals(ideaId).toArray();
-    var blob;
-    if (data[0]) {
-      blob = data[0].image;
-      console.log("BLOB DOWNLOAD: ", typeof blob);
-      const text = await new Response(blob).text();
-      console.log("TEXT OF BLOB: ", text);
-      setSelectedImage(blob);
+    if (data.length > 0) {
+      for (let i = 0; i < data.length; i++) {
+        const blob = data[i].image;
+        console.log("BLOB DOWNLOAD: ", typeof blob);
+        setSelectedImages((prevs) => [...prevs, blob]);
+      }
     }
   }
 
@@ -34,61 +37,50 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
 
   async function storeImage(file, ideaId) {
     try {
-      const img = new Image(); // Create a new Image object
+      const img = new Image();
       const reader = new FileReader();
 
       reader.onload = async (event) => {
-        img.src = event.target.result; // Set the image source to the file data
+        img.src = event.target.result;
         img.onload = async () => {
-          const blob = await makeBlobFromImage(img); // Pass the image to makeBlobFromImage
+          const blob = await makeBlobFromImage(img);
           await db.images.put({
             ideaId: ideaId,
-            name: file.name, // Use the original file name
-            type: file.type, // Store the MIME type of the image
-            size: file.size, // Store the size of the image
+            name: file.name,
+            type: file.type,
+            size: file.size,
             image: blob,
           });
         };
       };
 
-      reader.readAsDataURL(file); // Read the file as a data URL
+      reader.readAsDataURL(file);
     } catch (error) {
       console.log("Didn't store data in indexDB with error: ", error);
     }
   }
 
+  const imageList = () => {
+    return selectedImages.map((src, index) => (
+      <img
+        key={index}
+        alt="not found"
+        style={{ paddingBottom: "20px" }}
+        width={"250px"}
+        src={URL.createObjectURL(src)}
+      />
+    ));
+  };
+
   return (
     <div>
-      {selectedImage && (
-        <div>
-          <img
-            alt="not found"
-            width={"250px"} // TODO: needs to be flex
-            src={URL.createObjectURL(selectedImage)}
-          />
-          {displayButtons ? (
-            <div className="IdeaButtons">
-              <button
-                class="btn btn-light"
-                onClick={(event) => {
-                  setSelectedImage(null);
-                  console.log(event);
-                  deleteImageFromDB();
-                }}
-                // TODO: reentering a photo doesn't work
-              >
-                Remove
-              </button>
-            </div>
-          ) : null}
-        </div>
-      )}
+      {selectedImages.length > 0 && <div>{imageList()}</div>}
       <div>
         {displayButtons ? (
           <div className="IdeaButtons">
             <button
               className="btn btn-light"
-              onClick={() => document.getElementById("getFile").click()}
+              onClick={() => document.getElementById(inputId).click()}
             >
               Image
             </button>
@@ -96,14 +88,13 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
         ) : null}
 
         <input
-          id="getFile"
+          id={inputId}
           style={{ display: "none" }}
           type="file"
           name="myImage"
-          // Event handler to capture file selection and update the state
           onChange={(event) => {
-            console.log(event.target.files[0]); // Log the selected file
-            setSelectedImage(event.target.files[0]); // Update the state with the selected file
+            console.log(event.target.files[0]);
+            addFileToImageList(event.target.files[0]);
             storeImage(event.target.files[0], ideaId);
           }}
         />
@@ -111,18 +102,28 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
     </div>
   );
 
-  function makeBlob() {
-    const obj = { hello: "world" };
-    const blob = new Blob([JSON.stringify(obj, null, 2)], {
-      type: "application/json",
-    });
-    return blob;
+  async function addFileToImageList(file) {
+    try {
+      const img = new Image();
+      const reader = new FileReader();
+
+      reader.onload = async (event) => {
+        img.src = event.target.result;
+        img.onload = async () => {
+          const blob = await makeBlobFromImage(img);
+          setSelectedImages((prevs) => [...prevs, blob]);
+        };
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.log("Didn't store data in indexDB with error: ", error);
+    }
   }
 
   async function makeBlobFromImage(img) {
     return new Promise((resolve) => {
       let canvas = document.createElement("canvas");
-      canvas.width = img.width; // Use img.width and img.height
+      canvas.width = img.width;
       canvas.height = img.height;
 
       let context = canvas.getContext("2d");
@@ -130,11 +131,11 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
 
       canvas.toBlob((blob) => {
         if (blob) {
-          console.log("Blob created successfully:", blob); // Log the created blob
-          resolve(blob); // Resolve the promise with the blob
+          console.log("Blob created successfully:", blob);
+          resolve(blob);
         } else {
-          console.error("Failed to create blob from canvas."); // Log an error if blob creation fails
-          resolve(null); // Resolve with null if blob creation fails
+          console.error("Failed to create blob from canvas.");
+          resolve(null);
         }
       }, "image/png");
     });

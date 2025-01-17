@@ -29,6 +29,7 @@ function CustomControls({
     if (controlsRef.current) {
       const target = new THREE.Vector3();
       if (zoom) {
+        //console.log("ZOOM :", controlsRef.current.object.position);
         target.set(focus.x, focus.y, focus.z); // Set target to focus point
         controlsRef.current.target.lerp(target, 0.1); // Smoothly move towards the target
       } else {
@@ -105,6 +106,7 @@ export default function ThreeDContainer({
             newSphere={newSphere}
             controlsRef={controlsRef}
             currentZoom={currentZoom}
+            setCurrentZoom={(z) => setCurrentZoom(z)}
             enableCustomControls={enableCustomControls}
             setEnableCustomControls={(e) => setEnableCustomControls(e)}
           />

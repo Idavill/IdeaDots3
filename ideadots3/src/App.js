@@ -10,7 +10,7 @@ export default function App() {
   const [cameraTarget, setCameraTarget] = useState(null);
   const [activeIdea, setActiveIdea] = useState(null);
   const [gizmo, setGizmo] = useState(null);
-  const [listActive, setListActive] = useState(true);
+  const [listActive, setListActive] = useState(false);
   const [modeButtonTest, setModeButtonTest] = useState("view model-mode");
 
   useEffect(() => {

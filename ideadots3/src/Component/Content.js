@@ -1,4 +1,5 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
+
 import { v4 as uuidv4 } from "uuid";
 import { SphereContext } from "./SphereContextProvider";
 import Sphere from "./Sphere";
@@ -14,10 +15,12 @@ export default function Content({
   listActive,
   controlsRef,
   currentZoom,
+  setCurrentZoom,
   enableCustomControls,
   setEnableCustomControls,
 }) {
   const context = useContext(SphereContext);
+  const [activeSphereId, setActiveSphereId] = useState(null);
 
   useEffect(() => {
     if (newSphere) {
@@ -60,6 +63,8 @@ export default function Content({
           enableCustomControls={enableCustomControls}
           setEnableCustomControls={(e) => setEnableCustomControls(e)}
           image={s.img}
+          activeSphereId={activeSphereId}
+          setActiveSphereId={(e) => setActiveSphereId(e)}
         />
       </>
     ));
