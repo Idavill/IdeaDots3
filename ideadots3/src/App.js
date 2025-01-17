@@ -14,11 +14,7 @@ export default function App() {
   const [modeButtonTest, setModeButtonTest] = useState("view model-mode");
 
   useEffect(() => {
-    if (listActive) {
-      setModeButtonTest("view model-mode");
-    } else {
-      setModeButtonTest("view list-mode");
-    }
+    setModeButtonTest(listActive ? "view model-mode" : "view list-mode");
   }, [listActive]);
 
   useEffect(() => {
