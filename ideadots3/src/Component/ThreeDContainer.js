@@ -10,8 +10,8 @@ CameraControls.install({ THREE });
 
 function CustomControls({
   controlsRef,
-  //zoom,
-  //focus,
+  zoom,
+  focus,
   gizmo,
   enableCustomControls,
 }) {
@@ -23,20 +23,20 @@ function CustomControls({
     }
   }, []);
 
-  // useFrame((state, delta) => {
-  //   if (controlsRef.current) {
-  //     const target = new THREE.Vector3();
-  //     if (zoom) {
-  //       //console.log("ZOOM :", controlsRef.current.object.position);
-  //       target.set(focus.x, focus.y, focus.z); // Set target to focus point
-  //       controlsRef.current.target.lerp(target, 0.1); // Smoothly move towards the target
-  //     } else {
-  //       controlsRef.current.target.set(0, 0, 0); // Reset target when not zooming
-  //     }
+  useFrame((state, delta) => {
+    if (controlsRef.current) {
+      const target = new THREE.Vector3();
+      if (zoom) {
+        //console.log("ZOOM :", controlsRef.current.object.position);
+        target.set(focus.x, focus.y, focus.z); // Set target to focus point
+        controlsRef.current.target.lerp(target, 0.1); // Smoothly move towards the target
+      } else {
+        controlsRef.current.target.set(0, 0, 0); // Reset target when not zooming
+      }
 
-  //     controlsRef.current.update(); // Update controls to apply changes
-  //   }
-  // });
+      controlsRef.current.update(); // Update controls to apply changes
+    }
+  });
 
   return (
     <>
@@ -73,7 +73,7 @@ export default function ThreeDContainer({
   useEffect(() => {
     if (cameraTarget) {
       setZoom(true);
-      //setFocus(cameraTarget.position);
+      setFocus(cameraTarget.position);
     }
   }, [cameraTarget]);
 
