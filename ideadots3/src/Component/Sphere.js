@@ -49,18 +49,6 @@ export default function Sphere({
         anchor={[position.x, position.y, position.z]}
       >
         <>
-          {/* {!isThreeDModeActive ? (
-            <Html distanceFactor={distanceFactorForZoom}>
-              <DisplayImage
-                ideaId={id}
-                hover={hover}
-                clicked={clicked}
-                setEnableCustomControls={setEnableCustomControls}
-                setScale={(e) => setScale(e)}
-                scale={scale}
-              />
-            </Html>
-          ) : null} */}
           <ThreeDImage
             id={id}
             hover={hover}
@@ -75,15 +63,6 @@ export default function Sphere({
             distanceFactorForZoom={distanceFactorForZoom}
             isThreeDModeActive={isThreeDModeActive}
           ></ThreeDImage>
-          {/* <Billboard key={10202020}>
-              <Image
-                transparent
-                radius={0.3}
-                position={pos}
-                scale={[1, 2, 1]}
-                url={testImage}
-              />
-            </Billboard> */}
         </>
       </PivotControls>
     </>

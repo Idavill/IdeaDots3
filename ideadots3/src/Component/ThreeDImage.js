@@ -1,5 +1,5 @@
 import { Billboard, Image } from "@react-three/drei";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ImageContext } from "./ImageContextProvider";
 import ImageIdea from "./ImageIdea.js";
@@ -25,6 +25,10 @@ export default function ThreeDImage({
     (img) => img.id === ideaId
   );
 
+  useEffect(() => {
+    console.log(" position ", position);
+  }, []);
+
   const imageList = filteredImages.map((filename) => (
     <group key={uuidv4()} position={position}>
       <Billboard key={uuidv4()}>
@@ -43,39 +47,26 @@ export default function ThreeDImage({
           }}
         />
       </Billboard>
-      <Html key={uuidv4()} distanceFactor={distanceFactorForZoom}>
-        <div className="threedImage">
-          <img
-            draggable={false}
-            style={{
-              height: "200px",
-              width: "200px",
-              borderRadius: "10%",
-            }}
-            src={`./Assets/${filename.src}`}
-          ></img>
-        </div>
-        {/* <ImageIdea
-          setEnableCustomControls={setEnableCustomControls}
-          hover={hover}
-          //image={URL.createObjectURL(src)}
-          src={`./Assets/${filename.src}`}
-          //left={left}
-          //top={top}
-          clicked={clicked}
-        /> */}
-
-        {/* <DisplayImage
+      {!isThreeDModeActive && (
+        <Html
+          //position={[position[0], position[1], position[2]]}
+          //position={position}
           key={uuidv4()}
-          filename={filename}
-          ideaId={ideaId}
-          hover={hover}
-          clicked={clicked}
-          setEnableCustomControls={setEnableCustomControls}
-          setScale={setScale}
-          scale={scale}
-        /> */}
-      </Html>
+          distanceFactor={10}
+        >
+          <div className="threedImage">
+            <img
+              draggable={false}
+              style={{
+                height: "100px",
+                width: "100px",
+                borderRadius: "10%",
+              }}
+              src={`./Assets/${filename.src}`}
+            ></img>
+          </div>
+        </Html>
+      )}
     </group>
   ));
 
