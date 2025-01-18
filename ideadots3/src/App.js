@@ -4,6 +4,8 @@ import ThreeDContainer from "./Component/ThreeDContainer.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DraggableUI from "./Component/DraggableUI.js";
 import { SphereContextProvider } from "./Component/SphereContextProvider.js";
+import { ImageContextProvider } from "./Component/ImageContextProvider.js";
+
 import Header from "./Component/Header.js";
 
 export default function App() {
@@ -15,6 +17,7 @@ export default function App() {
   const [isThreeDModeActive, setIsThreeDModeActive] = useState(false);
   const [viewModeButton, setViewModeButton] = useState("view model-mode");
   const [viewSpatialModeButton, setViewSpatialModeButton] = useState("3D");
+  const [imageSrcList, setImageSrcList] = useState([]);
 
   useEffect(() => {
     setViewModeButton(isListModeActive ? "view model-mode" : "view list-mode");
@@ -46,37 +49,39 @@ export default function App() {
   return (
     <>
       <SphereContextProvider>
-        <Header
-          activeIdea={activeIdea}
-          viewModeButton={viewModeButton}
-          isListModeActive={isListModeActive}
-          setIsListModeActive={setIsListModeActive}
-          isThreeDModeActive={isThreeDModeActive}
-          viewSpatialModeButton={viewSpatialModeButton}
-          setIsThreeDModeActive={setIsThreeDModeActive}
-        />
-        <Suspense fallback={null}>
-          <ThreeDContainer
+        <ImageContextProvider value={{ imageSrcList, setImageSrcList }}>
+          <Header
+            activeIdea={activeIdea}
+            viewModeButton={viewModeButton}
             isListModeActive={isListModeActive}
-            gizmo={gizmo}
-            scrollToIdea={(s, i) => scrollToIdea(s, i)}
-            setActiveIdea={(s) => setActiveIdea(s)}
-            activeIdea={activeIdea}
-            cameraTarget={cameraTarget}
+            setIsListModeActive={setIsListModeActive}
             isThreeDModeActive={isThreeDModeActive}
+            viewSpatialModeButton={viewSpatialModeButton}
+            setIsThreeDModeActive={setIsThreeDModeActive}
           />
-        </Suspense>
-        {isListModeActive ? (
-          <DraggableUI
-            scrollToIdea={scrollToIdea}
-            activeIdea={activeIdea}
-            setActiveIdea={(e) => setActiveIdea(e)}
-            gizmo={gizmo}
-            setGizmo={(e) => setGizmo(e)}
-            titleIsChanged={titleIsChanged}
-            setTitleIsChanged={(e) => setTitleIsChanged(e)}
-          />
-        ) : null}
+          <Suspense fallback={null}>
+            <ThreeDContainer
+              isListModeActive={isListModeActive}
+              gizmo={gizmo}
+              scrollToIdea={(s, i) => scrollToIdea(s, i)}
+              setActiveIdea={(s) => setActiveIdea(s)}
+              activeIdea={activeIdea}
+              cameraTarget={cameraTarget}
+              isThreeDModeActive={isThreeDModeActive}
+            />
+          </Suspense>
+          {isListModeActive ? (
+            <DraggableUI
+              scrollToIdea={scrollToIdea}
+              activeIdea={activeIdea}
+              setActiveIdea={(e) => setActiveIdea(e)}
+              gizmo={gizmo}
+              setGizmo={(e) => setGizmo(e)}
+              titleIsChanged={titleIsChanged}
+              setTitleIsChanged={(e) => setTitleIsChanged(e)}
+            />
+          ) : null}
+        </ImageContextProvider>
       </SphereContextProvider>
     </>
   );

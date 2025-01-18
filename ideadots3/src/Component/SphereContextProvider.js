@@ -5,6 +5,7 @@ export const SphereContext = createContext();
 
 export const SphereContextProvider = ({ children }) => {
   const [spheres, setSpheres] = useState([]);
+  const [imageSrcList, setImageSrcList] = useState([]);
   const apiInstance = API();
 
   useEffect(() => {

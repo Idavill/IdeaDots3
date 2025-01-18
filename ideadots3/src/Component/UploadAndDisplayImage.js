@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { db } from "./Database";
 import { v4 as uuidv4 } from "uuid";
+import { ImageContext } from "./ImageContextProvider";
 
 const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
   const [selectedImages, setSelectedImages] = useState([]);
+  const context = useContext(ImageContext);
   const inputId = `file-input-${ideaId}`;
 
   useEffect(() => {
@@ -37,6 +39,8 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
 
   async function storeImage(file, ideaId) {
     try {
+      context.setImageSrcList((prevs) => [...prevs, file.name]);
+      console.log("file: ", file.name);
       const img = new Image();
       const reader = new FileReader();
 

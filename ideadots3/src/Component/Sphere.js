@@ -24,6 +24,7 @@ export default function Sphere({
   //const context = useContext(SphereContext);
   const [scale, setScale] = useState(3);
   const [distanceFactorForZoom, setDistanceFactorForZoom] = useState(10);
+  const [imageSrcList, setImageSrcList] = useState([]);
 
   //TODO: insteda useeffect
   useFrame(() => {
