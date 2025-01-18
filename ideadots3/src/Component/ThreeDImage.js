@@ -31,23 +31,24 @@ export default function ThreeDImage({
 
   const imageList = filteredImages.map((filename) => (
     <group key={uuidv4()} position={position}>
-      <Billboard key={uuidv4()}>
-        <Image
-          key={uuidv4()}
-          onClick={onClick}
-          onPointerOver={onPointerOver}
-          onPointerOut={onPointerOut}
-          transparent
-          radius={0.3}
-          scale={[2, 2, 2]}
-          url={`./Assets/${filename.src}`}
-          onError={(e) => {
-            console.error(`Could not load ${filename.src}:`, e);
-            //e.target.src = "path/to/default/image.jpg"; // Fallback image
-          }}
-        />
-      </Billboard>
-      {!isThreeDModeActive && (
+      {isThreeDModeActive ? (
+        <Billboard key={uuidv4()}>
+          <Image
+            key={uuidv4()}
+            onClick={onClick}
+            onPointerOver={onPointerOver}
+            onPointerOut={onPointerOut}
+            transparent
+            radius={0.3}
+            scale={[2, 2, 2]}
+            url={`./Assets/${filename.src}`}
+            onError={(e) => {
+              console.error(`Could not load ${filename.src}:`, e);
+              //e.target.src = "path/to/default/image.jpg"; // Fallback image
+            }}
+          />
+        </Billboard>
+      ) : (
         <Html
           //position={[position[0], position[1], position[2]]}
           //position={position}
@@ -58,8 +59,11 @@ export default function ThreeDImage({
             <img
               draggable={false}
               style={{
-                height: "100px",
-                width: "100px",
+                position: "absolute",
+                height: "200px",
+                width: "200px",
+                top: "-100px",
+                left: "-100px",
                 borderRadius: "10%",
               }}
               src={`./Assets/${filename.src}`}
