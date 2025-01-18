@@ -9,7 +9,7 @@ export default function Content({
   setActiveIdea,
   zoom,
   setZoom,
-  //setFocus,
+  setFocus,
   //focusSphere,
   newSphere,
   scrollToIdea,
@@ -21,6 +21,7 @@ export default function Content({
   //enableCustomControls,
   setEnableCustomControls,
   isThreeDModeActive,
+  isListModeActive,
 }) {
   const context = useContext(SphereContext);
   //const [activeSphereId, setActiveSphereId] = useState(null);
@@ -55,7 +56,7 @@ export default function Content({
           //listActive={listActive}
           gizmo={gizmo}
           zoomToView={(focusRef) => (
-            setZoom(!zoom), /*setFocus(focusRef)*/ scrollToIdea(s, i)
+            setZoom(!zoom), setFocus(focusRef), scrollToIdea(s, i)
           )}
           position={[s.position.x, s.position.y, s.position.z]}
           title={s.title}
@@ -70,6 +71,7 @@ export default function Content({
           setActiveIdea={(e) => setActiveIdea(e)}
           //activeSphereId={activeSphereId}
           //setActiveSphereId={(e) => setActiveSphereId(e)}
+          isListModeActive={isListModeActive}
         />
       </>
     ));

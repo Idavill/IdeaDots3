@@ -16,6 +16,7 @@ export default function Sphere({
   controlsRef,
   setEnableCustomControls,
   isThreeDModeActive,
+  isListModeActive,
 }) {
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
@@ -37,7 +38,9 @@ export default function Sphere({
 
   const handleClick = (e) => {
     console.log("click");
-    zoomToView(e.object.position);
+    if (isListModeActive) {
+      zoomToView(e.object.position);
+    }
     click(!clicked);
   };
 

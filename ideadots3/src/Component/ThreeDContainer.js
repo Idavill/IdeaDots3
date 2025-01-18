@@ -62,6 +62,7 @@ export default function ThreeDContainer({
   activeIdea,
   gizmo,
   listActive,
+  isListModeActive,
 }) {
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
@@ -96,7 +97,7 @@ export default function ThreeDContainer({
             scrollToIdea={(s, i) => scrollToIdea(s, i)}
             zoom={zoom}
             setZoom={setZoom}
-            //setFocus={setFocus}
+            setFocus={setFocus}
             //focusSphere={focus}
             newSphere={newSphere}
             controlsRef={controlsRef}
@@ -104,6 +105,7 @@ export default function ThreeDContainer({
             setCurrentZoom={(z) => setCurrentZoom(z)}
             //enableCustomControls={enableCustomControls}
             setEnableCustomControls={(e) => setEnableCustomControls(e)}
+            isListModeActive={isListModeActive}
           />
 
           <directionalLight position={[10, 10, 0]} intensity={1.5} />

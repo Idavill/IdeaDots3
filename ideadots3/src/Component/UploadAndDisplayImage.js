@@ -15,11 +15,11 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
     setInitialUpload(true);
   }, [ideaId]);
 
-  useEffect(() => {
-    if (!initialUpload) {
-      downloadImages(ideaId);
-    }
-  }, [imageContext]);
+  // useEffect(() => {
+  //   if (!initialUpload) {
+  //     downloadImages(ideaId);
+  //   }
+  // }, [imageContext]);
 
   async function downloadImages(ideaId) {
     const data = await db.images.where("ideaId").equals(ideaId).toArray();

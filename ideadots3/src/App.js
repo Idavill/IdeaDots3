@@ -72,7 +72,7 @@ export default function App() {
           </Suspense>
           {isListModeActive ? (
             <DraggableUI
-              scrollToIdea={scrollToIdea}
+              scrollToIdea={(s, i) => scrollToIdea(s, i)}
               activeIdea={activeIdea}
               setActiveIdea={(e) => setActiveIdea(e)}
               gizmo={gizmo}
