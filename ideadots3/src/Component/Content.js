@@ -50,13 +50,13 @@ export default function Content({
     return context.spheres.map((s, i) => (
       <>
         <Sphere
+          key={uuidv4()}
           id={s.id}
           //listActive={listActive}
           gizmo={gizmo}
           zoomToView={(focusRef) => (
             setZoom(!zoom), /*setFocus(focusRef)*/ scrollToIdea(s, i)
           )}
-          key={i}
           position={[s.position.x, s.position.y, s.position.z]}
           title={s.title}
           isThreeDModeActive={isThreeDModeActive}
