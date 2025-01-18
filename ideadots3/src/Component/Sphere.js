@@ -5,6 +5,7 @@ import { PivotControls, Billboard, Text, Image } from "@react-three/drei";
 import DisplayImage from "./DisplayImageThreeD.js";
 import { useFrame } from "@react-three/fiber"; // Ensure this import is correct
 import ThreeDImage from "./ThreeDImage.js";
+import testImage from "/Users/idavilladsen/Desktop/IdeaDots3/ideadots3/src/Assets/shelf.jpg";
 
 export default function Sphere({
   id,
@@ -77,19 +78,17 @@ export default function Sphere({
                   scale={scale}
                 />
               </Html>
-            ) : (
-              <Billboard>
-                <Text
-                  fontSize={0.5}
-                  position={[2.15, 3.85, 0]}
-                  anchorX="left"
-                  color="black"
-                >
-                  heeeej
-                </Text>
-                <ThreeDImage ideaId={id}></ThreeDImage>
-              </Billboard>
-            )}
+            ) : null}
+            <ThreeDImage ideaId={id} pos={pos}></ThreeDImage>
+            {/* <Billboard key={10202020}>
+              <Image
+                transparent
+                radius={0.3}
+                position={pos}
+                scale={[1, 2, 1]}
+                url={testImage}
+              />
+            </Billboard> */}
           </>
         </mesh>
       </PivotControls>

@@ -18,8 +18,8 @@ export default function ImageIdea({
       {clicked && (
         <Draggable>
           <div
-            onPointerOver={() => hover(true)}
-            onPointerLeave={() => hover(false)}
+            //onPointerOver={() => hover(true)}
+            //onPointerLeave={() => hover(false)}
             onMouseDown={(e) => (
               setEnableCustomControls(false), handleMoveImage(e)
             )}

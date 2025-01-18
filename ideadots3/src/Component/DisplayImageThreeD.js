@@ -74,6 +74,7 @@ export default function DisplayImage({
   }
 
   const imageList = () => {
+    console.log("IMagelistcomputed");
     return scatteredImages.map(({ src, left, top }) => (
       <>
         <ImageIdea
