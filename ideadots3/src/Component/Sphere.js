@@ -19,7 +19,7 @@ export default function Sphere({
 }) {
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
-  const [pos, setPos] = useState(position);
+  //const [pos, setPos] = useState(position);
   const meshRef = useRef();
   //const context = useContext(SphereContext);
   const [scale, setScale] = useState(3);
@@ -49,15 +49,15 @@ export default function Sphere({
       <PivotControls
         enabled={gizmo === id ? true : false}
         activeAxes={[true, true, true]}
-        anchor={[pos.x, pos.y, pos.z]}
+        anchor={[position.x, position.y, position.z]}
       >
-        <mesh
+        {/* <mesh
           ref={meshRef}
-          onClick={handleClick}
-          position={pos}
+          //onClick={handleClick}
+          position={position}
           onPointerOver={(event) => (event.stopPropagation(), hover(true))}
           onPointerOut={() => hover(false)}
-          scale={0.3}
+          scale={0.5}
         >
           <sphereGeometry />
           <meshStandardMaterial
@@ -66,22 +66,28 @@ export default function Sphere({
             emissive="#404057"
             opacity={0.4}
             transparent
-          />
-          <>
-            {!isThreeDModeActive ? (
-              <Html distanceFactor={distanceFactorForZoom}>
-                <DisplayImage
-                  ideaId={id}
-                  hover={hover}
-                  clicked={clicked}
-                  setEnableCustomControls={setEnableCustomControls}
-                  setScale={(e) => setScale(e)}
-                  scale={scale}
-                />
-              </Html>
-            ) : null}
-            <ThreeDImage ideaId={id} pos={pos}></ThreeDImage>
-            {/* <Billboard key={10202020}>
+          /> */}
+        <>
+          {!isThreeDModeActive ? (
+            <Html distanceFactor={distanceFactorForZoom}>
+              <DisplayImage
+                ideaId={id}
+                hover={hover}
+                clicked={clicked}
+                setEnableCustomControls={setEnableCustomControls}
+                setScale={(e) => setScale(e)}
+                scale={scale}
+              />
+            </Html>
+          ) : null}
+          <ThreeDImage
+            onClick={handleClick}
+            onPointerOver={(event) => (event.stopPropagation(), hover(true))}
+            onPointerOut={() => hover(false)}
+            ideaId={id}
+            position={position}
+          ></ThreeDImage>
+          {/* <Billboard key={10202020}>
               <Image
                 transparent
                 radius={0.3}
@@ -90,8 +96,7 @@ export default function Sphere({
                 url={testImage}
               />
             </Billboard> */}
-          </>
-        </mesh>
+        </>
       </PivotControls>
     </>
   );
