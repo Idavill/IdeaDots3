@@ -2,6 +2,9 @@ import { Billboard, Image } from "@react-three/drei";
 import React, { useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ImageContext } from "./ImageContextProvider";
+import { SphereContext } from "./SphereContextProvider";
+import { Html } from "@react-three/drei";
+import DisplayImage from "./DisplayImageThreeD.js";
 
 export default function ThreeDImage({
   ideaId,
@@ -9,6 +12,13 @@ export default function ThreeDImage({
   onClick,
   onPointerOver,
   onPointerOut,
+  scale,
+  hover,
+  clicked,
+  setEnableCustomControls,
+  distanceFactorForZoom,
+  setScale,
+  isThreeDModeActive,
 }) {
   const context = useContext(ImageContext);
   const filteredImages = context.imageSrcList.filter(
@@ -32,6 +42,18 @@ export default function ThreeDImage({
           }}
         />
       </Billboard>
+      {!isThreeDModeActive ? (
+        <Html distanceFactor={distanceFactorForZoom}>
+          <DisplayImage
+            ideaId={ideaId}
+            hover={hover}
+            clicked={clicked}
+            setEnableCustomControls={setEnableCustomControls}
+            setScale={setScale}
+            scale={scale}
+          />
+        </Html>
+      ) : null}
     </group>
   ));
 

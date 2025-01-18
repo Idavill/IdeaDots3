@@ -49,7 +49,7 @@ export default function Sphere({
         anchor={[position.x, position.y, position.z]}
       >
         <>
-          {!isThreeDModeActive ? (
+          {/* {!isThreeDModeActive ? (
             <Html distanceFactor={distanceFactorForZoom}>
               <DisplayImage
                 ideaId={id}
@@ -60,13 +60,20 @@ export default function Sphere({
                 scale={scale}
               />
             </Html>
-          ) : null}
+          ) : null} */}
           <ThreeDImage
+            id={id}
+            hover={hover}
+            scale={scale}
+            setScale={(e) => setScale(e)}
+            setEnableCustomControls={setEnableCustomControls}
             onClick={(e) => handleClick(e)}
             onPointerOver={(event) => (event.stopPropagation(), hover(true))}
             onPointerOut={() => hover(false)}
             ideaId={id}
             position={position}
+            distanceFactorForZoom={distanceFactorForZoom}
+            isThreeDModeActive={isThreeDModeActive}
           ></ThreeDImage>
           {/* <Billboard key={10202020}>
               <Image
