@@ -3,8 +3,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { db } from "./Database";
 import { v4 as uuidv4 } from "uuid";
 import { ImageContext } from "./ImageContextProvider";
+import Button from "./Button";
 
-const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
+const UploadAndDisplayImage = ({
+  ideaId,
+  displayButtons,
+  handleGo,
+  handleMoveClicked,
+  handleRemoveIdea,
+}) => {
   const [selectedImages, setSelectedImages] = useState([]);
   const imageContext = useContext(ImageContext);
   const inputId = `file-input-${ideaId}`;
@@ -14,12 +21,6 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
     downloadImages(ideaId);
     setInitialUpload(true);
   }, [ideaId]);
-
-  // useEffect(() => {
-  //   if (!initialUpload) {
-  //     downloadImages(ideaId);
-  //   }
-  // }, [imageContext]);
 
   async function downloadImages(ideaId) {
     const data = await db.images.where("ideaId").equals(ideaId).toArray();
@@ -84,7 +85,7 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
     <div>
       {selectedImages.length > 0 && <div>{imageList()}</div>}
       <div>
-        {displayButtons ? (
+        {/* {displayButtons ? (
           <div className="IdeaButtons">
             <button
               className="btn btn-light"
@@ -93,7 +94,7 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
               Image
             </button>
           </div>
-        ) : null}
+        ) : null} */}
 
         <input
           id={inputId}
@@ -107,6 +108,15 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
           }}
         />
       </div>
+      <button
+        className="btn btn-light"
+        onClick={() => document.getElementById(inputId).click()}
+      >
+        Image
+      </button>
+      <Button onClick={handleGo} text={"Go"} />
+      <Button onClick={handleMoveClicked} text={"Move"} />
+      <Button onClick={handleRemoveIdea} text={"-"} />
     </div>
   );
 

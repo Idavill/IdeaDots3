@@ -97,11 +97,14 @@ export default function Idea({
       >
         {text}
       </p>
-      <UploadAndDisplayImage ideaId={s.id} displayButtons={true} />
       <div className="IdeaButtons">
-        <Button onClick={handleGo} text={"Go"} />
-        <Button onClick={handleMoveClicked} text={"Move"} />
-        <Button onClick={handleRemoveIdea} text={"-"} />
+        <UploadAndDisplayImage
+          handleGo={handleGo}
+          handleMoveClicked={handleMoveClicked}
+          handleRemoveIdea={handleRemoveIdea}
+          ideaId={s.id}
+          displayButtons={true}
+        />
       </div>
     </div>
   );
