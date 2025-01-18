@@ -63,7 +63,7 @@ export default function Sphere({
             </Html>
           ) : null}
           <ThreeDImage
-            onClick={handleClick}
+            onClick={(e) => handleClick(e)}
             onPointerOver={(event) => (event.stopPropagation(), hover(true))}
             onPointerOut={() => hover(false)}
             ideaId={id}
