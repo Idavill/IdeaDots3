@@ -77,13 +77,6 @@ export default function ThreeDContainer({
     }
   }, [cameraTarget]);
 
-  // useEffect(() => {
-  //   if (focus) {
-  //     console.log("focus ", focus);
-  //     setActiveIdea(focus);
-  //   }
-  // }, [focus]);
-
   return (
     <div style={{ height: "100vh" }}>
       <Suspense fallback={<span>loading...</span>}>

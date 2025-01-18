@@ -10,14 +10,15 @@ export const ImageContextProvider = ({ children }) => {
     getAllImageNames();
   }, []);
 
+  useEffect(() => {
+    console.log("inside image context provider: ", imageSrcList);
+  }, [imageSrcList]);
+
   async function getAllImageNames() {
-    const data = await db.images
-      .where("ideaId")
-      .equals("6680d8c3-11fa-40ea-96b1-e0c2ba4f7df5")
-      .toArray();
+    const data = await db.images.toArray();
     if (data.length > 0) {
-      data.forEach((d) => {
-        setImageSrcList((prev) => [...prev, d.name]);
+      data.forEach((e) => {
+        setImageSrcList((prev) => [...prev, { id: e.ideaId, src: e.name }]);
       });
     }
   }

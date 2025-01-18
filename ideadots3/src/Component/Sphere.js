@@ -19,9 +19,6 @@ export default function Sphere({
 }) {
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
-  //const [pos, setPos] = useState(position);
-  const meshRef = useRef();
-  //const context = useContext(SphereContext);
   const [scale, setScale] = useState(3);
   const [distanceFactorForZoom, setDistanceFactorForZoom] = useState(10);
   const [imageSrcList, setImageSrcList] = useState([]);
@@ -40,6 +37,7 @@ export default function Sphere({
   }, [activeIdea]);
 
   const handleClick = (e) => {
+    console.log("click");
     zoomToView(e.object.position);
     click(!clicked);
   };
@@ -51,22 +49,6 @@ export default function Sphere({
         activeAxes={[true, true, true]}
         anchor={[position.x, position.y, position.z]}
       >
-        {/* <mesh
-          ref={meshRef}
-          //onClick={handleClick}
-          position={position}
-          onPointerOver={(event) => (event.stopPropagation(), hover(true))}
-          onPointerOut={() => hover(false)}
-          scale={0.5}
-        >
-          <sphereGeometry />
-          <meshStandardMaterial
-            color={clicked ? "rgb(55, 52, 255)" : "white"}
-            roughness={0.75}
-            emissive="#404057"
-            opacity={0.4}
-            transparent
-          /> */}
         <>
           {!isThreeDModeActive ? (
             <Html distanceFactor={distanceFactorForZoom}>

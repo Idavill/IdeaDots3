@@ -6,16 +6,20 @@ import { ImageContext } from "./ImageContextProvider";
 
 const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
   const [selectedImages, setSelectedImages] = useState([]);
-  const context = useContext(ImageContext);
+  const imageContext = useContext(ImageContext);
   const inputId = `file-input-${ideaId}`;
+  const [initialUpload, setInitialUpload] = useState(false);
 
   useEffect(() => {
     downloadImages(ideaId);
+    setInitialUpload(true);
   }, [ideaId]);
 
   useEffect(() => {
-    console.log("SELECTED IMAGES: ", selectedImages);
-  }, [selectedImages]);
+    if (!initialUpload) {
+      downloadImages(ideaId);
+    }
+  }, [imageContext]);
 
   async function downloadImages(ideaId) {
     const data = await db.images.where("ideaId").equals(ideaId).toArray();
@@ -39,7 +43,7 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
 
   async function storeImage(file, ideaId) {
     try {
-      context.setImageSrcList((prevs) => [...prevs, file.name]);
+      imageContext.setImageSrcList((prevs) => [...prevs, file.name]);
       console.log("file: ", file.name);
       const img = new Image();
       const reader = new FileReader();
