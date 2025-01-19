@@ -25,9 +25,9 @@ export default function ThreeDImage({
     (img) => img.id === ideaId
   );
 
-  useEffect(() => {
-    console.log(" position ", position);
-  }, []);
+  // useEffect(() => {
+  //   console.log(" position ", position);
+  // }, []);
 
   const imageList = filteredImages.map((filename) => (
     <group key={uuidv4()} position={position}>

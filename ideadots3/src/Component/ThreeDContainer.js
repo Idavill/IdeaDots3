@@ -63,6 +63,7 @@ export default function ThreeDContainer({
   gizmo,
   listActive,
   isListModeActive,
+  isDotModeActive,
 }) {
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
@@ -78,6 +79,10 @@ export default function ThreeDContainer({
     }
   }, [cameraTarget]);
 
+  useEffect(() => {
+    console.log("customer contorls ", enableCustomControls);
+  }, [enableCustomControls]);
+
   return (
     <div style={{ height: "100vh" }}>
       <Suspense fallback={<span>loading...</span>}>
@@ -91,7 +96,8 @@ export default function ThreeDContainer({
           <Content
             activeIdea={activeIdea}
             isThreeDModeActive={isThreeDModeActive}
-            //setActiveIdea={(e) => setActiveIdea(e)}
+            isDotModeActive={isDotModeActive}
+            setActiveIdea={(e) => setActiveIdea(e)}
             //listActive={listActive}
             gizmo={gizmo}
             scrollToIdea={(s, i) => scrollToIdea(s, i)}
@@ -104,7 +110,7 @@ export default function ThreeDContainer({
             //currentZoom={currentZoom}
             setCurrentZoom={(z) => setCurrentZoom(z)}
             //enableCustomControls={enableCustomControls}
-            setEnableCustomControls={(e) => setEnableCustomControls(e)}
+            setEnableCustomControls={setEnableCustomControls}
             isListModeActive={isListModeActive}
           />
 

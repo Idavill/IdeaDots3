@@ -2,13 +2,17 @@ import React, { Suspense, useEffect, useState } from "react";
 import Button from "./Button";
 
 export default function Header({
-  viewModeButton,
+  modelListViewButtonText,
   activeIdea,
   setIsListModeActive,
   setIsThreeDModeActive,
   isListModeActive,
-  viewSpatialModeButton,
+  spatialModeButtonText,
   isThreeDModeActive,
+  dotModeButtonText,
+  setDotModeButtonText,
+  isDotModeActive,
+  setIsDotModeActive,
 }) {
   return (
     <div
@@ -24,11 +28,15 @@ export default function Header({
     >
       <Button
         onClick={() => setIsListModeActive(!isListModeActive)}
-        text={viewModeButton}
+        text={modelListViewButtonText}
       />
       <Button
         onClick={() => setIsThreeDModeActive(!isThreeDModeActive)}
-        text={viewSpatialModeButton}
+        text={spatialModeButtonText}
+      />
+      <Button
+        onClick={() => setIsDotModeActive(!isDotModeActive)}
+        text={dotModeButtonText}
       />
       <h4
         style={{

@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import DraggableUI from "./Component/DraggableUI.js";
 import { SphereContextProvider } from "./Component/SphereContextProvider.js";
 import { ImageContextProvider } from "./Component/ImageContextProvider.js";
+import { ActiveSphereContextProvider } from "./Component/ActiveSphereContextProvider.js";
 
 import Header from "./Component/Header.js";
 
@@ -40,6 +41,7 @@ export default function App() {
     if (activeIdea && activeIdea.position) {
       setActiveIdea(activeIdea);
       setCameraTarget(activeIdea);
+      console.log("active Idea is: ", activeIdea);
     }
   }, [activeIdea]);
 
@@ -59,37 +61,44 @@ export default function App() {
     <>
       <SphereContextProvider>
         <ImageContextProvider value={{ imageSrcList, setImageSrcList }}>
-          <Header
-            activeIdea={activeIdea}
-            viewModeButton={viewModeButton}
-            isListModeActive={isListModeActive}
-            setIsListModeActive={setIsListModeActive}
-            isThreeDModeActive={isThreeDModeActive}
-            viewSpatialModeButton={viewSpatialModeButton}
-            setIsThreeDModeActive={setIsThreeDModeActive}
-          />
-          <Suspense fallback={null}>
-            <ThreeDContainer
+          <ActiveSphereContextProvider>
+            <Header
+              activeIdea={activeIdea}
+              modelListViewButtonText={modelListViewButtonText}
               isListModeActive={isListModeActive}
-              gizmo={gizmo}
-              scrollToIdea={(s, i) => scrollToIdea(s, i)}
-              setActiveIdea={(s) => setActiveIdea(s)}
-              activeIdea={activeIdea}
-              cameraTarget={cameraTarget}
+              setIsListModeActive={setIsListModeActive}
               isThreeDModeActive={isThreeDModeActive}
+              spatialModeButtonText={spatialModeButtonText}
+              setIsThreeDModeActive={setIsThreeDModeActive}
+              dotModeButtonText={dotModeButtonText}
+              setDotModeButtonText={setDotModeButtonText}
+              isDotModeActive={isDotModeActive}
+              setIsDotModeActive={setIsDotModeActive}
             />
-          </Suspense>
-          {isListModeActive ? (
-            <DraggableUI
-              scrollToIdea={(s, i) => scrollToIdea(s, i)}
-              activeIdea={activeIdea}
-              setActiveIdea={(e) => setActiveIdea(e)}
-              gizmo={gizmo}
-              setGizmo={(e) => setGizmo(e)}
-              titleIsChanged={titleIsChanged}
-              setTitleIsChanged={(e) => setTitleIsChanged(e)}
-            />
-          ) : null}
+            <Suspense fallback={null}>
+              <ThreeDContainer
+                isListModeActive={isListModeActive}
+                gizmo={gizmo}
+                scrollToIdea={(s, i) => scrollToIdea(s, i)}
+                setActiveIdea={(s) => setActiveIdea(s)}
+                activeIdea={activeIdea}
+                cameraTarget={cameraTarget}
+                isThreeDModeActive={isThreeDModeActive}
+                isDotModeActive={isDotModeActive}
+              />
+            </Suspense>
+            {isListModeActive ? (
+              <DraggableUI
+                scrollToIdea={(s, i) => scrollToIdea(s, i)}
+                activeIdea={activeIdea}
+                setActiveIdea={(e) => setActiveIdea(e)}
+                gizmo={gizmo}
+                setGizmo={(e) => setGizmo(e)}
+                titleIsChanged={titleIsChanged}
+                setTitleIsChanged={(e) => setTitleIsChanged(e)}
+              />
+            ) : null}
+          </ActiveSphereContextProvider>
         </ImageContextProvider>
       </SphereContextProvider>
     </>

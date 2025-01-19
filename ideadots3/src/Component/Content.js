@@ -22,6 +22,7 @@ export default function Content({
   setEnableCustomControls,
   isThreeDModeActive,
   isListModeActive,
+  isDotModeActive,
 }) {
   const context = useContext(SphereContext);
   //const [activeSphereId, setActiveSphereId] = useState(null);
@@ -61,6 +62,7 @@ export default function Content({
           position={[s.position.x, s.position.y, s.position.z]}
           title={s.title}
           isThreeDModeActive={isThreeDModeActive}
+          isDotModeActive={isDotModeActive}
           //focus={focusSphere}
           controlsRef={controlsRef}
           //currentZoom={currentZoom}

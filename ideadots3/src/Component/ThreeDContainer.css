@@ -70,6 +70,17 @@
   border-radius: 25px;
 }
 
+.threedDot{
+  border: 10px solid #202035;
+  background-color:  #202035;
+  border-radius: 25px;
+  position:absolute;
+  height:100px;
+  width:200px;
+  overflow-y: scroll;
+  top:-150px;
+}
+
 .contentContainer{
   display:flex;
 }

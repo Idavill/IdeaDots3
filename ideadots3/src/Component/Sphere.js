@@ -1,11 +1,8 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
-import { SphereContext } from "./SphereContextProvider";
-import { Html } from "@react-three/drei";
+import ThreeDDot from "./ThreeDDot.js";
 import { PivotControls, Billboard, Text, Image } from "@react-three/drei";
-import DisplayImage from "./DisplayImageThreeD.js";
 import { useFrame } from "@react-three/fiber"; // Ensure this import is correct
 import ThreeDImage from "./ThreeDImage.js";
-import testImage from "/Users/idavilladsen/Desktop/IdeaDots3/ideadots3/src/Assets/shelf.jpg";
 
 export default function Sphere({
   id,
@@ -13,10 +10,12 @@ export default function Sphere({
   zoomToView,
   gizmo,
   activeIdea,
+  setActiveIdea,
   controlsRef,
   setEnableCustomControls,
   isThreeDModeActive,
   isListModeActive,
+  isDotModeActive,
 }) {
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
@@ -51,22 +50,33 @@ export default function Sphere({
         activeAxes={[true, true, true]}
         anchor={[position.x, position.y, position.z]}
       >
-        <>
-          <ThreeDImage
-            id={id}
-            hover={hover}
-            scale={scale}
-            setScale={(e) => setScale(e)}
-            setEnableCustomControls={setEnableCustomControls}
-            onClick={(e) => handleClick(e)}
-            onPointerOver={(event) => (event.stopPropagation(), hover(true))}
-            onPointerOut={() => hover(false)}
-            ideaId={id}
+        {isDotModeActive ? (
+          <ThreeDDot
+            activeIdea={activeIdea}
+            setActiveIdea={setActiveIdea}
             position={position}
-            distanceFactorForZoom={distanceFactorForZoom}
-            isThreeDModeActive={isThreeDModeActive}
-          ></ThreeDImage>
-        </>
+            text={activeIdea ? activeIdea.text : ""}
+            id={id}
+            setEnableCustomControls={setEnableCustomControls}
+          />
+        ) : (
+          <>
+            <ThreeDImage
+              id={id}
+              hover={hover}
+              scale={scale}
+              setScale={(e) => setScale(e)}
+              setEnableCustomControls={setEnableCustomControls}
+              onClick={(e) => handleClick(e)}
+              onPointerOver={(event) => (event.stopPropagation(), hover(true))}
+              onPointerOut={() => hover(false)}
+              ideaId={id}
+              position={position}
+              distanceFactorForZoom={distanceFactorForZoom}
+              isThreeDModeActive={isThreeDModeActive}
+            ></ThreeDImage>
+          </>
+        )}
       </PivotControls>
     </>
   );
