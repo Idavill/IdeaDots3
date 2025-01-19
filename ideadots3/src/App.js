@@ -15,17 +15,26 @@ export default function App() {
   const [gizmo, setGizmo] = useState(null);
   const [isListModeActive, setIsListModeActive] = useState(false);
   const [isThreeDModeActive, setIsThreeDModeActive] = useState(false);
-  const [viewModeButton, setViewModeButton] = useState("view model-mode");
-  const [viewSpatialModeButton, setViewSpatialModeButton] = useState("3D");
+  const [isDotModeActive, setIsDotModeActive] = useState(false);
+  const [dotModeButtonText, setDotModeButtonText] = useState("dot-mode");
+  const [modelListViewButtonText, setModelListViewButtonText] =
+    useState("model-focus-mode");
+  const [spatialModeButtonText, setSpatialModeButtonText] = useState("3D");
   const [imageSrcList, setImageSrcList] = useState([]);
 
   useEffect(() => {
-    setViewModeButton(isListModeActive ? "view model-mode" : "view list-mode");
+    setModelListViewButtonText(
+      isListModeActive ? "list-mode" : "model-focus-mode"
+    );
   }, [isListModeActive]);
 
   useEffect(() => {
-    setViewSpatialModeButton(isThreeDModeActive ? "3D" : "2D");
+    setSpatialModeButtonText(isThreeDModeActive ? "3D" : "2D");
   }, [isThreeDModeActive]);
+
+  useEffect(() => {
+    setDotModeButtonText(isDotModeActive ? "image-mode" : "dot-mode");
+  }, [isDotModeActive]);
 
   useEffect(() => {
     if (activeIdea && activeIdea.position) {
