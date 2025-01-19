@@ -71,13 +71,19 @@ const UploadAndDisplayImage = ({
 
   const imageList = () => {
     return selectedImages.map((src, index) => (
-      <img
-        key={index}
-        alt="not found"
-        style={{ paddingBottom: "20px" }}
-        width={"250px"}
-        src={URL.createObjectURL(src)}
-      />
+      <div style={{ width: "200px", height: "200px", overflow: "hidden" }}>
+        <img
+          key={index}
+          alt="not found"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            paddingBottom: "0",
+          }}
+          src={URL.createObjectURL(src)}
+        />
+      </div>
     ));
   };
 

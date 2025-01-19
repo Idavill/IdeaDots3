@@ -78,14 +78,14 @@ export default function DraggableUI({
     <>
       <Draggable>
         <div className="mainContainer">
-          <div className="header"></div>
+          {/* <div className="header"></div> */}
           <div className="contentContainer">
-            <div className="overviewContainer">
+            {/* <div className="overviewContainer">
               <nav id="navbar-example2" class="navbar px-3 mb-3">
                 <ul class="nav nav-pills">{overview()}</ul>
               </nav>
-            </div>
-            <div className="overviewContainer">
+            </div> */}
+            <div className="ideaContainer">
               {" "}
               <div
                 data-bs-spy="scroll"
@@ -95,7 +95,9 @@ export default function DraggableUI({
                 class="scrollspy-example p-3 rounded-2"
                 tabIndex={0}
               >
-                {listContent()}
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                  {listContent()}
+                </div>
               </div>
             </div>
           </div>

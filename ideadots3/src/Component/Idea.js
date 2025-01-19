@@ -79,24 +79,28 @@ export default function Idea({
       onMouseLeave={() => setIsActive(false)}
       className="listcontent"
       style={{
+        display: "flex",
+
+        width: "250px",
+        height: "250px",
         backgroundColor: isActive ? "rgb(55, 52, 255)" : "rgb(53, 53, 53)",
       }}
     >
-      <h4
+      <h5
         id={`scrollspyHeading${i}`}
         contenteditable="true"
         onDoubleClick={handleSelectAllText()}
         onInput={(e) => editTitle(s.id, e.currentTarget.textContent)}
       >
         {title}
-      </h4>
-      <p
+      </h5>
+      {/* <p
         contenteditable="true"
         onDoubleClick={handleSelectAllText()}
         onInput={(e) => editText(s.id, e.currentTarget.textContent)}
       >
         {text}
-      </p>
+      </p> */}
       <div className="IdeaButtons">
         <UploadAndDisplayImage
           handleGo={handleGo}
