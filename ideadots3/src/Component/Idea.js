@@ -2,12 +2,14 @@ import React, { useEffect, useState, useContext } from "react";
 import { SphereContext } from "./SphereContextProvider";
 import UploadAndDisplayImage from "./UploadAndDisplayImage";
 import Button from "./Button";
+import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
+import { use } from "react";
 
 export default function Idea({
   s,
   i,
-  setActiveIdea,
-  activeIdea,
+  //setActiveIdea,
+  //activeIdea,
   deleteIdea,
   gizmo,
   setGizmo,
@@ -18,6 +20,7 @@ export default function Idea({
   const [title, setTitle] = useState(s.title);
   const [text, setText] = useState(s.text);
   const context = useContext(SphereContext);
+  const ideaContext = useContext(ActiveIdeaContext);
 
   useEffect(() => {
     const titleId = s.id + "title";
@@ -30,15 +33,16 @@ export default function Idea({
   }, []);
 
   useEffect(() => {
-    if (activeIdea) {
-      setIsActive(activeIdea.id === s.id ? true : false);
+    if (ideaContext.activeIdea) {
+      setIsActive(ideaContext.activeIdea.id === s.id ? true : false);
     }
-  }, [activeIdea]);
+  }, [ideaContext.activeIdea]);
 
   const handleGo = () => {
     context.spheres.forEach((contextSphere) => {
       if (contextSphere.id == s.id) {
-        setActiveIdea(contextSphere);
+        //setActiveIdea(contextSphere);
+        ideaContext.setActiveIdea(contextSphere);
       }
     });
   };

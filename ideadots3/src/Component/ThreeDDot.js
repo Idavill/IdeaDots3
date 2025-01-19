@@ -12,13 +12,14 @@ import { Sphere } from "@react-three/drei";
 import { v4 as uuidv4 } from "uuid";
 import { Html, Line } from "@react-three/drei";
 import { SphereContext } from "./SphereContextProvider";
+import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
 
 export default function ThreeDDot({
   position,
   text,
   id,
   activeIdea,
-  setActiveIdea,
+  //setActiveIdea,
   setEnableCustomControls,
 }) {
   const [ideaPosition, setideaPosition] = useState([
@@ -30,18 +31,21 @@ export default function ThreeDDot({
   const [hoverDot, setHoverDot] = useState(false);
   const [clicked, click] = useState(false);
   const sphereContext = useContext(SphereContext);
+  const ideaContext = useContext(ActiveIdeaContext);
 
-  useEffect(() => {
-    if (activeIdea) {
-      click(activeIdea.id === id ? true : false);
-      console.log("!", clicked);
-    }
-  }, [activeIdea]);
+  // useEffect(() => {
+  //   if (ideaContext.activeIdea) {
+  //     click(ideaContext.activeIdea.id === id ? true : false);
+  //   }
+  // }, [ideaContext.activeIdea]);
 
   const handleClick = () => {
-    const thisSphere = sphereContext.spheres.filter((s) => s.id === id);
-    setActiveIdea(thisSphere);
-    console.log("!", thisSphere);
+    click(!clicked);
+    if (!clicked) {
+      const thisSphere = sphereContext.spheres.filter((s) => s.id === id);
+      ideaContext.setActiveIdea(thisSphere[0]);
+      console.log("!", thisSphere[0].text);
+    }
   };
 
   return (
@@ -66,7 +70,7 @@ export default function ThreeDDot({
               ></div>
 
               <div className="threedDot">
-                <p style={{ color: "white" }}> {activeIdea.text}</p>
+                <p style={{ color: "white" }}> {ideaContext.activeIdea.text}</p>
               </div>
             </Html>
           </Draggable>
@@ -87,9 +91,7 @@ export default function ThreeDDot({
             position={ideaPosition}
             scale={0.1}
           >
-            <meshStandardMaterial
-              color={hoverDot ? "rgb(55, 52, 255)" : "grey"}
-            />
+            <meshStandardMaterial color={"grey"} />
           </Sphere>{" "}
         </>
       )}
@@ -100,7 +102,9 @@ export default function ThreeDDot({
         position={dotPosition}
         scale={0.2}
       >
-        <meshStandardMaterial color={hoverDot ? "rgb(55, 52, 255)" : "grey"} />
+        <meshStandardMaterial
+          color={hoverDot || clicked ? "rgb(55, 52, 255)" : "grey"}
+        />
       </Sphere>
     </>
   );

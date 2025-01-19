@@ -1,5 +1,6 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState, useContext } from "react";
 import Button from "./Button";
+import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
 
 export default function Header({
   modelListViewButtonText,
@@ -14,6 +15,7 @@ export default function Header({
   isDotModeActive,
   setIsDotModeActive,
 }) {
+  const ideaContext = useContext(ActiveIdeaContext);
   return (
     <div
       style={{
@@ -46,7 +48,8 @@ export default function Header({
           width: "auto",
         }}
       >
-        {activeIdea ? activeIdea.title : ""}
+        {/* {activeIdea ? activeIdea.title : ""} */}
+        {ideaContext.activeIdea ? ideaContext.activeIdea.title : ""}
       </h4>
     </div>
   );

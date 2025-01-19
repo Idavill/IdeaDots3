@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import DraggableUI from "./Component/DraggableUI.js";
 import { SphereContextProvider } from "./Component/SphereContextProvider.js";
 import { ImageContextProvider } from "./Component/ImageContextProvider.js";
-import { ActiveSphereContextProvider } from "./Component/ActiveSphereContextProvider.js";
+import { ActiveIdeaContextProvider } from "./Component/ActiveIdeaContextProvider.js";
 
 import Header from "./Component/Header.js";
 
@@ -45,6 +45,14 @@ export default function App() {
     }
   }, [activeIdea]);
 
+  useEffect(() => {
+    if (activeIdea && activeIdea.position) {
+      setActiveIdea(activeIdea);
+      setCameraTarget(activeIdea);
+      console.log("active Idea is: ", activeIdea);
+    }
+  }, [activeIdea]);
+
   const scrollToIdea = (s, i) => {
     setActiveIdea(s);
     //event.preventDefault(); // Prevent default anchor click behavior
@@ -61,7 +69,7 @@ export default function App() {
     <>
       <SphereContextProvider>
         <ImageContextProvider value={{ imageSrcList, setImageSrcList }}>
-          <ActiveSphereContextProvider>
+          <ActiveIdeaContextProvider>
             <Header
               activeIdea={activeIdea}
               modelListViewButtonText={modelListViewButtonText}
@@ -98,7 +106,7 @@ export default function App() {
                 setTitleIsChanged={(e) => setTitleIsChanged(e)}
               />
             ) : null}
-          </ActiveSphereContextProvider>
+          </ActiveIdeaContextProvider>
         </ImageContextProvider>
       </SphereContextProvider>
     </>
