@@ -1,12 +1,4 @@
-import * as THREE from "three";
-
-import React, {
-  useEffect,
-  useState,
-  useContext,
-  useLayoutEffect,
-  useRef,
-} from "react";
+import React, { useState, useContext } from "react";
 import Draggable from "react-draggable";
 import { Sphere } from "@react-three/drei";
 import { v4 as uuidv4 } from "uuid";
@@ -14,14 +6,7 @@ import { Html, Line } from "@react-three/drei";
 import { SphereContext } from "./SphereContextProvider";
 import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
 
-export default function ThreeDDot({
-  position,
-  text,
-  id,
-  activeIdea,
-  //setActiveIdea,
-  setEnableCustomControls,
-}) {
+export default function ThreeDDot({ position, id, setEnableCustomControls }) {
   const [ideaPosition, setideaPosition] = useState([
     position[0] * 2,
     position[1] * 2,
@@ -33,18 +18,11 @@ export default function ThreeDDot({
   const sphereContext = useContext(SphereContext);
   const ideaContext = useContext(ActiveIdeaContext);
 
-  // useEffect(() => {
-  //   if (ideaContext.activeIdea) {
-  //     click(ideaContext.activeIdea.id === id ? true : false);
-  //   }
-  // }, [ideaContext.activeIdea]);
-
   const handleClick = () => {
     click(!clicked);
     if (!clicked) {
       const thisSphere = sphereContext.spheres.filter((s) => s.id === id);
       ideaContext.setActiveIdea(thisSphere[0]);
-      console.log("!", thisSphere[0].text);
     }
   };
 

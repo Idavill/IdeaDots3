@@ -1,19 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
 import { SphereContext } from "./SphereContextProvider";
 import UploadAndDisplayImage from "./UploadAndDisplayImage";
-import Button from "./Button";
 import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
-import { use } from "react";
 
 export default function Idea({
   s,
   i,
-  //setActiveIdea,
-  //activeIdea,
   deleteIdea,
   gizmo,
   setGizmo,
   setTitleIsChanged,
+  scrollToIdea,
   setTitleChangeId,
 }) {
   const [isActive, setIsActive] = useState(false);
@@ -34,17 +31,18 @@ export default function Idea({
 
   useEffect(() => {
     if (ideaContext.activeIdea) {
-      setIsActive(ideaContext.activeIdea.id === s.id ? true : false);
+      if (ideaContext.activeIdea.id === s.id) {
+        setIsActive(true);
+        scrollToIdea(s, i);
+      } else {
+        setIsActive(false);
+      }
     }
-  }, [ideaContext.activeIdea]);
+  }, [ideaContext]);
 
   const handleGo = () => {
-    context.spheres.forEach((contextSphere) => {
-      if (contextSphere.id == s.id) {
-        //setActiveIdea(contextSphere);
-        ideaContext.setActiveIdea(contextSphere);
-      }
-    });
+    ideaContext.setActiveIdea(s);
+    setIsActive(true);
   };
 
   const handleRemoveIdea = () => {
@@ -53,6 +51,8 @@ export default function Idea({
 
   //TODO: WHen title is edited, then context should
   const editTitle = (id, textContext) => {
+    ideaContext.setActiveIdea(s);
+
     setIsActive(true);
     const titleId = id + "title";
     localStorage.setItem(titleId, textContext);
@@ -66,6 +66,8 @@ export default function Idea({
   };
 
   const editText = (id, textContext) => {
+    ideaContext.setActiveIdea(s);
+
     setIsActive(true);
     s.text = textContext;
     const textId = id + "text";
@@ -76,11 +78,16 @@ export default function Idea({
     setGizmo(gizmo ? null : s.id);
   };
 
+  const handleClick = () => {
+    ideaContext.setActiveIdea(s);
+  };
+
   return (
     <div
       key={i}
-      onMouseOver={() => setIsActive(true)}
-      onMouseLeave={() => setIsActive(false)}
+      //onMouseOver={() => setIsActive(true)}
+      //onMouseLeave={() => setIsActive(false)}
+      onClick={handleClick}
       className="listcontent"
       style={{
         backgroundColor: isActive ? "rgb(55, 52, 255)" : "rgb(53, 53, 53)",

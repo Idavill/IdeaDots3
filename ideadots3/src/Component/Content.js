@@ -52,6 +52,7 @@ export default function Content({
     return context.spheres.map((s, i) => (
       <>
         <Sphere
+          s={s}
           key={uuidv4()}
           id={s.id}
           //listActive={listActive}

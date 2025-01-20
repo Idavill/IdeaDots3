@@ -62,6 +62,7 @@ export default function DraggableUI({
       <Idea
         s={s}
         i={i}
+        scrollToIdea={scrollToIdea}
         key={i}
         gizmo={gizmo}
         setGizmo={(e) => setGizmo(e)}

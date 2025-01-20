@@ -6,6 +6,7 @@ import ThreeDImage from "./ThreeDImage.js";
 import { ActiveIdeaContext } from "./ActiveIdeaContextProvider.js";
 
 export default function Sphere({
+  s,
   id,
   position,
   zoomToView,
@@ -19,7 +20,7 @@ export default function Sphere({
   isDotModeActive,
 }) {
   const [hovered, hover] = useState(false);
-  const ideaContext = useContext(ActiveIdeaContext)
+  const ideaContext = useContext(ActiveIdeaContext);
   const [clicked, click] = useState(false);
   const [scale, setScale] = useState(3);
   const [distanceFactorForZoom, setDistanceFactorForZoom] = useState(10);
@@ -31,11 +32,11 @@ export default function Sphere({
     }
   });
 
-  useEffect(() => {
-    if (activeIdea) {
-      click(activeIdea.id === id ? true : false);
-    }
-  }, [activeIdea]);
+  // useEffect(() => {
+  //   if (activeIdea) {
+  //     click(activeIdea.id === id ? true : false);
+  //   }
+  // }, [activeIdea]);
 
   useEffect(() => {
     if (ideaContext.activeIdea) {
@@ -44,9 +45,9 @@ export default function Sphere({
   }, [ideaContext.activeIdea]);
 
   const handleClick = (e) => {
-    console.log("click");
     if (isListModeActive) {
       zoomToView(e.object.position);
+      ideaContext.setActiveIdea(s);
     }
     click(!clicked);
   };
