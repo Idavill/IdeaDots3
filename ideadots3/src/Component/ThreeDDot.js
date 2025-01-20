@@ -58,9 +58,12 @@ export default function ThreeDDot({
                 // onMouseEnter={() => setEnableCustomControls(false)}
                 // onMouseLeave={() => setEnableCustomControls(true)}
                 style={{
+                  display: "flex",
+                  justifyItems: "center",
+                  justifyContent: "center",
                   width: "200px",
                   height: "200px",
-                  background: "red",
+                  //background: "red",
                   opacity: "50%",
                   borderRadius: "100px",
                   position: "absolute",
@@ -70,7 +73,16 @@ export default function ThreeDDot({
               ></div>
 
               <div className="threedDot">
-                <p style={{ color: "white" }}> {ideaContext.activeIdea.text}</p>
+                <p
+                  style={{
+                    color: "white",
+                    display: "flex",
+                    justifySelf: "center",
+                  }}
+                >
+                  {" "}
+                  {ideaContext.activeIdea.text}
+                </p>
               </div>
             </Html>
           </Draggable>

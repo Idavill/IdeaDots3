@@ -71,6 +71,10 @@
 }
 
 .threedDot{
+  display:flex;
+  justify-content: center;
+  justify-items: center;
+  
   border: 10px solid #202035;
   background-color:  #202035;
   border-radius: 25px;

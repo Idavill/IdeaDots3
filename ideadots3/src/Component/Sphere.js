@@ -3,6 +3,7 @@ import ThreeDDot from "./ThreeDDot.js";
 import { PivotControls, Billboard, Text, Image } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber"; // Ensure this import is correct
 import ThreeDImage from "./ThreeDImage.js";
+import { ActiveIdeaContext } from "./ActiveIdeaContextProvider.js";
 
 export default function Sphere({
   id,
@@ -18,6 +19,7 @@ export default function Sphere({
   isDotModeActive,
 }) {
   const [hovered, hover] = useState(false);
+  const ideaContext = useContext(ActiveIdeaContext)
   const [clicked, click] = useState(false);
   const [scale, setScale] = useState(3);
   const [distanceFactorForZoom, setDistanceFactorForZoom] = useState(10);
@@ -34,6 +36,12 @@ export default function Sphere({
       click(activeIdea.id === id ? true : false);
     }
   }, [activeIdea]);
+
+  useEffect(() => {
+    if (ideaContext.activeIdea) {
+      click(ideaContext.activeIdea.id === id ? true : false);
+    }
+  }, [ideaContext.activeIdea]);
 
   const handleClick = (e) => {
     console.log("click");
