@@ -65,16 +65,17 @@ export default function Sphere({
             activeIdea={activeIdea}
             setActiveIdea={setActiveIdea}
             position={position}
-            text={activeIdea ? activeIdea.text : ""}
+            text={s.text}
             id={id}
             setEnableCustomControls={setEnableCustomControls}
-          />
+          ></ThreeDDot>
         ) : (
           <>
             <ThreeDImage
               id={id}
               hover={hover}
-              scale={scale}
+              dimensions={[150, 150]}
+              scale={1}
               setScale={(e) => setScale(e)}
               setEnableCustomControls={setEnableCustomControls}
               onClick={(e) => handleClick(e)}

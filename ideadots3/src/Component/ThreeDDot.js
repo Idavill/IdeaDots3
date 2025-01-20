@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Html, Line } from "@react-three/drei";
 import { SphereContext } from "./SphereContextProvider";
 import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
+import ThreeDImage from "./ThreeDImage";
 
 export default function ThreeDDot({
   s,
@@ -105,15 +106,17 @@ export default function ThreeDDot({
           >
             <meshStandardMaterial color={"grey"} />
           </Sphere>{" "}
+          <ThreeDImage
+            id={id}
+            setEnableCustomControls={setEnableCustomControls}
+            ideaId={id}
+            position={ideaPosition}
+            scale={0.1}
+            dimensions={[150, 150]}
+          ></ThreeDImage>
         </>
       )}
-      <Sphere
-        onClick={() => handleClick()}
-        // onPointerOver={() => setHoverDot(true)}
-        // onPointerLeave={() => setHoverDot(false)}
-        position={dotPosition}
-        scale={0.2}
-      >
+      <Sphere onClick={() => handleClick()} position={dotPosition} scale={0.2}>
         <meshStandardMaterial
           color={hoverDot || clicked ? "rgb(55, 52, 255)" : "grey"}
         />

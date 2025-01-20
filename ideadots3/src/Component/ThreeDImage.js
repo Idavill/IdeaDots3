@@ -13,21 +13,16 @@ export default function ThreeDImage({
   onPointerOver,
   onPointerOut,
   scale,
-  hover,
-  clicked,
   setEnableCustomControls,
   distanceFactorForZoom,
   setScale,
+  dimensions,
   isThreeDModeActive,
 }) {
   const context = useContext(ImageContext);
   const filteredImages = context.imageSrcList.filter(
-    (img) => img.id === ideaId
+    (img) => img.id === ideaId // TODO: move this computation to parent
   );
-
-  // useEffect(() => {
-  //   console.log(" position ", position);
-  // }, []);
 
   const imageList = filteredImages.map((filename) => (
     <group key={uuidv4()} position={position}>
@@ -40,7 +35,7 @@ export default function ThreeDImage({
             onPointerOut={onPointerOut}
             transparent
             radius={0.3}
-            scale={[2, 2, 2]}
+            scale={scale}
             url={`./Assets/${filename.src}`}
             onError={(e) => {
               console.error(`Could not load ${filename.src}:`, e);
@@ -60,8 +55,10 @@ export default function ThreeDImage({
               draggable={false}
               style={{
                 position: "absolute",
-                height: "200px",
-                width: "200px",
+                height: `${dimensions[0]}px`,
+                width: `${dimensions[1]}px`,
+                // height: "200px",
+                // width: "200px",
                 top: "-100px",
                 left: "-100px",
                 borderRadius: "10%",
