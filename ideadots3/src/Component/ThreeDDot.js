@@ -64,7 +64,7 @@ export default function ThreeDDot({
                   justifyContent: "center",
                   width: "200px",
                   height: "200px",
-                  //background: "red",
+                  background: "red",
                   opacity: "50%",
                   borderRadius: "100px",
                   position: "absolute",
