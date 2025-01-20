@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Draggable from "react-draggable";
 import { Sphere } from "@react-three/drei";
 import { v4 as uuidv4 } from "uuid";
@@ -6,7 +6,12 @@ import { Html, Line } from "@react-three/drei";
 import { SphereContext } from "./SphereContextProvider";
 import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
 
-export default function ThreeDDot({ position, id, setEnableCustomControls }) {
+export default function ThreeDDot({
+  s,
+  position,
+  id,
+  setEnableCustomControls,
+}) {
   const [ideaPosition, setideaPosition] = useState([
     position[0] * 2,
     position[1] * 2,
@@ -17,13 +22,30 @@ export default function ThreeDDot({ position, id, setEnableCustomControls }) {
   const [clicked, click] = useState(false);
   const sphereContext = useContext(SphereContext);
   const ideaContext = useContext(ActiveIdeaContext);
+  const thisSphere = sphereContext.spheres.filter((s) => s.id === id); // pass prop down instead?
 
-  const handleClick = () => {
-    click(!clicked);
-    if (!clicked) {
-      const thisSphere = sphereContext.spheres.filter((s) => s.id === id);
+  useEffect(() => {
+    if (ideaContext.activeIdea) {
+      if (ideaContext.activeIdea.id === s.id) {
+        click(true);
+      } else {
+        click(false);
+      }
+    }
+  }, [ideaContext]);
+
+  useEffect(() => {
+    if (clicked) {
       ideaContext.setActiveIdea(thisSphere[0]);
     }
+  }, [clicked]);
+
+  const handleClick = () => {
+    click(true);
+    // if (clicked) {
+    //   const thisSphere = sphereContext.spheres.filter((s) => s.id === id);
+    //   ideaContext.setActiveIdea(thisSphere[0]);
+    // }
   };
 
   return (
@@ -59,7 +81,7 @@ export default function ThreeDDot({ position, id, setEnableCustomControls }) {
                   }}
                 >
                   {" "}
-                  {ideaContext.activeIdea.text}
+                  {s.text}
                 </p>
               </div>
             </Html>
@@ -76,8 +98,8 @@ export default function ThreeDDot({ position, id, setEnableCustomControls }) {
             dashed={false}
           />
           <Sphere
-            onPointerOver={() => setHoverDot(true)}
-            onPointerLeave={() => setHoverDot(false)}
+            // onPointerOver={() => setHoverDot(true)}
+            // onPointerLeave={() => setHoverDot(false)}
             position={ideaPosition}
             scale={0.1}
           >
@@ -87,8 +109,8 @@ export default function ThreeDDot({ position, id, setEnableCustomControls }) {
       )}
       <Sphere
         onClick={() => handleClick()}
-        onPointerOver={() => setHoverDot(true)}
-        onPointerLeave={() => setHoverDot(false)}
+        // onPointerOver={() => setHoverDot(true)}
+        // onPointerLeave={() => setHoverDot(false)}
         position={dotPosition}
         scale={0.2}
       >

@@ -114,7 +114,7 @@ const UploadAndDisplayImage = ({
       >
         Image
       </button>
-      <Button onClick={handleGo} text={"Go"} />
+      {/* <Button onClick={handleGo} text={"Go"} /> */}
       <Button onClick={handleMoveClicked} text={"Move"} />
       <Button onClick={handleRemoveIdea} text={"-"} />
     </div>

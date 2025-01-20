@@ -61,6 +61,7 @@ export default function Sphere({
       >
         {isDotModeActive ? (
           <ThreeDDot
+            s={s}
             activeIdea={activeIdea}
             setActiveIdea={setActiveIdea}
             position={position}
