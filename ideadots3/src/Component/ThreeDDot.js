@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from "uuid";
 import { Html, Line } from "@react-three/drei";
 import { SphereContext } from "./SphereContextProvider";
 import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
-import ThreeDImage from "./ThreeDImage";
 import ThreeDDotImage from "./ThreeDDotImage";
 
 export default function ThreeDDot({
@@ -91,14 +90,16 @@ export default function ThreeDDot({
                   display: "flex",
                   justifyItems: "center",
                   justifyContent: "center",
-                  width: `${radius}px`,
-                  height: `${radius}px`,
-                  background: "red",
-                  opacity: "50%",
-                  borderRadius: `${radius / 2}px`,
+                  width: `${300}px`,
+                  height: `${300}px`,
+                  //background: "#202035", //red
+                  //opacity: "50%",
+                  borderRadius: `${300 / 2}px`,
                   position: "absolute",
-                  top: `-${radius / 2}px`,
-                  left: `-${radius / 2}px`,
+                  top: `-${300 / 2}px`,
+                  left: `-${300 / 2}px`,
+                  border: "2px solid #202035",
+                  //backgroundColor: "#202035",
                 }}
               ></div>
               <div

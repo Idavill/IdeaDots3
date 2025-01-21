@@ -45,12 +45,7 @@ export default function ThreeDImage({
           />
         </Billboard>
       ) : (
-        <Html
-          //position={[position[0], position[1], position[2]]}
-          //position={position}
-          key={uuidv4()}
-          distanceFactor={10}
-        >
+        <Html key={uuidv4()} distanceFactor={10}>
           <div className="threedImage">
             <img
               draggable={false}
@@ -58,8 +53,6 @@ export default function ThreeDImage({
                 position: "absolute",
                 height: `${dimensions[0]}px`,
                 width: `${dimensions[1]}px`,
-                // height: "200px",
-                // width: "200px",
                 top: "-100px",
                 left: "-100px",
                 borderRadius: "10%",
