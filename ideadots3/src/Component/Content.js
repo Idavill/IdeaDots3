@@ -49,12 +49,15 @@ export default function Content({
   };
 
   const sphereList = () => {
-    return context.spheres.map((s, i) => (
+    const spheres = context.spheres || []; // Fallback to an empty array if undefined
+
+    return spheres.map((s, i) => (
       <>
         <Sphere
           s={s}
           key={uuidv4()}
           id={s.id}
+          amountOfSpheres={context.spheres.length}
           //listActive={listActive}
           gizmo={gizmo}
           zoomToView={(focusRef) => (

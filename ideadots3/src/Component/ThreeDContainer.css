@@ -70,7 +70,7 @@
   border-radius: 25px;
 }
 
-.threedDot{
+/* .threedDot{
   display:flex;
   justify-content: center;
   justify-items: center;
@@ -83,7 +83,7 @@
   width:200px;
   overflow-y: scroll;
   top:-150px;
-}
+} */
 
 .contentContainer{
   display:flex;

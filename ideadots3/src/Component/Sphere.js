@@ -18,6 +18,7 @@ export default function Sphere({
   isThreeDModeActive,
   isListModeActive,
   isDotModeActive,
+  amountOfSpheres,
 }) {
   const [hovered, hover] = useState(false);
   const ideaContext = useContext(ActiveIdeaContext);
@@ -62,6 +63,7 @@ export default function Sphere({
         {isDotModeActive ? (
           <ThreeDDot
             s={s}
+            amountOfSpheres={amountOfSpheres}
             activeIdea={activeIdea}
             setActiveIdea={setActiveIdea}
             position={position}

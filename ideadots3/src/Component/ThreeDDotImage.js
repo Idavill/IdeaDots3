@@ -1,12 +1,10 @@
 import { Billboard, Image } from "@react-three/drei";
 import React, { useContext, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { ImageContext } from "./ImageContextProvider";
-import ImageIdea from "./ImageIdea.js";
+import { ImageContext } from "./ImageContextProvider.js";
 import { Html } from "@react-three/drei";
-import DisplayImage from "./DisplayImageThreeD.js";
 
-export default function ThreeDImage({
+export default function ThreeDDotImage({
   ideaId,
   position,
   offset,
@@ -60,8 +58,8 @@ export default function ThreeDImage({
                 width: `${dimensions[1]}px`,
                 // height: "200px",
                 // width: "200px",
-                top: "-100px",
-                left: "-100px",
+                top: `${offset[1]}px`,
+                left: `${offset[0]}px`,
                 borderRadius: "10%",
               }}
               src={`./Assets/${filename.src}`}

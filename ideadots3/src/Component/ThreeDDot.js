@@ -6,12 +6,14 @@ import { Html, Line } from "@react-three/drei";
 import { SphereContext } from "./SphereContextProvider";
 import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
 import ThreeDImage from "./ThreeDImage";
+import ThreeDDotImage from "./ThreeDDotImage";
 
 export default function ThreeDDot({
   s,
   position,
   id,
   setEnableCustomControls,
+  amountOfSpheres,
 }) {
   const [ideaPosition, setideaPosition] = useState([
     position[0] * 2,
@@ -24,16 +26,49 @@ export default function ThreeDDot({
   const sphereContext = useContext(SphereContext);
   const ideaContext = useContext(ActiveIdeaContext);
   const thisSphere = sphereContext.spheres.filter((s) => s.id === id); // pass prop down instead?
+  const radius = 150;
+  const [offset, setOffset] = useState([]);
 
   useEffect(() => {
     if (ideaContext.activeIdea) {
       if (ideaContext.activeIdea.id === s.id) {
         click(true);
+        //calculateCircleDivision();
       } else {
         click(false);
       }
     }
   }, [ideaContext]);
+
+  useEffect(() => {
+    calculateCircleDivision();
+  }, []);
+
+  useEffect(() => {
+    if (offset.length > 0) {
+      console.log("offset :", offset[2][0], offset[2][1]);
+    }
+  }, [offset]);
+
+  const calculateCircleDivision = () => {
+    const circumference = radius * Math.PI * 2;
+    console.log("amount: ", 3);
+
+    console.log("circumference: ", circumference);
+    const angleDivision = 360 / 3;
+    console.log("angleDivision: ", angleDivision);
+
+    let angle = 0;
+    for (let i = 0; i < 3; i++) {
+      const radians = (angle * Math.PI) / 180;
+      const x = radius * Math.cos(radians);
+      const y = radius * Math.sin(radians);
+      console.log("x: ", x, " y: ", y);
+      setOffset((prev) => [...prev, [x, y]]);
+
+      angle += angleDivision;
+    }
+  };
 
   useEffect(() => {
     if (clicked) {
@@ -43,10 +78,6 @@ export default function ThreeDDot({
 
   const handleClick = () => {
     click(true);
-    // if (clicked) {
-    //   const thisSphere = sphereContext.spheres.filter((s) => s.id === id);
-    //   ideaContext.setActiveIdea(thisSphere[0]);
-    // }
   };
 
   return (
@@ -56,29 +87,41 @@ export default function ThreeDDot({
           <Draggable>
             <Html position={ideaPosition} key={uuidv4()} distanceFactor={10}>
               <div
-                // onMouseEnter={() => setEnableCustomControls(false)}
-                // onMouseLeave={() => setEnableCustomControls(true)}
                 style={{
                   display: "flex",
                   justifyItems: "center",
                   justifyContent: "center",
-                  width: "200px",
-                  height: "200px",
+                  width: `${radius}px`,
+                  height: `${radius}px`,
                   background: "red",
                   opacity: "50%",
-                  borderRadius: "100px",
+                  borderRadius: `${radius / 2}px`,
                   position: "absolute",
-                  top: "-100px",
-                  left: "-100px",
+                  top: `-${radius / 2}px`,
+                  left: `-${radius / 2}px`,
                 }}
               ></div>
-
-              <div className="threedDot">
+              <div
+                //className="threedDot"
+                style={{
+                  border: "10px solid #202035",
+                  backgroundColor: "#202035",
+                  borderRadius: "25px",
+                  position: "absolute",
+                  height: "100px",
+                  width: "200px",
+                  overflowY: "scroll",
+                  // top: `-${offset[2][1]}px`,
+                  // left: `-${offset[2][0]}px`,
+                  top: `${offset[2][1]}px`,
+                  left: `${offset[2][0]}px`,
+                }}
+              >
                 <p
                   style={{
                     color: "white",
-                    display: "flex",
-                    justifySelf: "center",
+                    //display: "flex",
+                    //justifySelf: "center",
                   }}
                 >
                   {" "}
@@ -98,22 +141,36 @@ export default function ThreeDDot({
             segments={false}
             dashed={false}
           />
-          <Sphere
-            // onPointerOver={() => setHoverDot(true)}
-            // onPointerLeave={() => setHoverDot(false)}
-            position={ideaPosition}
-            scale={0.1}
-          >
+          <Sphere position={ideaPosition} scale={0.1}>
             <meshStandardMaterial color={"grey"} />
           </Sphere>{" "}
-          <ThreeDImage
+          <ThreeDDotImage
+            offset={offset[0]}
             id={id}
+            setEnableCustomControls={setEnableCustomControls}
+            ideaId={id}
+            position={ideaPosition} //iodeaPOsition
+            scale={0.1}
+            dimensions={[150, 150]}
+          ></ThreeDDotImage>
+          <ThreeDDotImage
+            id={id}
+            offset={offset[1]}
             setEnableCustomControls={setEnableCustomControls}
             ideaId={id}
             position={ideaPosition}
             scale={0.1}
             dimensions={[150, 150]}
-          ></ThreeDImage>
+          ></ThreeDDotImage>
+          {/* <ThreeDDotImage
+            id={id}
+            offset={offset[2]}
+            setEnableCustomControls={setEnableCustomControls}
+            ideaId={id}
+            position={ideaPosition}
+            scale={0.1}
+            dimensions={[150, 150]}
+          ></ThreeDDotImage> */}
         </>
       )}
       <Sphere onClick={() => handleClick()} position={dotPosition} scale={0.2}>
