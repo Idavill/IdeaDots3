@@ -39,26 +39,29 @@ export default function ThreeDDot({
   }, [ideaContext]);
 
   useEffect(() => {
-    calculateCircleDivision();
-    console.log("filtered images inside dot: ", filteredImages);
-  }, []);
-
-  useEffect(() => {
-    if (offset.length > 0) {
-      console.log("offset :", offset[2][0], offset[2][1]);
+    if (filteredImages) {
+      calculateCircleDivision();
+      console.log("filtered images inside dot: ", filteredImages);
     }
-  }, [offset]);
+  }, [filteredImages]);
+
+  // useEffect(() => {
+  //   if (offset.length > 0) {
+  //     console.log("offset :", offset[2][0], offset[2][1]);
+  //   }
+  // }, [offset]);
 
   const calculateCircleDivision = () => {
     const circumference = radius * Math.PI * 2;
-    console.log("amount: ", 3);
+    const amount = filteredImages ? filteredImages.length + 1 : 1;
+    console.log("amount: ", amount);
 
     console.log("circumference: ", circumference);
-    const angleDivision = 360 / 3;
+    const angleDivision = 360 / amount;
     console.log("angleDivision: ", angleDivision);
 
     let angle = 0;
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < amount; i++) {
       const radians = (angle * Math.PI) / 180;
       const x = radius * Math.cos(radians);
       const y = radius * Math.sin(radians);
@@ -124,8 +127,8 @@ export default function ThreeDDot({
                   height: "100px",
                   width: "200px",
                   overflowY: "scroll",
-                  top: `${offset[2][1]}px`,
-                  left: `${offset[2][0]}px`,
+                  top: `${offset[offset.length - 1][1]}px`,
+                  left: `${offset[offset.length - 1][0]}px`,
                 }}
               >
                 <p
