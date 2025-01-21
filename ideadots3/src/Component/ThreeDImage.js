@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ImageContext } from "./ImageContextProvider";
 import { Html, Sphere } from "@react-three/drei";
 import Draggable from "react-draggable";
+import { flushGlobalEffects } from "@react-three/fiber";
 
 export default function ThreeDImage({
   ideaId,
@@ -16,12 +17,16 @@ export default function ThreeDImage({
   isThreeDModeActive,
   filteredImages,
 }) {
-  // const context = useContext(ImageContext);
-  // const filteredImages = context.imageSrcList.filter(
-  //   (img) => img.id === ideaId // TODO: move this computation to parent
-  // );
   const [currentImage, setCurrentImage] = useState(0); // 0, 1, or 2 for three images
   const [images, setImages] = useState(filteredImages || []);
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    if (filteredImages.length > 1) {
+      setShowButton(true);
+      console.log("filtered images amount: ", filteredImages);
+    }
+  }, [filteredImages]);
 
   const handleNextImage = () => {
     setCurrentImage((prev) => (prev + 1) % filteredImages.length); // Cycle through images
@@ -64,18 +69,20 @@ export default function ThreeDImage({
               }}
               src={`./Assets/${filename.src}`}
             ></img>
-            <button
-              onClick={handleNextImage}
-              style={{
-                position: "absolute",
-                top: "20px",
-                left: "20px",
-                background: "white",
-                padding: "10px",
-              }}
-            >
-              Next Image
-            </button>
+            {showButton ? (
+              <button
+                onClick={handleNextImage}
+                style={{
+                  position: "absolute",
+                  top: "-50px",
+                  left: "50px",
+                  background: "white",
+                  padding: "10px",
+                }}
+              >
+                {">"}
+              </button>
+            ) : null}
           </div>
           {/* </Draggable> */}
         </Html>
