@@ -1,6 +1,13 @@
 import React, { Suspense, useEffect, useRef, useState } from "react";
+import { useKeyboardControls } from "@react-three/drei";
+
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useGLTF, OrbitControls } from "@react-three/drei";
+import {
+  useGLTF,
+  OrbitControls,
+  KeyboardControls,
+  PointerLockControls,
+} from "@react-three/drei";
 import "./ThreeDContainer.css";
 import * as THREE from "three";
 import CameraControls from "camera-controls";
@@ -86,54 +93,67 @@ export default function ThreeDContainer({
   return (
     <div style={{ height: "100vh" }}>
       <Suspense fallback={<span>loading...</span>}>
-        <Canvas
-          dpr={[1, 2]}
-          camera={{
-            position: [6, 4, 10],
-            fov: 50,
-          }}
+        <KeyboardControls
+          map={[
+            { name: "forward", keys: ["ArrowUp", "w", "W"] },
+            { name: "backward", keys: ["ArrowDown", "s", "S"] },
+            { name: "left", keys: ["ArrowLeft", "a", "A"] },
+            { name: "right", keys: ["ArrowRight", "d", "D"] },
+            { name: "jump", keys: ["Space"] },
+          ]}
         >
-          <Content
-            activeIdea={activeIdea}
-            isThreeDModeActive={isThreeDModeActive}
-            isDotModeActive={isDotModeActive}
-            setActiveIdea={(e) => setActiveIdea(e)}
-            //listActive={listActive}
-            gizmo={gizmo}
-            scrollToIdea={(s, i) => scrollToIdea(s, i)}
-            zoom={zoom}
-            setZoom={setZoom}
-            setFocus={setFocus}
-            //focusSphere={focus}
-            newSphere={newSphere}
-            controlsRef={controlsRef}
-            //currentZoom={currentZoom}
-            setCurrentZoom={(z) => setCurrentZoom(z)}
-            //enableCustomControls={enableCustomControls}
-            setEnableCustomControls={setEnableCustomControls}
-            isListModeActive={isListModeActive}
-          />
+          <Canvas
+            dpr={[1, 2]}
+            camera={{
+              position: [6, 4, 10],
+              fov: 50,
+            }}
+          >
+            <MovementControls controlsRef={controlsRef} />
 
-          <directionalLight position={[10, 10, 0]} intensity={1.5} />
-          <directionalLight position={[-10, 10, 5]} intensity={1} />
-          <directionalLight position={[-10, 20, 0]} intensity={1.5} />
-          <directionalLight position={[0, -10, 0]} intensity={0.25} />
-          <Suspense fallback={<Model url="./Assets/WCPOM.gltf" />}>
-            <Model
-              url="./Assets/WCPOM.gltf"
-              setNewSphere={(e) => setNewSphere(e)}
+            <Content
+              activeIdea={activeIdea}
+              isThreeDModeActive={isThreeDModeActive}
+              isDotModeActive={isDotModeActive}
+              setActiveIdea={(e) => setActiveIdea(e)}
+              //listActive={listActive}
+              gizmo={gizmo}
+              scrollToIdea={(s, i) => scrollToIdea(s, i)}
+              zoom={zoom}
+              setZoom={setZoom}
+              setFocus={setFocus}
+              //focusSphere={focus}
+              newSphere={newSphere}
+              controlsRef={controlsRef}
+              //currentZoom={currentZoom}
+              setCurrentZoom={(z) => setCurrentZoom(z)}
+              //enableCustomControls={enableCustomControls}
+              setEnableCustomControls={setEnableCustomControls}
+              isListModeActive={isListModeActive}
             />
-          </Suspense>
-          <CustomControls
-            controlsRef={controlsRef}
-            zoom={zoom}
-            focus={focus}
-            gizmo={gizmo}
-            currentZoom={currentZoom}
-            setCurrentZoom={(z) => setCurrentZoom(z)}
-            enableCustomControls={enableCustomControls}
-          />
-        </Canvas>
+
+            <directionalLight position={[10, 10, 0]} intensity={1.5} />
+            <directionalLight position={[-10, 10, 5]} intensity={1} />
+            <directionalLight position={[-10, 20, 0]} intensity={1.5} />
+            <directionalLight position={[0, -10, 0]} intensity={0.25} />
+            <Suspense fallback={<Model url="./Assets/WCPOM.gltf" />}>
+              <Model
+                url="./Assets/WCPOM.gltf"
+                setNewSphere={(e) => setNewSphere(e)}
+              />
+            </Suspense>
+            {/* <CustomControls
+              controlsRef={controlsRef}
+              zoom={zoom}
+              focus={focus}
+              gizmo={gizmo}
+              currentZoom={currentZoom}
+              setCurrentZoom={(z) => setCurrentZoom(z)}
+              enableCustomControls={enableCustomControls}
+            /> */}
+            {/* <PointerLockControls /> */}
+          </Canvas>
+        </KeyboardControls>
       </Suspense>
     </div>
   );
@@ -153,4 +173,25 @@ function Model({ url, setNewSphere }) {
       object={scene}
     ></primitive>
   );
+}
+
+function MovementControls({ controlsRef }) {
+  const [subscribedKeys, getKeys] = useKeyboardControls();
+  useFrame(() => {
+    console.log(getKeys());
+  });
+
+  useFrame(() => {
+    const { forward, backward, left, right, jump } = getKeys();
+
+    // Adjust camera or controls based on key inputs
+    if (controlsRef.current) {
+      if (forward) controlsRef.current.object.position.z -= 0.1; // Move forward
+      if (backward) controlsRef.current.object.position.z += 0.1; // Move backward
+      if (left) controlsRef.current.object.position.x -= 0.1; // Move left
+      if (right) controlsRef.current.object.position.x += 0.1; // Move right
+    }
+  });
+
+  return null;
 }
