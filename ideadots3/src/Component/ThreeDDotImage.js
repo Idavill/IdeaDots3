@@ -12,9 +12,6 @@ export default function ThreeDDotImage({
   onPointerOver,
   onPointerOut,
   scale,
-  setEnableCustomControls,
-  distanceFactorForZoom,
-  setScale,
   dimensions,
   isThreeDModeActive,
 }) {
@@ -43,12 +40,7 @@ export default function ThreeDDotImage({
           />
         </Billboard>
       ) : (
-        <Html
-          //position={[position[0], position[1], position[2]]}
-          //position={position}
-          key={uuidv4()}
-          distanceFactor={10}
-        >
+        <Html key={uuidv4()} distanceFactor={10}>
           <div className="threedImage">
             <img
               draggable={false}
@@ -56,8 +48,6 @@ export default function ThreeDDotImage({
                 position: "absolute",
                 height: `${dimensions[0]}px`,
                 width: `${dimensions[1]}px`,
-                // height: "200px",
-                // width: "200px",
                 top: `${offset[1]}px`,
                 left: `${offset[0]}px`,
                 borderRadius: "10%",

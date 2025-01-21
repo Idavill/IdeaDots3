@@ -12,7 +12,6 @@ export default function ThreeDDot({
   position,
   id,
   setEnableCustomControls,
-  amountOfSpheres,
 }) {
   const [ideaPosition, setideaPosition] = useState([
     position[0] * 2,
@@ -32,7 +31,6 @@ export default function ThreeDDot({
     if (ideaContext.activeIdea) {
       if (ideaContext.activeIdea.id === s.id) {
         click(true);
-        //calculateCircleDivision();
       } else {
         click(false);
       }
@@ -92,18 +90,14 @@ export default function ThreeDDot({
                   justifyContent: "center",
                   width: `${300}px`,
                   height: `${300}px`,
-                  //background: "#202035", //red
-                  //opacity: "50%",
                   borderRadius: `${300 / 2}px`,
                   position: "absolute",
                   top: `-${300 / 2}px`,
                   left: `-${300 / 2}px`,
                   border: "2px solid #202035",
-                  //backgroundColor: "#202035",
                 }}
               ></div>
               <div
-                //className="threedDot"
                 style={{
                   border: "10px solid #202035",
                   backgroundColor: "#202035",
@@ -112,8 +106,6 @@ export default function ThreeDDot({
                   height: "100px",
                   width: "200px",
                   overflowY: "scroll",
-                  // top: `-${offset[2][1]}px`,
-                  // left: `-${offset[2][0]}px`,
                   top: `${offset[2][1]}px`,
                   left: `${offset[2][0]}px`,
                 }}
@@ -121,8 +113,6 @@ export default function ThreeDDot({
                 <p
                   style={{
                     color: "white",
-                    //display: "flex",
-                    //justifySelf: "center",
                   }}
                 >
                   {" "}
@@ -132,7 +122,6 @@ export default function ThreeDDot({
             </Html>
           </Draggable>
           <Line
-            //ref={lineRef}
             points={[
               dotPosition,
               [ideaPosition[0], ideaPosition[1], ideaPosition[2]],
@@ -163,15 +152,6 @@ export default function ThreeDDot({
             scale={0.1}
             dimensions={[150, 150]}
           ></ThreeDDotImage>
-          {/* <ThreeDDotImage
-            id={id}
-            offset={offset[2]}
-            setEnableCustomControls={setEnableCustomControls}
-            ideaId={id}
-            position={ideaPosition}
-            scale={0.1}
-            dimensions={[150, 150]}
-          ></ThreeDDotImage> */}
         </>
       )}
       <Sphere onClick={() => handleClick()} position={dotPosition} scale={0.2}>

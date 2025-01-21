@@ -1,22 +1,16 @@
 import { Billboard, Image } from "@react-three/drei";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ImageContext } from "./ImageContextProvider";
-import ImageIdea from "./ImageIdea.js";
 import { Html } from "@react-three/drei";
-import DisplayImage from "./DisplayImageThreeD.js";
 
 export default function ThreeDImage({
   ideaId,
   position,
-  offset,
   onClick,
   onPointerOver,
   onPointerOut,
   scale,
-  setEnableCustomControls,
-  distanceFactorForZoom,
-  setScale,
   dimensions,
   isThreeDModeActive,
 }) {

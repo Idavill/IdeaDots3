@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 
-export default function ImageIdea({
-  setEnableCustomControls,
-  hover,
-  src,
-  left,
-  top,
-  clicked,
-}) {
+export default function ImageIdea({ setEnableCustomControls, src, clicked }) {
   const handleMoveImage = (e) => {
     console.log("position:::", e.currentTarget);
   };
@@ -22,19 +15,11 @@ export default function ImageIdea({
       {clicked && (
         <Draggable>
           <div
-            //onPointerOver={() => hover(true)}
-            //onPointerLeave={() => hover(false)}
-            // onMouseDown={(e) => (
-            //   setEnableCustomControls(false), handleMoveImage(e)
-            // )}
-            //onMouseUp={() => setEnableCustomControls(true)}
             onMouseLeave={() => setEnableCustomControls(true)}
             onMouseOver={() => setEnableCustomControls(false)}
             style={{
               width: "auto",
               position: "absolute",
-              // left: `${left}px`,
-              // top: `${top}px`,
             }}
           >
             <div className="threedImage">
