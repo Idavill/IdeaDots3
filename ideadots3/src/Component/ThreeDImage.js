@@ -1,8 +1,9 @@
 import { Billboard, Image } from "@react-three/drei";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ImageContext } from "./ImageContextProvider";
-import { Html } from "@react-three/drei";
+import { Html, Sphere } from "@react-three/drei";
+import Draggable from "react-draggable";
 
 export default function ThreeDImage({
   ideaId,
@@ -18,14 +19,20 @@ export default function ThreeDImage({
   const filteredImages = context.imageSrcList.filter(
     (img) => img.id === ideaId // TODO: move this computation to parent
   );
+  const [currentImage, setCurrentImage] = useState(0); // 0, 1, or 2 for three images
 
-  const imageList = filteredImages.map((filename) => (
+  const handleNextImage = () => {
+    setCurrentImage((prev) => (prev + 1) % filteredImages.length); // Cycle through images
+  };
+
+  const imageList = filteredImages.map((filename, i) => (
     <group key={uuidv4()} position={position}>
       {isThreeDModeActive ? (
         <Billboard key={uuidv4()}>
           <Image
             key={uuidv4()}
             onClick={onClick}
+            visible={currentImage === i} // Only show if currentImage is 2
             onPointerOver={onPointerOver}
             onPointerOut={onPointerOut}
             transparent
@@ -40,7 +47,8 @@ export default function ThreeDImage({
         </Billboard>
       ) : (
         <Html key={uuidv4()} distanceFactor={10}>
-          <div className="threedImage">
+          {/* <Draggable> */}
+          <div /*className="threedImage"*/>
             <img
               draggable={false}
               style={{
@@ -50,10 +58,24 @@ export default function ThreeDImage({
                 top: "-100px",
                 left: "-100px",
                 borderRadius: "10%",
+                visibility: `${currentImage === i ? "visible" : "hidden"}`,
               }}
               src={`./Assets/${filename.src}`}
             ></img>
+            <button
+              onClick={handleNextImage}
+              style={{
+                position: "absolute",
+                top: "20px",
+                left: "20px",
+                background: "white",
+                padding: "10px",
+              }}
+            >
+              Next Image
+            </button>
           </div>
+          {/* </Draggable> */}
         </Html>
       )}
     </group>
