@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from "uuid";
 import { Html, Line } from "@react-three/drei";
 import { SphereContext } from "./SphereContextProvider";
 import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
-// import { ImageContext } from "./ImageContextProvider";
 import ThreeDDotImage from "./ThreeDDotImage";
 
 export default function ThreeDDot({
@@ -28,10 +27,6 @@ export default function ThreeDDot({
   const thisSphere = sphereContext.spheres.filter((s) => s.id === id); // pass prop down instead?
   const radius = 150;
   const [offset, setOffset] = useState([]);
-  // const context = useContext(ImageContext);
-  // const filteredImages = context.imageSrcList.filter(
-  //   (img) => img.id === id // TODO: move this computation to parent
-  // );
 
   useEffect(() => {
     if (ideaContext.activeIdea) {
@@ -158,26 +153,6 @@ export default function ThreeDDot({
             <meshStandardMaterial color={"grey"} />
           </Sphere>{" "}
           {dotImages}
-          {/* <ThreeDDotImage
-            filteredImages={filteredImages}
-            offset={offset[0]}
-            id={id}
-            setEnableCustomControls={setEnableCustomControls}
-            ideaId={id}
-            position={ideaPosition} //iodeaPOsition
-            scale={0.1}
-            dimensions={[150, 150]}
-          ></ThreeDDotImage>
-          <ThreeDDotImage
-            filteredImages={filteredImages}
-            id={id}
-            offset={offset[1]}
-            setEnableCustomControls={setEnableCustomControls}
-            ideaId={id}
-            position={ideaPosition}
-            scale={0.1}
-            dimensions={[150, 150]}
-          ></ThreeDDotImage> */}
         </>
       )}
       <Sphere onClick={() => handleClick()} position={dotPosition} scale={0.2}>
