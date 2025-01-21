@@ -1,5 +1,5 @@
 import { Billboard, Image } from "@react-three/drei";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ImageContext } from "./ImageContextProvider";
 import { Html, Sphere } from "@react-three/drei";
@@ -14,18 +14,20 @@ export default function ThreeDImage({
   scale,
   dimensions,
   isThreeDModeActive,
+  filteredImages,
 }) {
-  const context = useContext(ImageContext);
-  const filteredImages = context.imageSrcList.filter(
-    (img) => img.id === ideaId // TODO: move this computation to parent
-  );
+  // const context = useContext(ImageContext);
+  // const filteredImages = context.imageSrcList.filter(
+  //   (img) => img.id === ideaId // TODO: move this computation to parent
+  // );
   const [currentImage, setCurrentImage] = useState(0); // 0, 1, or 2 for three images
+  const [images, setImages] = useState(filteredImages || []);
 
   const handleNextImage = () => {
     setCurrentImage((prev) => (prev + 1) % filteredImages.length); // Cycle through images
   };
 
-  const imageList = filteredImages.map((filename, i) => (
+  const imageList = images.map((filename, i) => (
     <group key={uuidv4()} position={position}>
       {isThreeDModeActive ? (
         <Billboard key={uuidv4()}>

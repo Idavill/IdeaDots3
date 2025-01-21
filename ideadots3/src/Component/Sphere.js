@@ -4,6 +4,7 @@ import { PivotControls, Billboard, Text, Image } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber"; // Ensure this import is correct
 import ThreeDImage from "./ThreeDImage.js";
 import { ActiveIdeaContext } from "./ActiveIdeaContextProvider.js";
+import { ImageContext } from "./ImageContextProvider";
 
 export default function Sphere({
   s,
@@ -25,6 +26,10 @@ export default function Sphere({
   const [clicked, click] = useState(false);
   const [scale, setScale] = useState(3);
   const [distanceFactorForZoom, setDistanceFactorForZoom] = useState(10);
+  const context = useContext(ImageContext);
+  const filteredImages = context.imageSrcList.filter(
+    (img) => img.id === id // TODO: move this computation to parent
+  );
 
   //TODO: insteda useeffect
   useFrame(() => {
@@ -32,12 +37,6 @@ export default function Sphere({
       setDistanceFactorForZoom(controlsRef.current.object.position); // OrbitControls object.zoom
     }
   });
-
-  // useEffect(() => {
-  //   if (activeIdea) {
-  //     click(activeIdea.id === id ? true : false);
-  //   }
-  // }, [activeIdea]);
 
   useEffect(() => {
     if (ideaContext.activeIdea) {
@@ -62,6 +61,7 @@ export default function Sphere({
       >
         {isDotModeActive ? (
           <ThreeDDot
+            filteredImages={filteredImages}
             s={s}
             amountOfSpheres={amountOfSpheres}
             activeIdea={activeIdea}
@@ -74,6 +74,7 @@ export default function Sphere({
         ) : (
           <>
             <ThreeDImage
+              filteredImages={filteredImages}
               id={id}
               hover={hover}
               dimensions={[150, 150]}
