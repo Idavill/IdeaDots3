@@ -84,17 +84,29 @@ export default function ThreeDDot({
 
   const dotImages = filteredImages.map((filename, i) => {
     return (
-      <ThreeDDotImage
-        filename={filename}
-        filteredImages={filteredImages}
-        offset={offset[i]}
-        id={id}
-        setEnableCustomControls={setEnableCustomControls}
-        ideaId={id}
-        position={ideaPosition} //iodeaPOsition
-        scale={0.1}
-        dimensions={[150, 150]}
-      ></ThreeDDotImage>
+      <>
+        <ThreeDDotImage
+          filename={filename}
+          filteredImages={filteredImages}
+          offset={offset[i]}
+          id={id}
+          setEnableCustomControls={setEnableCustomControls}
+          ideaId={id}
+          position={ideaPosition} //iodeaPOsition
+          scale={0.1}
+          dimensions={[150, 150]}
+        ></ThreeDDotImage>
+        <Line
+          points={[
+            dotPosition,
+            [ideaPosition[0], ideaPosition[1], ideaPosition[2]],
+          ]}
+          color="black"
+          lineWidth={1}
+          segments={false}
+          dashed={false}
+        />
+      </>
     );
   });
 
@@ -142,7 +154,7 @@ export default function ThreeDDot({
               </div>
             </Html>
           </Draggable>
-          <Line
+          {/* <Line
             points={[
               dotPosition,
               [ideaPosition[0], ideaPosition[1], ideaPosition[2]],
@@ -151,7 +163,7 @@ export default function ThreeDDot({
             lineWidth={1}
             segments={false}
             dashed={false}
-          />
+          /> */}
           <Sphere position={ideaPosition} scale={0.1}>
             <meshStandardMaterial color={"grey"} />
           </Sphere>{" "}
