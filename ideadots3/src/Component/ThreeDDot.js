@@ -45,12 +45,6 @@ export default function ThreeDDot({
     }
   }, [filteredImages]);
 
-  // useEffect(() => {
-  //   if (offset.length > 0) {
-  //     console.log("offset :", offset[2][0], offset[2][1]);
-  //   }
-  // }, [offset]);
-
   const calculateCircleDivision = () => {
     const circumference = radius * Math.PI * 2;
     const amount = filteredImages ? filteredImages.length + 1 : 1;
