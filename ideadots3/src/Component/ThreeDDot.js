@@ -127,7 +127,7 @@ export default function ThreeDDot({
                   position: "absolute",
                   top: `-${300 / 2}px`,
                   left: `-${300 / 2}px`,
-                  border: "2px solid #202035",
+                  //border: "2px solid #202035",
                 }}
               ></div>
               <div
