@@ -15,7 +15,7 @@ export default function Sphere({
   id,
   position,
   zoomToView,
-  gizmo,
+  //gizmo,
   activeIdea,
   setActiveIdea,
   controlsRef,
@@ -26,7 +26,7 @@ export default function Sphere({
   amountOfSpheres,
 }) {
   const ref = useRef();
-  const { attach } = useControls({ attach: false });
+  const { gizmo } = useControls({ gizmo: false });
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
   const [scale, setScale] = useState(3);
@@ -122,13 +122,13 @@ export default function Sphere({
   return (
     <>
       <PivotControls
-        object={attach ? ref : undefined}
+        object={gizmo ? ref : undefined}
         onDrag={(e) => handleSavePosition(e)}
         onDragEnd={(e) => handleSavePositionToContext()}
         matrix={matrix}
         //enabled={true}
         autoTransform={true}
-        visible={attach}
+        visible={gizmo}
         activeAxes={[true, true, true]}
         anchor={[position.x, position.y, position.z]}
       >
