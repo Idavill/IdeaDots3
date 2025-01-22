@@ -29,23 +29,23 @@ export default function Sphere({
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
   const [scale, setScale] = useState(3);
-  const [currentPosition, updateCurrentPosition] = useState(position);
+  const [currentPosition, updateCurrentPosition] = useState([0, 0, 0]);
   const [currentPositionChanged, setCurrentPositionChanged] = useState(false);
   const [distanceFactorForZoom, setDistanceFactorForZoom] = useState(10);
   const context = useContext(ImageContext);
   const sphereContext = useContext(SphereContext);
   const ideaContext = useContext(ActiveIdeaContext);
-
+  var positiontest;
   const filteredImages = context.imageSrcList.filter(
     (img) => img.id === id // TODO: move this computation to parent
   );
 
   //TODO: insteda useeffect
-  useFrame(() => {
-    if (controlsRef.current) {
-      setDistanceFactorForZoom(controlsRef.current.object.position); // OrbitControls object.zoom
-    }
-  });
+  // useFrame(() => {
+  //   if (controlsRef.current) {
+  //     setDistanceFactorForZoom(controlsRef.current.object.position); // OrbitControls object.zoom
+  //   }
+  // });
 
   useEffect(() => {
     const positionId = s.id + "position";
@@ -91,30 +91,35 @@ export default function Sphere({
         "Position:",
         matrixPosition.x,
         matrixPosition.y,
-        matrixPosition.z
+        matrixPosition.z,
+
+        "original position: ",
+        currentPosition
       );
+
+      positiontest = [matrixPosition.x, matrixPosition.y, matrixPosition.z];
 
       localStorage.setItem(
         positionId,
         JSON.stringify({
-          x: position[0] + matrixPosition.x,
-          y: position[1] + matrixPosition.y,
-          z: position[2] + matrixPosition.z,
+          x: /*position[0]*/ +matrixPosition.x,
+          y: /*position[1]*/ +matrixPosition.y,
+          z: /*position[2]*/ +matrixPosition.z,
         })
       );
     }
   };
 
-  // const handleSavePositionToContext = () => {
-  //   //sphereContext.setSpheres();
-  // };
+  const handleSavePositionToContext = () => {
+    updateCurrentPosition(positiontest);
+  };
 
   return (
     <>
       <PivotControls
         object={attach ? ref : undefined}
         onDrag={(e) => handleSavePosition(e)}
-        //onDragEnd={(e) => handleSavePositionToContext()}
+        onDragEnd={(e) => handleSavePositionToContext()}
         //enabled={true}
         visible={attach}
         activeAxes={[true, true, true]}
