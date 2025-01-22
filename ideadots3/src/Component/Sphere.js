@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
+import * as THREE from "three";
 import ThreeDDot from "./ThreeDDot.js";
 import { useControls } from "leva";
 import { Vector3, Quaternion, Vector3 as ThreeVector3 } from "three";
@@ -29,12 +30,13 @@ export default function Sphere({
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
   const [scale, setScale] = useState(3);
-  const [currentPosition, updateCurrentPosition] = useState([0, 0, 0]);
+  const [currentPosition, updateCurrentPosition] = useState(position);
   const [currentPositionChanged, setCurrentPositionChanged] = useState(false);
   const [distanceFactorForZoom, setDistanceFactorForZoom] = useState(10);
   const context = useContext(ImageContext);
   const sphereContext = useContext(SphereContext);
   const ideaContext = useContext(ActiveIdeaContext);
+  const matrix = new THREE.Matrix4();
   var positiontest;
   const filteredImages = context.imageSrcList.filter(
     (img) => img.id === id // TODO: move this computation to parent
@@ -86,38 +88,35 @@ export default function Sphere({
       const rotation = new Quaternion();
       const scale = new ThreeVector3();
 
-      console.log("matrix: ", matrix);
-
       matrix.decompose(matrixPosition, rotation, scale);
-      console.log(
-        "Position from matrix:",
-        matrixPosition.x,
-        matrixPosition.y,
-        matrixPosition.z,
 
-        "current position: ",
-        currentPosition
-      );
-
+      // Use the matrixPosition directly
       const x = currentPosition[0] + matrixPosition.x;
       const y = currentPosition[1] + matrixPosition.y;
       const z = currentPosition[2] + matrixPosition.z;
-
       positiontest = [x, y, z];
 
       localStorage.setItem(
         positionId,
         JSON.stringify({
-          x: x,
-          y: y,
-          z: z,
+          x,
+          y,
+          z,
         })
       );
+
+      //Directly update state
+      //updateCurrentPosition([x, y, z]);
+
+      setCurrentPositionChanged(true);
     }
   };
 
-  const handleSavePositionToContext = () => {
-    updateCurrentPosition(positiontest);
+  const handleSavePositionToContext = (matrix) => {
+    if (positiontest) {
+      updateCurrentPosition(positiontest); // Sync positiontest to state
+      //matrix.copy(matrix);
+    }
   };
 
   return (
@@ -126,7 +125,9 @@ export default function Sphere({
         object={attach ? ref : undefined}
         onDrag={(e) => handleSavePosition(e)}
         onDragEnd={(e) => handleSavePositionToContext()}
+        matrix={matrix}
         //enabled={true}
+        autoTransform={true}
         visible={attach}
         activeAxes={[true, true, true]}
         anchor={[position.x, position.y, position.z]}
