@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import ThreeDDot from "./ThreeDDot.js";
+import { useControls } from "leva";
+
 import { PivotControls, Billboard, Text, Image } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber"; // Ensure this import is correct
 import ThreeDImage from "./ThreeDImage.js";
@@ -21,6 +23,9 @@ export default function Sphere({
   isDotModeActive,
   amountOfSpheres,
 }) {
+  const ref = useRef();
+  const { attach } = useControls({ attach: false });
+
   const [hovered, hover] = useState(false);
   const ideaContext = useContext(ActiveIdeaContext);
   const [clicked, click] = useState(false);
@@ -37,6 +42,10 @@ export default function Sphere({
       setDistanceFactorForZoom(controlsRef.current.object.position); // OrbitControls object.zoom
     }
   });
+
+  // useEffect(() => {
+  //   setEnableCustomControls(attach ? false : true);
+  // }, [attach]);
 
   useEffect(() => {
     if (ideaContext.activeIdea) {
@@ -55,7 +64,11 @@ export default function Sphere({
   return (
     <>
       <PivotControls
-        enabled={gizmo === id ? true : false}
+        object={attach ? ref : undefined}
+        //onDrag={() => setEnableCustomControls(false)}
+        //onDragEnd={() => setEnableCustomControls(true)}
+        //enabled={true}
+        visible={attach}
         activeAxes={[true, true, true]}
         anchor={[position.x, position.y, position.z]}
       >

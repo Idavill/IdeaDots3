@@ -1,5 +1,9 @@
 import React, { Suspense, useEffect, useRef, useState } from "react";
-import { useKeyboardControls } from "@react-three/drei";
+import {
+  useKeyboardControls,
+  GizmoHelper,
+  GizmoViewport,
+} from "@react-three/drei";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
@@ -52,7 +56,7 @@ function CustomControls({
           ref={controlsRef}
           camera={camera}
           gl={gl}
-          enableRotate={enableCustomControls ? true : false}
+          //enableRotate={enableCustomControls ? true : false}
           enablePan={true}
           enableZoom={true}
         />
@@ -93,7 +97,7 @@ export default function ThreeDContainer({
   return (
     <div style={{ height: "100vh" }}>
       <Suspense fallback={<span>loading...</span>}>
-        <KeyboardControls
+        {/* <KeyboardControls
           map={[
             { name: "forward", keys: ["ArrowUp", "w", "W"] },
             { name: "backward", keys: ["ArrowDown", "s", "S"] },
@@ -101,59 +105,63 @@ export default function ThreeDContainer({
             { name: "right", keys: ["ArrowRight", "d", "D"] },
             { name: "jump", keys: ["Space"] },
           ]}
+        > */}
+        <Canvas
+          dpr={[1, 2]}
+          camera={{
+            position: [6, 4, 10],
+            fov: 50,
+          }}
         >
-          <Canvas
-            dpr={[1, 2]}
-            camera={{
-              position: [6, 4, 10],
-              fov: 50,
-            }}
-          >
-            <MovementControls controlsRef={controlsRef} />
+          {/* <MovementControls controlsRef={controlsRef} /> */}
 
-            <Content
-              activeIdea={activeIdea}
-              isThreeDModeActive={isThreeDModeActive}
-              isDotModeActive={isDotModeActive}
-              setActiveIdea={(e) => setActiveIdea(e)}
-              //listActive={listActive}
-              gizmo={gizmo}
-              scrollToIdea={(s, i) => scrollToIdea(s, i)}
-              zoom={zoom}
-              setZoom={setZoom}
-              setFocus={setFocus}
-              //focusSphere={focus}
-              newSphere={newSphere}
-              controlsRef={controlsRef}
-              //currentZoom={currentZoom}
-              setCurrentZoom={(z) => setCurrentZoom(z)}
-              //enableCustomControls={enableCustomControls}
-              setEnableCustomControls={setEnableCustomControls}
-              isListModeActive={isListModeActive}
+          <Content
+            activeIdea={activeIdea}
+            isThreeDModeActive={isThreeDModeActive}
+            isDotModeActive={isDotModeActive}
+            setActiveIdea={(e) => setActiveIdea(e)}
+            //listActive={listActive}
+            gizmo={gizmo}
+            scrollToIdea={(s, i) => scrollToIdea(s, i)}
+            zoom={zoom}
+            setZoom={setZoom}
+            setFocus={setFocus}
+            //focusSphere={focus}
+            newSphere={newSphere}
+            controlsRef={controlsRef}
+            //currentZoom={currentZoom}
+            setCurrentZoom={(z) => setCurrentZoom(z)}
+            //enableCustomControls={enableCustomControls}
+            setEnableCustomControls={setEnableCustomControls}
+            isListModeActive={isListModeActive}
+          />
+
+          <directionalLight position={[10, 10, 0]} intensity={1.5} />
+          <directionalLight position={[-10, 10, 5]} intensity={1} />
+          <directionalLight position={[-10, 20, 0]} intensity={1.5} />
+          <directionalLight position={[0, -10, 0]} intensity={0.25} />
+          <Suspense fallback={<Model url="./Assets/WCPOM.gltf" />}>
+            <Model
+              url="./Assets/WCPOM.gltf"
+              setNewSphere={(e) => setNewSphere(e)}
             />
-
-            <directionalLight position={[10, 10, 0]} intensity={1.5} />
-            <directionalLight position={[-10, 10, 5]} intensity={1} />
-            <directionalLight position={[-10, 20, 0]} intensity={1.5} />
-            <directionalLight position={[0, -10, 0]} intensity={0.25} />
-            <Suspense fallback={<Model url="./Assets/WCPOM.gltf" />}>
-              <Model
-                url="./Assets/WCPOM.gltf"
-                setNewSphere={(e) => setNewSphere(e)}
-              />
-            </Suspense>
-            {/* <CustomControls
-              controlsRef={controlsRef}
-              zoom={zoom}
-              focus={focus}
-              gizmo={gizmo}
-              currentZoom={currentZoom}
-              setCurrentZoom={(z) => setCurrentZoom(z)}
-              enableCustomControls={enableCustomControls}
-            /> */}
-            {/* <PointerLockControls /> */}
-          </Canvas>
-        </KeyboardControls>
+          </Suspense>
+          <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
+            <GizmoViewport labelColor="white" axisHeadScale={1} />
+          </GizmoHelper>
+          <OrbitControls makeDefault />
+          {/* <CustomControls
+            controlsRef={controlsRef}
+            zoom={zoom}
+            focus={focus}
+            gizmo={gizmo}
+            currentZoom={currentZoom}
+            setCurrentZoom={(z) => setCurrentZoom(z)}
+            enableCustomControls={enableCustomControls}
+          /> */}
+          {/* <PointerLockControls /> */}
+        </Canvas>
+        {/* </KeyboardControls> */}
       </Suspense>
     </div>
   );
