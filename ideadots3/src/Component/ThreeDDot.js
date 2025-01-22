@@ -20,7 +20,7 @@ export default function ThreeDDot({
     position[1] * 2,
     position[2] * 2,
   ]);
-  const [dotPosition, setDotPosition] = useState(position);
+  //const [dotPosition, setDotPosition] = useState(position);
   const [hoverDot, setHoverDot] = useState(false);
   const [clicked, click] = useState(false);
   const sphereContext = useContext(SphereContext);
@@ -48,6 +48,7 @@ export default function ThreeDDot({
 
   useEffect(() => {
     console.log("position changed: ", position);
+    setideaPosition([position[0] * 2, position[1] * 2, position[2] * 2]);
   }, [currentPositionChanged]);
 
   const calculateCircleDivision = () => {
