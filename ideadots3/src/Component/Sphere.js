@@ -61,9 +61,9 @@ export default function Sphere({
     }
   }, []);
 
-  // useEffect(() => {
-  //   console.log("got positions : ", currentPosition);
-  // }, [currentPosition]);
+  useEffect(() => {
+    console.log("current position: ", currentPosition);
+  }, [currentPosition]);
 
   useEffect(() => {
     if (ideaContext.activeIdea) {
@@ -86,25 +86,31 @@ export default function Sphere({
       const rotation = new Quaternion();
       const scale = new ThreeVector3();
 
+      console.log("matrix: ", matrix);
+
       matrix.decompose(matrixPosition, rotation, scale);
       console.log(
-        "Position:",
+        "Position from matrix:",
         matrixPosition.x,
         matrixPosition.y,
         matrixPosition.z,
 
-        "original position: ",
+        "current position: ",
         currentPosition
       );
 
-      positiontest = [matrixPosition.x, matrixPosition.y, matrixPosition.z];
+      const x = currentPosition[0] + matrixPosition.x;
+      const y = currentPosition[1] + matrixPosition.y;
+      const z = currentPosition[2] + matrixPosition.z;
+
+      positiontest = [x, y, z];
 
       localStorage.setItem(
         positionId,
         JSON.stringify({
-          x: /*position[0]*/ +matrixPosition.x,
-          y: /*position[1]*/ +matrixPosition.y,
-          z: /*position[2]*/ +matrixPosition.z,
+          x: x,
+          y: y,
+          z: z,
         })
       );
     }
