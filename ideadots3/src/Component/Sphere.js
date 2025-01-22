@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import ThreeDDot from "./ThreeDDot.js";
 import { useControls } from "leva";
-
+import { Vector3, Quaternion, Vector3 as ThreeVector3 } from "three";
 import { PivotControls, Billboard, Text, Image } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber"; // Ensure this import is correct
 import ThreeDImage from "./ThreeDImage.js";
 import { ActiveIdeaContext } from "./ActiveIdeaContextProvider.js";
 import { ImageContext } from "./ImageContextProvider";
+import { SphereContext } from "./SphereContextProvider.js";
 
 export default function Sphere({
   s,
@@ -25,13 +26,16 @@ export default function Sphere({
 }) {
   const ref = useRef();
   const { attach } = useControls({ attach: false });
-
   const [hovered, hover] = useState(false);
-  const ideaContext = useContext(ActiveIdeaContext);
   const [clicked, click] = useState(false);
   const [scale, setScale] = useState(3);
+  const [currentPosition, updateCurrentPosition] = useState(position);
+  const [currentPositionChanged, setCurrentPositionChanged] = useState(false);
   const [distanceFactorForZoom, setDistanceFactorForZoom] = useState(10);
   const context = useContext(ImageContext);
+  const sphereContext = useContext(SphereContext);
+  const ideaContext = useContext(ActiveIdeaContext);
+
   const filteredImages = context.imageSrcList.filter(
     (img) => img.id === id // TODO: move this computation to parent
   );
@@ -43,9 +47,23 @@ export default function Sphere({
     }
   });
 
+  useEffect(() => {
+    const positionId = s.id + "position";
+    const localStoragePosition = localStorage.getItem(positionId);
+    //console.log("got positions from local? : ", localStoragePosition);
+    if (localStoragePosition) {
+      const lspos = JSON.parse(localStoragePosition);
+      const lsposarr = [lspos.x, lspos.y, lspos.z];
+      updateCurrentPosition(lsposarr);
+      setCurrentPositionChanged(true);
+    } else {
+      setCurrentPositionChanged(false);
+    }
+  }, []);
+
   // useEffect(() => {
-  //   setEnableCustomControls(attach ? false : true);
-  // }, [attach]);
+  //   console.log("got positions : ", currentPosition);
+  // }, [currentPosition]);
 
   useEffect(() => {
     if (ideaContext.activeIdea) {
@@ -61,12 +79,42 @@ export default function Sphere({
     click(!clicked);
   };
 
+  const handleSavePosition = (matrix) => {
+    if (matrix) {
+      const positionId = s.id + "position";
+      const matrixPosition = new Vector3();
+      const rotation = new Quaternion();
+      const scale = new ThreeVector3();
+
+      matrix.decompose(matrixPosition, rotation, scale);
+      console.log(
+        "Position:",
+        matrixPosition.x,
+        matrixPosition.y,
+        matrixPosition.z
+      );
+
+      localStorage.setItem(
+        positionId,
+        JSON.stringify({
+          x: position[0] + matrixPosition.x,
+          y: position[1] + matrixPosition.y,
+          z: position[2] + matrixPosition.z,
+        })
+      );
+    }
+  };
+
+  // const handleSavePositionToContext = () => {
+  //   //sphereContext.setSpheres();
+  // };
+
   return (
     <>
       <PivotControls
         object={attach ? ref : undefined}
-        //onDrag={() => setEnableCustomControls(false)}
-        //onDragEnd={() => setEnableCustomControls(true)}
+        onDrag={(e) => handleSavePosition(e)}
+        //onDragEnd={(e) => handleSavePositionToContext()}
         //enabled={true}
         visible={attach}
         activeAxes={[true, true, true]}
@@ -79,10 +127,11 @@ export default function Sphere({
             amountOfSpheres={amountOfSpheres}
             activeIdea={activeIdea}
             setActiveIdea={setActiveIdea}
-            position={position}
+            position={currentPosition}
             text={s.text}
             id={id}
             setEnableCustomControls={setEnableCustomControls}
+            currentPositionChanged={currentPositionChanged}
           ></ThreeDDot>
         ) : (
           <>
@@ -98,7 +147,7 @@ export default function Sphere({
               onPointerOver={(event) => (event.stopPropagation(), hover(true))}
               onPointerOut={() => hover(false)}
               ideaId={id}
-              position={position}
+              position={currentPosition}
               distanceFactorForZoom={distanceFactorForZoom}
               isThreeDModeActive={isThreeDModeActive}
             ></ThreeDImage>

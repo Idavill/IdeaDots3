@@ -8,8 +8,8 @@ import Button from "./Button";
 const UploadAndDisplayImage = ({
   ideaId,
   displayButtons,
-  handleGo,
-  handleMoveClicked,
+  //handleGo,
+  //handleMoveClicked,
   handleRemoveIdea,
 }) => {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -115,7 +115,7 @@ const UploadAndDisplayImage = ({
         Image
       </button>
       {/* <Button onClick={handleGo} text={"Go"} /> */}
-      <Button onClick={handleMoveClicked} text={"Move"} />
+      {/* <Button onClick={handleMoveClicked} text={"Move"} /> */}
       <Button onClick={handleRemoveIdea} text={"-"} />
     </div>
   );

@@ -13,6 +13,7 @@ export default function ThreeDDot({
   id,
   setEnableCustomControls,
   filteredImages,
+  currentPositionChanged,
 }) {
   const [ideaPosition, setideaPosition] = useState([
     position[0] * 2,
@@ -44,6 +45,10 @@ export default function ThreeDDot({
       console.log("filtered images inside dot: ", filteredImages);
     }
   }, [filteredImages]);
+
+  useEffect(() => {
+    console.log("position changed: ", position);
+  }, [currentPositionChanged]);
 
   const calculateCircleDivision = () => {
     const circumference = radius * Math.PI * 2;
@@ -92,7 +97,7 @@ export default function ThreeDDot({
         ></ThreeDDotImage>
         <Line
           points={[
-            dotPosition,
+            position,
             [ideaPosition[0], ideaPosition[1], ideaPosition[2]],
           ]}
           color="black"
@@ -148,23 +153,13 @@ export default function ThreeDDot({
               </div>
             </Html>
           </Draggable>
-          {/* <Line
-            points={[
-              dotPosition,
-              [ideaPosition[0], ideaPosition[1], ideaPosition[2]],
-            ]}
-            color="black"
-            lineWidth={1}
-            segments={false}
-            dashed={false}
-          /> */}
           <Sphere position={ideaPosition} scale={0.1}>
             <meshStandardMaterial color={"grey"} />
           </Sphere>{" "}
           {dotImages}
         </>
       )}
-      <Sphere onClick={() => handleClick()} position={dotPosition} scale={0.2}>
+      <Sphere onClick={() => handleClick()} position={position} scale={0.2}>
         <meshStandardMaterial
           color={hoverDot || clicked ? "rgb(55, 52, 255)" : "grey"}
         />
