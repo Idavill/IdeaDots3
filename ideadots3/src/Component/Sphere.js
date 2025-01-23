@@ -3,8 +3,7 @@ import * as THREE from "three";
 import ThreeDDot from "./ThreeDDot.js";
 import { useControls } from "leva";
 import { Vector3, Quaternion, Vector3 as ThreeVector3 } from "three";
-import { PivotControls, Billboard, Text, Image } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber"; // Ensure this import is correct
+import { PivotControls } from "@react-three/drei";
 import ThreeDImage from "./ThreeDImage.js";
 import { ActiveIdeaContext } from "./ActiveIdeaContextProvider.js";
 import { ImageContext } from "./ImageContextProvider";
@@ -105,17 +104,13 @@ export default function Sphere({
         })
       );
 
-      //Directly update state
-      //updateCurrentPosition([x, y, z]);
-
       setCurrentPositionChanged(true);
     }
   };
 
   const handleSavePositionToContext = (matrix) => {
     if (positiontest) {
-      updateCurrentPosition(positiontest); // Sync positiontest to state
-      //matrix.copy(matrix);
+      updateCurrentPosition(positiontest);
     }
   };
 

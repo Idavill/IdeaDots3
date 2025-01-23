@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Sphere } from '../Entities';
 
 interface ActiveIdeaContextType {

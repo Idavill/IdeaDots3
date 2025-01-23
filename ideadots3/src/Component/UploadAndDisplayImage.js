@@ -33,11 +33,6 @@ const UploadAndDisplayImage = ({
     }
   }
 
-  async function updateImageInDB() {
-    //TODO: need to implement
-    //TODO: need to support several images being uploaded
-  }
-
   async function deleteImageFromDB() {
     await db.images.where("ideaId").equals(ideaId).delete();
   }
@@ -85,17 +80,6 @@ const UploadAndDisplayImage = ({
     <div>
       {selectedImages.length > 0 && <div>{imageList()}</div>}
       <div>
-        {/* {displayButtons ? (
-          <div className="IdeaButtons">
-            <button
-              className="btn btn-light"
-              onClick={() => document.getElementById(inputId).click()}
-            >
-              Image
-            </button>
-          </div>
-        ) : null} */}
-
         <input
           id={inputId}
           style={{ display: "none" }}
@@ -114,8 +98,6 @@ const UploadAndDisplayImage = ({
       >
         Image
       </button>
-      {/* <Button onClick={handleGo} text={"Go"} /> */}
-      {/* <Button onClick={handleMoveClicked} text={"Move"} /> */}
       <Button onClick={handleRemoveIdea} text={"-"} />
     </div>
   );
