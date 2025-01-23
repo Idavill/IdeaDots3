@@ -1,21 +1,34 @@
-import React, { Suspense, useEffect, useState, useContext } from "react";
+import React, { useContext } from "react";
 import Button from "./Button";
 import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
 
+// Define the props type for the Header component
+interface HeaderProps {
+  modelListViewButtonText: string;
+  setIsListModeActive: (isActive: boolean) => void;
+  setIsThreeDModeActive: (isActive: boolean) => void;
+  isListModeActive: boolean;
+  spatialModeButtonText: string;
+  isThreeDModeActive: boolean;
+  dotModeButtonText: string;
+  isDotModeActive: boolean;
+  setIsDotModeActive: (isActive: boolean) => void;
+}
+
 export default function Header({
   modelListViewButtonText,
-  activeIdea,
   setIsListModeActive,
   setIsThreeDModeActive,
   isListModeActive,
   spatialModeButtonText,
   isThreeDModeActive,
   dotModeButtonText,
-  setDotModeButtonText,
   isDotModeActive,
   setIsDotModeActive,
-}) {
+}: HeaderProps) {
+  // Type the context using the appropriate type from your context definition
   const ideaContext = useContext(ActiveIdeaContext);
+
   return (
     <div
       style={{
@@ -48,8 +61,7 @@ export default function Header({
           width: "auto",
         }}
       >
-        {/* {activeIdea ? activeIdea.title : ""} */}
-        {ideaContext.activeIdea ? ideaContext.activeIdea.title : ""}
+        {ideaContext?.activeIdea ? ideaContext.activeIdea.title : ""}
       </h4>
     </div>
   );

@@ -3,6 +3,7 @@ import {render,screen} from '@testing-library/react'
 import Button from '../../src/Component/Button'
 import React from 'react'
 import '@testing-library/jest-dom/vitest' // with jest change to jest
+import { describe, expect, it } from 'vitest'
 
 describe('Button', () => {
     it('should render the text being passed as a prop', () => {

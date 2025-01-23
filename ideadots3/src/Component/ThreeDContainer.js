@@ -72,7 +72,6 @@ export default function ThreeDContainer({
   isThreeDModeActive,
   activeIdea,
   gizmo,
-  listActive,
   isListModeActive,
   isDotModeActive,
 }) {

@@ -6,13 +6,14 @@ import DraggableUI from "./Component/DraggableUI.js";
 import { SphereContextProvider } from "./Component/SphereContextProvider.js";
 import { ImageContextProvider } from "./Component/ImageContextProvider.js";
 import { ActiveIdeaContextProvider } from "./Component/ActiveIdeaContextProvider.js";
+import { Sphere } from "./Entities";
 
 import Header from "./Component/Header.js";
 
 export default function App() {
   const [titleIsChanged, setTitleIsChanged] = useState(false);
-  const [cameraTarget, setCameraTarget] = useState(null);
-  const [activeIdea, setActiveIdea] = useState(null);
+  const [cameraTarget, setCameraTarget] = useState<Sphere|null>(null);
+  const [activeIdea, setActiveIdea] = useState<Sphere|null>(null);
   const [gizmo, setGizmo] = useState(null);
   const [isListModeActive, setIsListModeActive] = useState(false);
   const [isThreeDModeActive, setIsThreeDModeActive] = useState(false);
@@ -68,7 +69,7 @@ export default function App() {
   return (
     <>
       <SphereContextProvider>
-        <ImageContextProvider value={{ imageSrcList, setImageSrcList }}>
+        <ImageContextProvider>
           <ActiveIdeaContextProvider>
             <Header
               activeIdea={activeIdea}
