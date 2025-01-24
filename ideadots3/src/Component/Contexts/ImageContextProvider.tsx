@@ -2,15 +2,9 @@ import React, { PropsWithChildren, createContext, useState, useEffect, useContex
 import { db } from "../Database";
 import { Image } from "../../Entities";
 
-interface dbImage{
-  ideaId: string;
-  name?: string;
-  src: string;
-}
-
 interface ImageContextType {
-  imageSrcList: [] | null;
-  setImageSrcList: React.Dispatch<React.SetStateAction<dbImage[] | null>>;
+  imageSrcList: Image[] | null;
+  setImageSrcList: React.Dispatch<React.SetStateAction<Image[] | null>>;
 }
 export const ImageContext =React.createContext<ImageContextType>( {} as ImageContextType);
 
@@ -25,12 +19,21 @@ export const ImageContextProvider = ({children}:PropsWithChildren) => {
     console.log("inside image context provider: ", imageSrcList);
   }, [imageSrcList]);
 
+
+  //TODO: TEST THIS::
   async function getAllImageNames() {
     const data = await db.images.toArray();
     if (data.length > 0) {
-      data.forEach((e: dbImage) => {
-        setImageSrcList((prev) => [...prev, { id: e.ideaId, src: e.name }]);
-      });
+      setImageSrcList((prevs) => [
+        ...(prevs || []),
+        ...data.map((e: Image) => ({
+          ideaId: e.ideaId,
+          name: e.name || "no name was found", // Fill with defaults if not present
+          type: e.type || "no file path",  // Use type from the database or a default
+          size: e.size || 0,          // Use size from the database or a default
+          image: e.image || null,        // Ensure `image` is included
+        })),
+      ]);
     }
   }
 
