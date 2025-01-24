@@ -5,9 +5,9 @@ import { useControls } from "leva";
 import { Vector3, Quaternion, Vector3 as ThreeVector3 } from "three";
 import { PivotControls } from "@react-three/drei";
 import ThreeDImage from "./ThreeDImage.js";
-import { ActiveIdeaContext } from "./ActiveIdeaContextProvider.js";
-import { ImageContext } from "./ImageContextProvider";
-import { SphereContext } from "./SphereContextProvider.js";
+import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider.js";
+import { ImageContext } from "../Contexts/ImageContextProvider.js";
+import { SphereContext } from "../Contexts/SphereContextProvider.js";
 
 export default function Sphere({
   s,

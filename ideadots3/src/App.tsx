@@ -1,19 +1,18 @@
 import React, { Suspense, useEffect, useState } from "react";
 import "./App.css";
-import ThreeDContainer from "./Component/ThreeDContainer.js";
+import ThreeDContainer from "./Component/MoodBoard/ThreeDContainer.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import DraggableUI from "./Component/DraggableUI.js";
-import { SphereContextProvider } from "./Component/SphereContextProvider.js";
-import { ImageContextProvider } from "./Component/ImageContextProvider.js";
-import { ActiveIdeaContextProvider } from "./Component/ActiveIdeaContextProvider.js";
-import { Sphere } from "./Entities";
-
-import Header from "./Component/Header.js";
+import DraggableUI from "./Component/Notebook/DraggableUI.js";
+import { SphereContextProvider } from "./Component/Contexts/SphereContextProvider";
+import { ImageContextProvider } from "./Component/Contexts/ImageContextProvider";
+import { ActiveIdeaContextProvider } from "./Component/Contexts/ActiveIdeaContextProvider";
+import { IdeaType } from "./Entities";
+import Header from "./Component/Header";
 
 export default function App() {
   const [titleIsChanged, setTitleIsChanged] = useState(false);
-  const [cameraTarget, setCameraTarget] = useState<Sphere|null>(null);
-  const [activeIdea, setActiveIdea] = useState<Sphere|null>(null);
+  const [cameraTarget, setCameraTarget] = useState<IdeaType|null>(null);
+  const [activeIdea, setActiveIdea] = useState<IdeaType|null>(null);
   const [gizmo, setGizmo] = useState(null);
   const [isListModeActive, setIsListModeActive] = useState(false);
   const [isThreeDModeActive, setIsThreeDModeActive] = useState(false);
@@ -54,7 +53,7 @@ export default function App() {
     }
   }, [activeIdea]);
 
-  const scrollToIdea = (s, i) => {
+  const scrollToIdea = (IdeaType:s, number:i) => {
     setActiveIdea(s);
     //event.preventDefault(); // Prevent default anchor click behavior
     const target = document.getElementById(`scrollspyHeading${i}`);

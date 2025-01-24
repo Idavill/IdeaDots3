@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Sphere } from '../Entities';
+import React, { PropsWithChildren, useState, useEffect, useContext } from "react";
+import { Sphere } from '../../Entities';
 
 interface ActiveIdeaContextType {
   activeIdea: { title: string } | null;
@@ -8,7 +8,7 @@ interface ActiveIdeaContextType {
 
 export const ActiveIdeaContext = React.createContext<ActiveIdeaContextType | null>(null);
 
-export const ActiveIdeaContextProvider = (/*{children}*/) => {
+export const ActiveIdeaContextProvider = ({children}:PropsWithChildren) => {
   const [activeIdea, setActiveIdea] = useState<Sphere|null>(null);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export const ActiveIdeaContextProvider = (/*{children}*/) => {
 
   return (
     <ActiveIdeaContext.Provider value={{ activeIdea, setActiveIdea }}>
-      {/* {children} */}
+      {children}
     </ActiveIdeaContext.Provider>
   );
 };

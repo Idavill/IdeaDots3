@@ -3,9 +3,20 @@ import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
-import { SphereContext } from "./SphereContextProvider";
+import { SphereContext } from "../SphereContextProvider";
 import Idea from "./Idea";
-import Overview from "./Overview";
+import Overview from "../Overview";
+import IdeaType from '..Entities';
+
+interface DraggableUIProps{
+  setActiveIdea:(isActive: boolean) => void;
+  scrollToIdea:(sphere:IdeaType, id:number) => void;
+  activeIdea: IdeaType;
+  gizmo:number;
+  setGizmo:(ideaId:number) => void;
+  titleIsChanged:boolean;
+  setTitleIsChanged:(titleIsChanged: boolean) => void;
+}
 
 export default function DraggableUI({
   setActiveIdea,
@@ -15,7 +26,7 @@ export default function DraggableUI({
   setGizmo,
   titleIsChanged,
   setTitleIsChanged,
-}) {
+}:DraggableUIProps) {
   const context = useContext(SphereContext);
   const [titleChangeId, setTitleChangeId] = useState("");
 

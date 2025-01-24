@@ -1,7 +1,19 @@
 import React, { useEffect, useState, useContext } from "react";
-import { SphereContext } from "./SphereContextProvider";
-import UploadAndDisplayImage from "./UploadAndDisplayImage";
-import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
+import { SphereContext } from "../Contexts/SphereContextProvider";
+import UploadAndDisplayImage from "../UploadAndDisplayImage";
+import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider";
+import IdeaType from '..Entities';
+
+interface IdeaProps{
+  s:IdeaType;
+  i:number;
+  deleteIdea: (s:IdeaType) => void;
+  gizmo:number,
+  setGizmo:(ideaId:number) => void;
+  setTitleIsChanged:(titleIsChanged: boolean) => void;
+  scrollToIdea:(sphere:IdeaType, id:number) => void;
+  setTitleChangeId:(id:number) => void;
+}
 
 export default function Idea({
   s,
@@ -12,7 +24,7 @@ export default function Idea({
   setTitleIsChanged,
   scrollToIdea,
   setTitleChangeId,
-}) {
+}:IdeaProps) {
   const [isActive, setIsActive] = useState(false);
   const [title, setTitle] = useState(s.title);
   const [text, setText] = useState(s.text);
