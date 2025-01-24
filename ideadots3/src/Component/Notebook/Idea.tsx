@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { SphereContext } from "../Contexts/SphereContextProvider";
 import UploadAndDisplayImage from "../UploadAndDisplayImage";
 import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider";
-import IdeaType from '..Entities';
+import {IdeaType} from '../../Entities';
 
 interface IdeaProps{
   s:IdeaType;
@@ -12,7 +12,7 @@ interface IdeaProps{
   setGizmo:(ideaId:number) => void;
   setTitleIsChanged:(titleIsChanged: boolean) => void;
   scrollToIdea:(sphere:IdeaType, id:number) => void;
-  setTitleChangeId:(id:number) => void;
+  setTitleChangeId:(id:string) => void;
 }
 
 export default function Idea({
@@ -28,7 +28,7 @@ export default function Idea({
   const [isActive, setIsActive] = useState(false);
   const [title, setTitle] = useState(s.title);
   const [text, setText] = useState(s.text);
-  const context = useContext(SphereContext);
+  const sphereContext = useContext(SphereContext);
   const ideaContext = useContext(ActiveIdeaContext);
 
   useEffect(() => {
@@ -42,8 +42,8 @@ export default function Idea({
   }, []);
 
   useEffect(() => {
-    if (ideaContext.activeIdea) {
-      if (ideaContext.activeIdea.id === s.id) {
+    if (ideaContext) {
+      if (ideaContext.activeIdea?.id === s.id) {
         setIsActive(true);
         scrollToIdea(s, i);
       } else {
@@ -53,8 +53,10 @@ export default function Idea({
   }, [ideaContext]);
 
   const handleGo = () => {
-    ideaContext.setActiveIdea(s);
-    setIsActive(true);
+    if(ideaContext){
+      ideaContext.setActiveIdea(s);
+      setIsActive(true);
+    }
   };
 
   const handleRemoveIdea = () => {
@@ -62,28 +64,31 @@ export default function Idea({
   };
 
   //TODO: WHen title is edited, then context should
-  const editTitle = (id, textContext) => {
-    ideaContext.setActiveIdea(s);
+  const editTitle = (id:string, textContext:any) => {
+    if (ideaContext && sphereContext){
+      ideaContext.setActiveIdea(s);
+      setIsActive(true);
+      const titleId = id + "title";
+      localStorage.setItem(titleId, textContext);
+      sphereContext.spheres?.forEach((sp) => {
+        if (sp.id == id) {
+          sp.title = textContext;
+        }
+      });
+      setTitleIsChanged(true);
+      setTitleChangeId(id);
+    }
 
-    setIsActive(true);
-    const titleId = id + "title";
-    localStorage.setItem(titleId, textContext);
-    context.spheres.forEach((sp) => {
-      if (sp.id == id) {
-        sp.title = textContext;
-      }
-    });
-    setTitleIsChanged(true);
-    setTitleChangeId(id);
   };
 
-  const editText = (id, textContext) => {
-    ideaContext.setActiveIdea(s);
-
-    setIsActive(true);
-    s.text = textContext;
-    const textId = id + "text";
-    localStorage.setItem(textId, textContext);
+  const editText = (id:string, textContext:string) => {
+    if(ideaContext){
+      ideaContext.setActiveIdea(s);
+      setIsActive(true);
+      s.text = textContext;
+      const textId = id + "text";
+      localStorage.setItem(textId, textContext);
+    }
   };
 
   const handleMoveClicked = () => {
@@ -91,7 +96,9 @@ export default function Idea({
   };
 
   const handleClick = () => {
-    ideaContext.setActiveIdea(s);
+    if(ideaContext){
+      ideaContext.setActiveIdea(s);
+    }
   };
 
   return (
@@ -107,16 +114,16 @@ export default function Idea({
     >
       <h4
         id={`scrollspyHeading${i}`}
-        contenteditable="true"
+        contentEditable="true"
         onDoubleClick={handleSelectAllText()}
         onInput={(e) => editTitle(s.id, e.currentTarget.textContent)}
       >
         {title}
       </h4>
       <p
-        contenteditable="true"
+        contentEditable="true"
         onDoubleClick={handleSelectAllText()}
-        onInput={(e) => editText(s.id, e.currentTarget.textContent)}
+        onInput={(e:any) => editText(s.id, e.currentTarget.textContent)}
       >
         {text}
       </p>
@@ -133,12 +140,16 @@ export default function Idea({
   );
 
   function handleSelectAllText() {
-    return (e) => {
+    return (e:any) => {
       const range = document.createRange();
       range.selectNodeContents(e.currentTarget);
       const selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
+      if(selection){
+        selection.removeAllRanges();
+        selection.addRange(range);
+      } else {
+        console.log("selection null")
+      }
     };
   }
 }

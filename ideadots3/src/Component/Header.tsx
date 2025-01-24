@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import Button from "./Button";
 import { ActiveIdeaContext } from "./Contexts/ActiveIdeaContextProvider";
+import { IdeaType } from "../Entities";
 
 // Define the props type for the Header component
 interface HeaderProps {

@@ -1,5 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
-import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
+import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider";
+import {IdeaType} from "../../Entities";
+
+interface OverviewProps {
+  s: IdeaType;
+  i: string;
+  titleChangeId: string;
+  scrollToIdea: (idea: IdeaType, i: string) => void;
+  titleIsChanged: (bool: boolean) => void;
+}
 
 export default function Overview({
   s,
@@ -7,7 +16,7 @@ export default function Overview({
   scrollToIdea,
   titleIsChanged,
   titleChangeId,
-}) {
+}: OverviewProps) {
   const [title, setTitle] = useState(s.title);
   const ideaContext = useContext(ActiveIdeaContext);
 
@@ -18,8 +27,10 @@ export default function Overview({
   }, [titleIsChanged]);
 
   const handleClick = () => {
-    ideaContext.setActiveIdea(s);
-    scrollToIdea(s, i);
+    if(ideaContext){
+      ideaContext.setActiveIdea(s);
+      scrollToIdea(s, i);
+    }
   };
 
   useEffect(() => {

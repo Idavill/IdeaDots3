@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { db } from "./Database";
-import { v4 as uuidv4 } from "uuid";
-import { ImageContext } from "./ImageContextProvider";
+import { ImageContext } from "./Contexts/ImageContextProvider";
 import Button from "./Button";
+import {IdeaType} from '../Entities';
+
+interface UploadAndDisplayImage {
+  ideaId:string;
+  handleRemoveIdea:(idea:IdeaType)=>void;
+}
 
 const UploadAndDisplayImage = ({
   ideaId,
-  displayButtons,
-  //handleGo,
-  //handleMoveClicked,
   handleRemoveIdea,
-}) => {
+}:UploadAndDisplayImage) => {
   const [selectedImages, setSelectedImages] = useState([]);
   const imageContext = useContext(ImageContext);
   const inputId = `file-input-${ideaId}`;
@@ -22,7 +24,7 @@ const UploadAndDisplayImage = ({
     setInitialUpload(true);
   }, [ideaId]);
 
-  async function downloadImages(ideaId) {
+  async function downloadImages(ideaId:string) {
     const data = await db.images.where("ideaId").equals(ideaId).toArray();
     if (data.length > 0) {
       for (let i = 0; i < data.length; i++) {
@@ -37,7 +39,7 @@ const UploadAndDisplayImage = ({
     await db.images.where("ideaId").equals(ideaId).delete();
   }
 
-  async function storeImage(file, ideaId) {
+  async function storeImage(file:File, ideaId:string) { // TODO: correct type FIle?
     try {
       imageContext.setImageSrcList((prevs) => [...prevs, file.name]);
       console.log("file: ", file.name);
@@ -45,18 +47,21 @@ const UploadAndDisplayImage = ({
       const reader = new FileReader();
 
       reader.onload = async (event) => {
-        img.src = event.target.result;
-        img.onload = async () => {
-          const blob = await makeBlobFromImage(img);
-          await db.images.put({
-            ideaId: ideaId,
-            name: file.name,
-            type: file.type,
-            size: file.size,
-            image: blob,
-          });
+        if(event.target){
+          img.src = event.target.result;
+          img.onload = async () => {
+            const blob = await makeBlobFromImage(img);
+            await db.images.put({
+              ideaId: ideaId,
+              name: file.name,
+              type: file.type,
+              size: file.size,
+              image: blob,
+            });
+          };
         };
-      };
+        }
+
 
       reader.readAsDataURL(file);
     } catch (error) {
@@ -86,9 +91,11 @@ const UploadAndDisplayImage = ({
           type="file"
           name="myImage"
           onChange={(event) => {
-            console.log(event.target.files[0]);
-            addFileToImageList(event.target.files[0]);
-            storeImage(event.target.files[0], ideaId);
+            if(event.target.files){
+              console.log(event.target.files[0]);
+              addFileToImageList(event.target.files[0]);
+              storeImage(event.target.files[0], ideaId);
+            }
           }}
         />
       </div>

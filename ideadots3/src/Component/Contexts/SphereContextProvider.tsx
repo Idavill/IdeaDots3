@@ -1,16 +1,16 @@
 import API from "../../Services/API.js";
 import React, { createContext, useState, useEffect, useContext, PropsWithChildren } from "react";
-import Sphere from '../Entities';
+import IdeaType from '../Entities';
 
-interface SphereContextType {
-  spheres: Sphere[] | null;
-  setSpheres: React.Dispatch<React.SetStateAction<Sphere[] | null>>;
+export interface SphereContextType {
+  spheres: IdeaType[] | null;
+  setSpheres: React.Dispatch<React.SetStateAction<IdeaType[] | null>>;
 }
 
 export const SphereContext = React.createContext<SphereContextType>( {} as SphereContextType );
 
 export const SphereContextProvider = ({ children }:PropsWithChildren) => {
-  const [spheres, setSpheres] = useState<Sphere[]| null>([]);
+  const [spheres, setSpheres] = useState<IdeaType[]| null>([]);
   const apiInstance = API();
 
   useEffect(() => {

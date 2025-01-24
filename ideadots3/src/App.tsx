@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import "./App.css";
 import ThreeDContainer from "./Component/MoodBoard/ThreeDContainer.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import DraggableUI from "./Component/Notebook/DraggableUI.js";
+import DraggableUI from "./Component/Notebook/DraggableUI";
 import { SphereContextProvider } from "./Component/Contexts/SphereContextProvider";
 import { ImageContextProvider } from "./Component/Contexts/ImageContextProvider";
 import { ActiveIdeaContextProvider } from "./Component/Contexts/ActiveIdeaContextProvider";
@@ -13,7 +13,7 @@ export default function App() {
   const [titleIsChanged, setTitleIsChanged] = useState(false);
   const [cameraTarget, setCameraTarget] = useState<IdeaType|null>(null);
   const [activeIdea, setActiveIdea] = useState<IdeaType|null>(null);
-  const [gizmo, setGizmo] = useState(null);
+  const [gizmo, setGizmo] = useState<number | null>(null);
   const [isListModeActive, setIsListModeActive] = useState(false);
   const [isThreeDModeActive, setIsThreeDModeActive] = useState(false);
   const [isDotModeActive, setIsDotModeActive] = useState(false);
@@ -21,7 +21,7 @@ export default function App() {
   const [modelListViewButtonText, setModelListViewButtonText] =
     useState("model-focus-mode");
   const [spatialModeButtonText, setSpatialModeButtonText] = useState("3D");
-  const [imageSrcList, setImageSrcList] = useState([]);
+  //const [imageSrcList, setImageSrcList] = useState([]);
 
   useEffect(() => {
     setModelListViewButtonText(
@@ -53,7 +53,7 @@ export default function App() {
     }
   }, [activeIdea]);
 
-  const scrollToIdea = (IdeaType:s, number:i) => {
+  const scrollToIdea = (s:IdeaType, i:number) => {
     setActiveIdea(s);
     //event.preventDefault(); // Prevent default anchor click behavior
     const target = document.getElementById(`scrollspyHeading${i}`);
@@ -71,7 +71,6 @@ export default function App() {
         <ImageContextProvider>
           <ActiveIdeaContextProvider>
             <Header
-              activeIdea={activeIdea}
               modelListViewButtonText={modelListViewButtonText}
               isListModeActive={isListModeActive}
               setIsListModeActive={setIsListModeActive}
@@ -79,7 +78,7 @@ export default function App() {
               spatialModeButtonText={spatialModeButtonText}
               setIsThreeDModeActive={setIsThreeDModeActive}
               dotModeButtonText={dotModeButtonText}
-              setDotModeButtonText={setDotModeButtonText}
+              //setDotModeButtonText={setDotModeButtonText}
               isDotModeActive={isDotModeActive}
               setIsDotModeActive={setIsDotModeActive}
             />
@@ -87,8 +86,8 @@ export default function App() {
               <ThreeDContainer
                 isListModeActive={isListModeActive}
                 gizmo={gizmo}
-                scrollToIdea={(s, i) => scrollToIdea(s, i)}
-                setActiveIdea={(s) => setActiveIdea(s)}
+                scrollToIdea={(idea:IdeaType, i:number) => scrollToIdea(idea, i)}
+                setActiveIdea={(idea:IdeaType) => setActiveIdea(idea)}
                 activeIdea={activeIdea}
                 cameraTarget={cameraTarget}
                 isThreeDModeActive={isThreeDModeActive}
@@ -97,13 +96,13 @@ export default function App() {
             </Suspense>
             {isListModeActive ? (
               <DraggableUI
-                scrollToIdea={(s, i) => scrollToIdea(s, i)}
+                scrollToIdea={(idea:IdeaType, i:number) => scrollToIdea(idea, i)}
                 activeIdea={activeIdea}
-                setActiveIdea={(e) => setActiveIdea(e)}
+                setActiveIdea={(idea:IdeaType) => setActiveIdea(idea)}
                 gizmo={gizmo}
-                setGizmo={(e) => setGizmo(e)}
+                setGizmo={(id:number) => setGizmo(id)}
                 titleIsChanged={titleIsChanged}
-                setTitleIsChanged={(e) => setTitleIsChanged(e)}
+                setTitleIsChanged={(bool:boolean) => setTitleIsChanged(bool)}
               />
             ) : null}
           </ActiveIdeaContextProvider>
