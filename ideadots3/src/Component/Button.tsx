@@ -1,7 +1,7 @@
 import React from "react";
 
 interface ButtonProps {
-  onClick: () => void;
+  onClick: (props:any) => void; // TODO: look into type here 
   text: string;
 }
 

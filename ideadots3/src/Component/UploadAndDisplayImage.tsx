@@ -14,7 +14,7 @@ const UploadAndDisplayImage = ({
   ideaId,
   handleRemoveIdea,
 }:UploadAndDisplayImage) => {
-  const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState<any[]>([]); // TODO: also look into, type of blob
   const imageContext = useContext(ImageContext);
   const inputId = `file-input-${ideaId}`;
   const [initialUpload, setInitialUpload] = useState(false);
@@ -29,7 +29,7 @@ const UploadAndDisplayImage = ({
     if (data.length > 0) {
       for (let i = 0; i < data.length; i++) {
         const blob = data[i].image;
-        console.log("BLOB DOWNLOAD: ", typeof blob);
+        //console.log("BLOB DOWNLOAD: ", typeof blob);
         setSelectedImages((prevs) => [...prevs, blob]);
       }
     }
@@ -41,14 +41,18 @@ const UploadAndDisplayImage = ({
 
   async function storeImage(file:File, ideaId:string) { // TODO: correct type FIle?
     try {
-      imageContext.setImageSrcList((prevs) => [...prevs, file.name]);
-      console.log("file: ", file.name);
+      //imageContext.setImageSrcList((prevs) => [...prevs, file.name]); // original
+      imageContext.setImageSrcList((prevs) => [
+        ...(prevs || []),
+        { ideaId, name: "", src: file.name }, // Add all required properties
+      ]);
+      //console.log("file: ", file.name);
       const img = new Image();
       const reader = new FileReader();
 
       reader.onload = async (event) => {
         if(event.target){
-          img.src = event.target.result;
+          img.src = event.target.result as string;
           img.onload = async () => {
             const blob = await makeBlobFromImage(img);
             await db.images.put({
@@ -101,7 +105,7 @@ const UploadAndDisplayImage = ({
       </div>
       <button
         className="btn btn-light"
-        onClick={() => document.getElementById(inputId).click()}
+        onClick={() => {document.getElementById(inputId)?.click()}}
       >
         Image
       </button>
@@ -109,42 +113,46 @@ const UploadAndDisplayImage = ({
     </div>
   );
 
-  async function addFileToImageList(file) {
+  async function addFileToImageList(file:File) { //TODO is file correct?
     try {
       const img = new Image();
       const reader = new FileReader();
 
       reader.onload = async (event) => {
-        img.src = event.target.result;
-        img.onload = async () => {
-          const blob = await makeBlobFromImage(img);
-          setSelectedImages((prevs) => [...prevs, blob]);
+        if(event.target){
+          img.src = event.target.result as string; // TODO: look into this
+          img.onload = async () => {
+            const blob = await makeBlobFromImage(img);
+            setSelectedImages((prevs) => [...prevs, blob]);
+          };
         };
-      };
+        }
+
       reader.readAsDataURL(file);
     } catch (error) {
       console.log("Didn't store data in indexDB with error: ", error);
     }
   }
 
-  async function makeBlobFromImage(img) {
+  async function makeBlobFromImage(img:any) { // TODO: change type from any
     return new Promise((resolve) => {
       let canvas = document.createElement("canvas");
       canvas.width = img.width;
       canvas.height = img.height;
 
       let context = canvas.getContext("2d");
-      context.drawImage(img, 0, 0);
-
-      canvas.toBlob((blob) => {
-        if (blob) {
-          console.log("Blob created successfully:", blob);
-          resolve(blob);
-        } else {
-          console.error("Failed to create blob from canvas.");
-          resolve(null);
-        }
-      }, "image/png");
+      if(context){
+        context.drawImage(img, 0, 0);
+        canvas.toBlob((blob) => {
+          if (blob) {
+            console.log("Blob created successfully:", blob);
+            resolve(blob);
+          } else {
+            console.error("Failed to create blob from canvas.");
+            resolve(null);
+          }
+        }, "image/png");
+      }
     });
   }
 };

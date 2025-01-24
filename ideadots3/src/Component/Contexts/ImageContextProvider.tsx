@@ -2,13 +2,15 @@ import React, { PropsWithChildren, createContext, useState, useEffect, useContex
 import { db } from "../Database";
 import { Image } from "../../Entities";
 
-interface dbImage
-  { ideaId: number; name: string; } // should be expanded
-
+interface dbImage{
+  ideaId: string;
+  name?: string;
+  src: string;
+}
 
 interface ImageContextType {
   imageSrcList: [] | null;
-  setImageSrcList: React.Dispatch<React.SetStateAction<[] | null>>;
+  setImageSrcList: React.Dispatch<React.SetStateAction<dbImage[] | null>>;
 }
 export const ImageContext =React.createContext<ImageContextType>( {} as ImageContextType);
 
