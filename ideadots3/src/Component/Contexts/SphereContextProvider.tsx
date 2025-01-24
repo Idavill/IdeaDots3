@@ -1,6 +1,6 @@
 import API from "../../Services/API.js";
 import React, { createContext, useState, useEffect, useContext, PropsWithChildren } from "react";
-import IdeaType from '../Entities';
+import {IdeaType} from '../../Entities';
 
 export interface SphereContextType {
   spheres: IdeaType[] | null;
@@ -26,7 +26,7 @@ export const SphereContextProvider = ({ children }:PropsWithChildren) => {
           s.title = localStorage.getItem(s.id + "title");
           console.log("TESSST", s.title);
         }
-        setSpheres((prevs) => [...prevs, s]);
+        setSpheres((prevs) => [...(prevs || []), s]);
       }
     } else {
       console.log("no spheres in CONTEXT");

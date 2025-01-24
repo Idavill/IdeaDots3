@@ -28,7 +28,7 @@ export const ImageContextProvider = ({children}:PropsWithChildren) => {
         ...(prevs || []),
         ...data.map((e: Image) => ({
           ideaId: e.ideaId,
-          name: e.name || "no name was found", // Fill with defaults if not present
+          src: e.src || "no name was found", // Fill with defaults if not present
           type: e.type || "no file path",  // Use type from the database or a default
           size: e.size || 0,          // Use size from the database or a default
           image: e.image || null,        // Ensure `image` is included

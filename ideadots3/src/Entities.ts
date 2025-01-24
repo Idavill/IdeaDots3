@@ -9,7 +9,7 @@ export type IdeaType = {
 export type Image = {
     id?: string; // Auto-incremented primary key
     ideaId: string; // Foreign key to associate with an idea
-    name: string; // Name of the image
+    src: string; // Name of the image
     type: string; // Type of the file (e.g., "image/png")
     size: number; // Size of the image in bytes
     image: Blob | any; // The actual image data

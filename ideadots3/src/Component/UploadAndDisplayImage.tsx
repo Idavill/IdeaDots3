@@ -39,14 +39,16 @@ const UploadAndDisplayImage = ({
     await db.images.where("ideaId").equals(ideaId).delete();
   }
 
-  async function storeImage(file:File, ideaId:string) { // TODO: correct type FIle?
+  async function storeImage(file:File, id:string) { // TODO: correct type FIle?
     try {
-      //imageContext.setImageSrcList((prevs) => [...prevs, file.name]); // original
       imageContext.setImageSrcList((prevs) => [
         ...(prevs || []),
-        { ideaId, name: "", src: file.name }, // Add all required properties
+        { ideaId: id, src: file.name,
+          type: file.type || "no file path",
+          size: file.size || 0,
+          image: file.name || null, // TODO: check this type 
+        },
       ]);
-      //console.log("file: ", file.name);
       const img = new Image();
       const reader = new FileReader();
 
@@ -57,7 +59,7 @@ const UploadAndDisplayImage = ({
             const blob = await makeBlobFromImage(img);
             await db.images.put({
               ideaId: ideaId,
-              name: file.name,
+              src: file.name,
               type: file.type,
               size: file.size,
               image: blob,
