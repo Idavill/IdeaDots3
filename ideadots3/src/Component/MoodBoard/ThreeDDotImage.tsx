@@ -1,8 +1,7 @@
-import { Billboard, Image } from "@react-three/drei";
+import { Billboard, Image, Select } from "@react-three/drei";
 import { v4 as uuidv4 } from "uuid";
 import { Html } from "@react-three/drei";
 import { Vector3 } from "three";
-import { Group } from "three";
 import { ImageType } from "../../Entities";
 
 interface ThreeDDotImageProps {
@@ -30,7 +29,7 @@ export default function ThreeDDotImage({
 }: ThreeDDotImageProps) {
   return (
     <>
-      <Group key={uuidv4()} position={position}>
+      <Select key={uuidv4()} position={position}>
         {isThreeDModeActive ? (
           <Billboard key={uuidv4()}>
             <Image
@@ -62,7 +61,7 @@ export default function ThreeDDotImage({
             </div>
           </Html>
         )}
-      </Group>
+      </Select>
     </>
   );
 }

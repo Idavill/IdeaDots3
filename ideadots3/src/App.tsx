@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import "./App.css";
 import ThreeDContainer from "./Component/MoodBoard/ThreeDContainer.js";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -11,8 +11,8 @@ import Header from "./Component/Header";
 
 export default function App() {
   const [titleIsChanged, setTitleIsChanged] = useState(false);
-  const [cameraTarget, setCameraTarget] = useState<IdeaType|null>(null);
-  const [activeIdea, setActiveIdea] = useState<IdeaType|null>(null);
+  const [cameraTarget, setCameraTarget] = useState<IdeaType | null>(null);
+  const [activeIdea, setActiveIdea] = useState<IdeaType | null>(null);
   const [gizmo, setGizmo] = useState<number | null>(null);
   const [isListModeActive, setIsListModeActive] = useState(false);
   const [isThreeDModeActive, setIsThreeDModeActive] = useState(false);
@@ -53,7 +53,7 @@ export default function App() {
     }
   }, [activeIdea]);
 
-  const scrollToIdea = (s:IdeaType, i:number) => {
+  const scrollToIdea = (s: IdeaType, i: number) => {
     setActiveIdea(s);
     //event.preventDefault(); // Prevent default anchor click behavior
     const target = document.getElementById(`scrollspyHeading${i}`);
@@ -86,8 +86,10 @@ export default function App() {
               <ThreeDContainer
                 isListModeActive={isListModeActive}
                 gizmo={gizmo}
-                scrollToIdea={(idea:IdeaType, i:number) => scrollToIdea(idea, i)}
-                setActiveIdea={(idea:IdeaType) => setActiveIdea(idea)}
+                scrollToIdea={(idea: IdeaType, i: number) =>
+                  scrollToIdea(idea, i)
+                }
+                setActiveIdea={(idea: IdeaType) => setActiveIdea(idea)}
                 activeIdea={activeIdea}
                 cameraTarget={cameraTarget}
                 isThreeDModeActive={isThreeDModeActive}
@@ -96,13 +98,15 @@ export default function App() {
             </Suspense>
             {isListModeActive ? (
               <DraggableUI
-                scrollToIdea={(idea:IdeaType, i:number) => scrollToIdea(idea, i)}
+                scrollToIdea={(idea: IdeaType, i: number) =>
+                  scrollToIdea(idea, i)
+                }
                 //activeIdea={activeIdea}
                 //setActiveIdea={(idea:IdeaType) => setActiveIdea(idea)}
                 gizmo={gizmo}
-                setGizmo={(id:number) => setGizmo(id)}
+                setGizmo={(id: number) => setGizmo(id)}
                 titleIsChanged={titleIsChanged}
-                setTitleIsChanged={(bool:boolean) => setTitleIsChanged(bool)}
+                setTitleIsChanged={(bool: boolean) => setTitleIsChanged(bool)}
               />
             ) : null}
           </ActiveIdeaContextProvider>

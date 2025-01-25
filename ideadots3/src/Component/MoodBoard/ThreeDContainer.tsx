@@ -1,6 +1,5 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import { GizmoHelper, GizmoViewport, Gltf, SpotLight } from "@react-three/drei";
-import * as React from "react";
 import { Canvas } from "@react-three/fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 import "./ThreeDContainer.css";
@@ -13,11 +12,11 @@ CameraControls.install({ THREE });
 
 interface ThreeDContainerProps {
   scrollToIdea: (idea: IdeaType, i: number) => void;
-  cameraTarget: IdeaType; //TODO: check correct
+  cameraTarget: IdeaType | null; //TODO: check correct
   setActiveIdea: (idea: IdeaType) => void;
   isThreeDModeActive: boolean;
-  activeIdea: IdeaType;
-  gizmo: number;
+  activeIdea: IdeaType | null;
+  gizmo: number | null;
   isListModeActive: boolean;
   isDotModeActive: boolean;
 }
@@ -34,7 +33,7 @@ export default function ThreeDContainer({
 }: ThreeDContainerProps) {
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
-  const [newSphere, setNewSphere] = useState<IdeaType | null>(null);
+  const [newSphere, setNewSphere] = useState<THREE.Vector3 | null>(null);
   //const [currentZoom, setCurrentZoom] = useState(false);
   const controlsRef = useRef(null); // TODO: check correct?
   const [enableCustomControls, setEnableCustomControls] = useState(true);

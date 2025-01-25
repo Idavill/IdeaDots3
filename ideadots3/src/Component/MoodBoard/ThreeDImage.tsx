@@ -1,11 +1,8 @@
-import { Billboard, Image } from "@react-three/drei";
+import { Billboard, Image, Select } from "@react-three/drei";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Html } from "@react-three/drei";
 import { ImageType } from "../../Entities";
-import React from "react";
-import { GroupProps } from "@react-three/fiber";
-import { Grouping } from "./Grouping";
 
 interface ThreeDImage {
   position: [x: number, y: number, z: number];
@@ -45,9 +42,9 @@ export default function ThreeDImage({
       setCurrentImage((prev) => (prev + 1) % filteredImages.length); // Cycle through images
   };
 
+  //TODO: does select jsx work?
   const imageList = images.map((filename, i) => (
-    <grouping key={uuidv4()} position={position}>
-      <Grouping></Grouping>
+    <Select key={uuidv4()} position={position}>
       {isThreeDModeActive ? (
         <Billboard key={uuidv4()}>
           <Image
@@ -95,7 +92,7 @@ export default function ThreeDImage({
           </div>
         </Html>
       )}
-    </grouping>
+    </Select>
   ));
 
   return <>halloo{imageList}</>;

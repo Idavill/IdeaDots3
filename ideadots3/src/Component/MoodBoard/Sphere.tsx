@@ -15,7 +15,7 @@ interface SphereProps {
   id: string;
   position: [x: number, y: number, z: number]; //{ x: number; y: number; z: number };
   zoomToView: (focusRef: any) => void; // TODO: check this type
-  activeIdea: IdeaType;
+  activeIdea: IdeaType | null;
   setActiveIdea: (idea: IdeaType) => void;
   setEnableCustomControls: (bool: boolean) => void;
   isThreeDModeActive: boolean;

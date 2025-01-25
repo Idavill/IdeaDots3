@@ -6,14 +6,14 @@ import { IdeaType } from "../../Entities";
 import { Vector3 } from "three";
 
 interface ContentProps {
-  activeIdea: IdeaType;
+  activeIdea: IdeaType | null;
   setActiveIdea: (idea: IdeaType) => void;
   zoom: boolean;
   setZoom: (bool: boolean) => void;
   setFocus: (ref: any) => void; // TODO: find type
-  newSphere: Vector3; // or IdeaType;
+  newSphere: Vector3 | null; // or IdeaType;
   scrollToIdea: (idea: IdeaType, i: number) => void;
-  gizmo: number;
+  gizmo: number | null;
   controlsRef: any; // TODO: find type
   setEnableCustomControls: (bool: boolean) => void;
   isThreeDModeActive: boolean;
