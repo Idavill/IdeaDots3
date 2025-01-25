@@ -8,6 +8,7 @@ import * as THREE from "three";
 import CameraControls from "camera-controls";
 import Content from "./Content";
 import { IdeaType } from "../../Entities";
+import { Group } from "three";
 CameraControls.install({ THREE });
 
 interface ThreeDContainerProps {

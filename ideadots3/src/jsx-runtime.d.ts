@@ -1,12 +1,13 @@
 /// <reference types="@react-three/fiber" />
 
-import { Object3DNode, PrimitiveProps } from '@react-three/fiber';
+import { GroupProps, Object3DNode, PrimitiveProps } from '@react-three/fiber';
 import { Object3D } from 'three';
 
 declare global {
-  namespace JSX {
+  declare namespace JSX {
     interface IntrinsicElements {
-      primitive: PrimitiveProps;
+      grouping: GroupProps;
     }
   }
 }
+

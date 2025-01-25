@@ -1,20 +1,24 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                      // Use modern JavaScript features
-    "module": "ESNext",                      // Use ECMAScript modules
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],// Include DOM and ESNext APIs
-    "jsx": "react-jsx",                      // Enable React JSX transform
-    "strict": true,                          // Enable all strict type-checking options
+    "target": "ESNext", // Use modern JavaScript features
+    "module": "ESNext", // Use ECMAScript modules
+    "lib": ["DOM", "DOM.Iterable", "ESNext"], // Include DOM and ESNext APIs
+    //"jsx": "react-jsx",
+    "jsx": "react-jsx", // Enable React JSX transform
+    "strict": true, // Enable all strict type-checking options
     "resolveJsonModule": true,
-    "moduleResolution": "node",             // Resolve modules using Node.js conventions
-    "esModuleInterop": true,                // Allow default imports from CommonJS modules
-    "skipLibCheck": true,                   // Skip type checking for all declaration files
+    "moduleResolution": "node", // Resolve modules using Node.js conventions
+    "esModuleInterop": true, // Allow default imports from CommonJS modules
+    "skipLibCheck": true, // Skip type checking for all declaration files
     "forceConsistentCasingInFileNames": true // Enforce case-sensitive imports
   },
-  "include": ["src"],                        // Specify the folder to include TypeScript files
-  "exclude": ["node_modules", "build"]       // Exclude unnecessary folders
+  "include": ["src"], // Specify the folder to include TypeScript files
+  "exclude": ["node_modules", "build"], // Exclude unnecessary folders
+  "exports": {
+    "./jsx-runtime": "./jsx-runtime.js",
+    "./jsx-dev-runtime": "./jsx-dev-runtime.js"
+  }
 }
-
 
 // {
 //   "compilerOptions": {

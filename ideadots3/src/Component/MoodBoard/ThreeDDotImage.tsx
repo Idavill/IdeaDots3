@@ -1,37 +1,47 @@
 import { Billboard, Image } from "@react-three/drei";
 import { v4 as uuidv4 } from "uuid";
 import { Html } from "@react-three/drei";
+import { Vector3 } from "three";
+import { Group } from "three";
+import { ImageType } from "../../Entities";
+
+interface ThreeDDotImageProps {
+  position: Vector3;
+  offset: number[];
+  //onClick: (e: any) => void;
+  //onPointerOver:()
+  //onPointerOut,
+  scale: number;
+  dimensions: number[];
+  isThreeDModeActive: boolean;
+  filename: ImageType;
+}
 
 export default function ThreeDDotImage({
   position,
   offset,
-  onClick,
-  onPointerOver,
-  onPointerOut,
+  //onClick,
+  //onPointerOver,
+  //onPointerOut,
   scale,
   dimensions,
   isThreeDModeActive,
   filename,
-}) {
+}: ThreeDDotImageProps) {
   return (
     <>
-      halloo{" "}
-      <group key={uuidv4()} position={position}>
+      <Group key={uuidv4()} position={position}>
         {isThreeDModeActive ? (
           <Billboard key={uuidv4()}>
             <Image
               key={uuidv4()}
-              onClick={onClick}
-              onPointerOver={onPointerOver}
-              onPointerOut={onPointerOut}
+              //onClick={onClick}
+              //onPointerOver={onPointerOver}
+              //onPointerOut={onPointerOut}
               transparent
               radius={0.3}
               scale={scale}
               url={`./Assets/${filename.src}`}
-              onError={(e) => {
-                console.error(`Could not load ${filename.src}:`, e);
-                //e.target.src = "path/to/default/image.jpg"; // Fallback image
-              }}
             />
           </Billboard>
         ) : (
@@ -52,7 +62,7 @@ export default function ThreeDDotImage({
             </div>
           </Html>
         )}
-      </group>
+      </Group>
     </>
   );
 }

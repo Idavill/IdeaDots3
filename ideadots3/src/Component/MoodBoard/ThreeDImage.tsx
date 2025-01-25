@@ -1,7 +1,22 @@
 import { Billboard, Image } from "@react-three/drei";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Html } from "@react-three/drei";
+import { ImageType } from "../../Entities";
+import React from "react";
+import { GroupProps } from "@react-three/fiber";
+import { Grouping } from "./Grouping";
+
+interface ThreeDImage {
+  position: [x: number, y: number, z: number];
+  onClick: (e: any) => void;
+  onPointerOver: (e: any) => void;
+  onPointerOut: (e: any) => void;
+  scale: number;
+  dimensions: number[];
+  isThreeDModeActive: boolean;
+  filteredImages: ImageType[] | undefined;
+}
 
 export default function ThreeDImage({
   position,
@@ -12,24 +27,27 @@ export default function ThreeDImage({
   dimensions,
   isThreeDModeActive,
   filteredImages,
-}) {
+}: ThreeDImage) {
   const [currentImage, setCurrentImage] = useState(0); // 0, 1, or 2 for three images
   const [images, setImages] = useState(filteredImages || []);
   const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
-    if (filteredImages.length > 1) {
-      setShowButton(true);
-      console.log("filtered images amount: ", filteredImages);
-    }
+    if (filteredImages)
+      if (filteredImages.length > 1) {
+        setShowButton(true);
+        console.log("filtered images amount: ", filteredImages);
+      }
   }, [filteredImages]);
 
   const handleNextImage = () => {
-    setCurrentImage((prev) => (prev + 1) % filteredImages.length); // Cycle through images
+    if (filteredImages)
+      setCurrentImage((prev) => (prev + 1) % filteredImages.length); // Cycle through images
   };
 
   const imageList = images.map((filename, i) => (
-    <group key={uuidv4()} position={position}>
+    <grouping key={uuidv4()} position={position}>
+      <Grouping></Grouping>
       {isThreeDModeActive ? (
         <Billboard key={uuidv4()}>
           <Image
@@ -42,9 +60,6 @@ export default function ThreeDImage({
             radius={0.3}
             scale={scale}
             url={`./Assets/${filename.src}`}
-            onError={(e) => {
-              console.error(`Could not load ${filename.src}:`, e);
-            }}
           />
         </Billboard>
       ) : (
@@ -80,7 +95,7 @@ export default function ThreeDImage({
           </div>
         </Html>
       )}
-    </group>
+    </grouping>
   ));
 
   return <>halloo{imageList}</>;

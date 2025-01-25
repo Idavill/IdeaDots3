@@ -6,6 +6,17 @@ import { Html, Line } from "@react-three/drei";
 import { SphereContext } from "../Contexts/SphereContextProvider";
 import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider";
 import ThreeDDotImage from "./ThreeDDotImage";
+import { IdeaType, ImageType } from "../../Entities";
+import { Vector3 } from "three";
+
+interface ThreeDDot {
+  s: IdeaType;
+  position: [x: number, y: number, z: number];
+  id: string;
+  setEnableCustomControls: (bool: boolean) => void;
+  filteredImages: ImageType[] | undefined;
+  currentPositionChanged: boolean;
+}
 
 export default function ThreeDDot({
   s,
@@ -14,22 +25,25 @@ export default function ThreeDDot({
   setEnableCustomControls,
   filteredImages,
   currentPositionChanged,
-}) {
-  const [ideaPosition, setideaPosition] = useState([
-    position[0] * 2,
-    position[1] * 2,
-    position[2] * 2,
-  ]);
+}: ThreeDDot) {
+  // const [ideaPosition, setideaPosition] = useState([
+  //   position[0] * 2,
+  //   position[1] * 2,
+  //   position[2] * 2,
+  // ]);
+  const [ideaPosition, setideaPosition] = useState<Vector3>(
+    new Vector3(position[0] * 2, position[1] * 2, position[2] * 2)
+  );
   const [hoverDot, setHoverDot] = useState(false);
   const [clicked, click] = useState(false);
   const sphereContext = useContext(SphereContext);
   const ideaContext = useContext(ActiveIdeaContext);
-  const thisSphere = sphereContext.spheres.filter((s) => s.id === id); // pass prop down instead?
+  const thisSphere = sphereContext.spheres?.filter((s) => s.id === id); // pass prop down instead?
   const radius = 150;
-  const [offset, setOffset] = useState([]);
+  const [offset, setOffset] = useState<number[][]>([]);
 
   useEffect(() => {
-    if (ideaContext.activeIdea) {
+    if (ideaContext?.activeIdea) {
       if (ideaContext.activeIdea.id === s.id) {
         click(true);
       } else {
@@ -47,7 +61,9 @@ export default function ThreeDDot({
 
   useEffect(() => {
     console.log("position changed: ", position);
-    setideaPosition([position[0] * 2, position[1] * 2, position[2] * 2]);
+    setideaPosition(
+      new Vector3(position[0] * 2, position[1] * 2, position[2] * 2)
+    );
   }, [currentPositionChanged]);
 
   const calculateCircleDivision = () => {
@@ -65,7 +81,7 @@ export default function ThreeDDot({
       const x = radius * Math.cos(radians);
       const y = radius * Math.sin(radians);
       console.log("x: ", x, " y: ", y);
-      setOffset((prev) => [...prev, [x, y]]);
+      setOffset((prev: number[][]) => [...(prev || []), [x, y]]);
 
       angle += angleDivision;
     }
@@ -73,7 +89,9 @@ export default function ThreeDDot({
 
   useEffect(() => {
     if (clicked) {
-      ideaContext.setActiveIdea(thisSphere[0]);
+      if (thisSphere) {
+        ideaContext?.setActiveIdea(thisSphere[0]);
+      }
     }
   }, [clicked]);
 
@@ -81,25 +99,23 @@ export default function ThreeDDot({
     click(true);
   };
 
-  const dotImages = filteredImages.map((filename, i) => {
+  const dotImages = filteredImages?.map((filename, i) => {
     return (
       <>
         <ThreeDDotImage
           filename={filename}
-          filteredImages={filteredImages}
+          //filteredImages={filteredImages}
           offset={offset[i]}
-          id={id}
-          setEnableCustomControls={setEnableCustomControls}
-          ideaId={id}
+          //id={id}
+          //setEnableCustomControls={setEnableCustomControls}
+          //ideaId={id}
           position={ideaPosition} //iodeaPOsition
+          isThreeDModeActive={true} //TODO: correct value?
           scale={0.1}
           dimensions={[150, 150]}
         ></ThreeDDotImage>
         <Line
-          points={[
-            position,
-            [ideaPosition[0], ideaPosition[1], ideaPosition[2]],
-          ]}
+          points={[position, ideaPosition.x, ideaPosition.y, ideaPosition.z]}
           color="black"
           lineWidth={1}
           segments={false}
@@ -152,16 +168,21 @@ export default function ThreeDDot({
               </div>
             </Html>
           </Draggable>
-          <Sphere position={ideaPosition} scale={0.1}>
-            <meshStandardMaterial color={"grey"} />
+          <Sphere position={ideaPosition} scale={0.1} material-color={"grey"}>
+            {/* <meshStandardMaterial color={"grey"} /> */}
           </Sphere>{" "}
           {dotImages}
         </>
       )}
-      <Sphere onClick={() => handleClick()} position={position} scale={0.2}>
-        <meshStandardMaterial
+      <Sphere
+        onClick={() => handleClick()}
+        material-color={hoverDot || clicked ? "rgb(55, 52, 255)" : "grey"}
+        position={position}
+        scale={0.2}
+      >
+        {/* <meshStandardMaterial
           color={hoverDot || clicked ? "rgb(55, 52, 255)" : "grey"}
-        />
+        /> */}
       </Sphere>
     </>
   );

@@ -6,7 +6,7 @@ export type IdeaType = {
     img:string
   };
 
-export type Image = {
+export type ImageType = {
     id?: string; // Auto-incremented primary key
     ideaId: string; // Foreign key to associate with an idea
     src: string; // Name of the image

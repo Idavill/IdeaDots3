@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import * as THREE from "three";
-import ThreeDDot from "./ThreeDDot.js";
+import ThreeDDot from "./ThreeDDot";
 import { useControls } from "leva";
 import { Vector3, Quaternion, Vector3 as ThreeVector3 } from "three";
 import { PivotControls } from "@react-three/drei";
-import ThreeDImage from "./ThreeDImage.js";
+import ThreeDImage from "./ThreeDImage";
 import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider.js";
 import { ImageContext } from "../Contexts/ImageContextProvider.js";
 import { SphereContext } from "../Contexts/SphereContextProvider.js";
-import { IdeaType } from "../../Entities.js";
+import { IdeaType, ImageType } from "../../Entities.js";
 
 interface SphereProps {
   s: IdeaType;
   id: string;
-  position: { x: number; y: number; z: number };
+  position: [x: number, y: number, z: number]; //{ x: number; y: number; z: number };
   zoomToView: (focusRef: any) => void; // TODO: check this type
   activeIdea: IdeaType;
   setActiveIdea: (idea: IdeaType) => void;
@@ -21,7 +21,7 @@ interface SphereProps {
   isThreeDModeActive: boolean;
   isListModeActive: boolean;
   isDotModeActive: boolean;
-  amountOfSpheres: number;
+  amountOfSpheres: number | null;
 }
 
 export default function Sphere({
@@ -42,7 +42,8 @@ export default function Sphere({
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
   const [scale, setScale] = useState(3);
-  const [currentPosition, updateCurrentPosition] = useState(position);
+  const [currentPosition, updateCurrentPosition] =
+    useState<[x: number, y: number, z: number]>(position);
   const [currentPositionChanged, setCurrentPositionChanged] = useState(false);
   const [distanceFactorForZoom, setDistanceFactorForZoom] = useState(10);
   const context = useContext(ImageContext);
@@ -50,7 +51,7 @@ export default function Sphere({
   const ideaContext = useContext(ActiveIdeaContext);
   const matrix = new THREE.Matrix4();
   var positiontest: any; // TODO: find actual type
-  const filteredImages = context.imageSrcList?.filter(
+  const filteredImages: ImageType[] | undefined = context.imageSrcList?.filter(
     (img) => img.id === id // TODO: move this computation to parent
   );
 
@@ -67,7 +68,11 @@ export default function Sphere({
     //console.log("got positions from local? : ", localStoragePosition);
     if (localStoragePosition) {
       const lspos = JSON.parse(localStoragePosition);
-      const lsposarr = [lspos.x, lspos.y, lspos.z];
+      const lsposarr: [x: number, y: number, z: number] = [
+        lspos.x,
+        lspos.y,
+        lspos.z,
+      ];
       updateCurrentPosition(lsposarr);
       setCurrentPositionChanged(true);
     } else {
@@ -141,17 +146,17 @@ export default function Sphere({
         autoTransform={true}
         visible={gizmo}
         activeAxes={[true, true, true]}
-        anchor={[position.x, position.y, position.z]}
+        anchor={[position[0], position[1], position[2]]}
       >
         {isDotModeActive ? (
           <ThreeDDot
             filteredImages={filteredImages}
             s={s}
-            amountOfSpheres={amountOfSpheres}
-            activeIdea={activeIdea}
-            setActiveIdea={setActiveIdea}
+            //amountOfSpheres={amountOfSpheres}
+            //activeIdea={activeIdea}
+            //setActiveIdea={setActiveIdea}
             position={currentPosition}
-            text={s.text}
+            //text={s.text}
             id={id}
             setEnableCustomControls={setEnableCustomControls}
             currentPositionChanged={currentPositionChanged}
@@ -160,20 +165,20 @@ export default function Sphere({
           <>
             <ThreeDImage
               filteredImages={filteredImages}
-              id={id}
-              hover={hover}
+              //id={id}
+              //hover={hover}
               dimensions={[150, 150]}
               scale={1}
-              setScale={(scale: number) => setScale(scale)}
-              setEnableCustomControls={setEnableCustomControls}
+              //setScale={(scale: number) => setScale(scale)}
+              //setEnableCustomControls={setEnableCustomControls}
               onClick={(e: any) => handleClick(e)} // TODO: what type is event
               onPointerOver={(event: any) => (
                 event.stopPropagation(), hover(true)
               )} // TODO:what type is e?
               onPointerOut={() => hover(false)}
-              ideaId={id}
+              //ideaId={id}
               position={currentPosition}
-              distanceFactorForZoom={distanceFactorForZoom}
+              //distanceFactorForZoom={distanceFactorForZoom}
               isThreeDModeActive={isThreeDModeActive}
             ></ThreeDImage>
           </>
