@@ -8,23 +8,36 @@ import ThreeDImage from "./ThreeDImage.js";
 import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider.js";
 import { ImageContext } from "../Contexts/ImageContextProvider.js";
 import { SphereContext } from "../Contexts/SphereContextProvider.js";
+import { IdeaType } from "../../Entities.js";
+
+interface SphereProps {
+  s: IdeaType;
+  id: string;
+  position: { x: number; y: number; z: number };
+  zoomToView: (focusRef: any) => void; // TODO: check this type
+  activeIdea: IdeaType;
+  setActiveIdea: (idea: IdeaType) => void;
+  setEnableCustomControls: (bool: boolean) => void;
+  isThreeDModeActive: boolean;
+  isListModeActive: boolean;
+  isDotModeActive: boolean;
+  amountOfSpheres: number;
+}
 
 export default function Sphere({
   s,
   id,
   position,
   zoomToView,
-  //gizmo,
   activeIdea,
   setActiveIdea,
-  controlsRef,
   setEnableCustomControls,
   isThreeDModeActive,
   isListModeActive,
   isDotModeActive,
   amountOfSpheres,
-}) {
-  const ref = useRef();
+}: SphereProps) {
+  //const ref = useRef(null); // TODO: correct?
   const { gizmo } = useControls({ gizmo: false });
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
@@ -33,11 +46,11 @@ export default function Sphere({
   const [currentPositionChanged, setCurrentPositionChanged] = useState(false);
   const [distanceFactorForZoom, setDistanceFactorForZoom] = useState(10);
   const context = useContext(ImageContext);
-  const sphereContext = useContext(SphereContext);
+  //const sphereContext = useContext(SphereContext);
   const ideaContext = useContext(ActiveIdeaContext);
   const matrix = new THREE.Matrix4();
-  var positiontest;
-  const filteredImages = context.imageSrcList.filter(
+  var positiontest: any; // TODO: find actual type
+  const filteredImages = context.imageSrcList?.filter(
     (img) => img.id === id // TODO: move this computation to parent
   );
 
@@ -67,20 +80,22 @@ export default function Sphere({
   }, [currentPosition]);
 
   useEffect(() => {
-    if (ideaContext.activeIdea) {
+    if (ideaContext?.activeIdea) {
       click(ideaContext.activeIdea.id === id ? true : false);
     }
-  }, [ideaContext.activeIdea]);
+  }, [ideaContext?.activeIdea]);
 
-  const handleClick = (e) => {
+  const handleClick = (e: any) => {
+    //TODO: correct type?
     if (isListModeActive) {
       zoomToView(e.object.position);
-      ideaContext.setActiveIdea(s);
+      ideaContext?.setActiveIdea(s);
     }
     click(!clicked);
   };
 
-  const handleSavePosition = (matrix) => {
+  const handleSavePosition = (matrix: any) => {
+    //TODO: correct type?
     if (matrix) {
       const positionId = s.id + "position";
       const matrixPosition = new Vector3();
@@ -93,6 +108,7 @@ export default function Sphere({
       const x = currentPosition[0] + matrixPosition.x;
       const y = currentPosition[1] + matrixPosition.y;
       const z = currentPosition[2] + matrixPosition.z;
+
       positiontest = [x, y, z];
 
       localStorage.setItem(
@@ -108,7 +124,7 @@ export default function Sphere({
     }
   };
 
-  const handleSavePositionToContext = (matrix) => {
+  const handleSavePositionToContext = () => {
     if (positiontest) {
       updateCurrentPosition(positiontest);
     }
@@ -117,9 +133,9 @@ export default function Sphere({
   return (
     <>
       <PivotControls
-        object={gizmo ? ref : undefined}
+        //object={gizmo ? ref : undefined} TODO: reintroduce?
         onDrag={(e) => handleSavePosition(e)}
-        onDragEnd={(e) => handleSavePositionToContext()}
+        onDragEnd={() => handleSavePositionToContext()}
         matrix={matrix}
         //enabled={true}
         autoTransform={true}
@@ -148,10 +164,12 @@ export default function Sphere({
               hover={hover}
               dimensions={[150, 150]}
               scale={1}
-              setScale={(e) => setScale(e)}
+              setScale={(scale: number) => setScale(scale)}
               setEnableCustomControls={setEnableCustomControls}
-              onClick={(e) => handleClick(e)}
-              onPointerOver={(event) => (event.stopPropagation(), hover(true))}
+              onClick={(e: any) => handleClick(e)} // TODO: what type is event
+              onPointerOver={(event: any) => (
+                event.stopPropagation(), hover(true)
+              )} // TODO:what type is e?
               onPointerOut={() => hover(false)}
               ideaId={id}
               position={currentPosition}

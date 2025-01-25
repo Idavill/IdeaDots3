@@ -1,7 +1,25 @@
-import React, { useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { SphereContext } from "../Contexts/SphereContextProvider";
 import Sphere from "./Sphere";
+import { IdeaType } from "../../Entities";
+import { Vector3 } from "three";
+
+interface ContentProps {
+  activeIdea: IdeaType;
+  setActiveIdea: (idea: IdeaType) => void;
+  zoom: boolean;
+  setZoom: (bool: boolean) => void;
+  setFocus: (ref: any) => void; // TODO: find type
+  newSphere: Vector3; // or IdeaType;
+  scrollToIdea: (idea: IdeaType, i: number) => void;
+  gizmo: number;
+  controlsRef: any; // TODO: find type
+  setEnableCustomControls: (bool: boolean) => void;
+  isThreeDModeActive: boolean;
+  isListModeActive: boolean;
+  isDotModeActive: boolean;
+}
 
 export default function Content({
   activeIdea,
@@ -17,7 +35,7 @@ export default function Content({
   isThreeDModeActive,
   isListModeActive,
   isDotModeActive,
-}) {
+}: ContentProps) {
   const context = useContext(SphereContext);
 
   useEffect(() => {
@@ -26,7 +44,8 @@ export default function Content({
     }
   }, [newSphere]);
 
-  const addNewSphere = (ns) => {
+  const addNewSphere = (ns: Vector3) => {
+    // TODO: Check correct type for vector3
     const newS = {
       id: uuidv4(),
       position: { x: ns.x, y: ns.y, z: ns.z },
@@ -34,7 +53,7 @@ export default function Content({
       text: "New Idea Text",
       img: "",
     };
-    context.setSpheres((prevSpheres) => [...prevSpheres, newS]);
+    context.setSpheres((prevSpheres) => [...(prevSpheres || []), newS]);
     const newSTitleID = newS.id + "title";
     const newSTextID = newS.id + "text";
     localStorage.setItem(newSTitleID, newS.title);
@@ -50,19 +69,21 @@ export default function Content({
           s={s}
           key={uuidv4()}
           id={s.id}
-          amountOfSpheres={context.spheres.length}
-          gizmo={gizmo}
-          zoomToView={(focusRef) => (
-            setZoom(!zoom), setFocus(focusRef), scrollToIdea(s, i)
-          )}
+          amountOfSpheres={context.spheres?.length || null}
+          //gizmo={gizmo}
+          zoomToView={(
+            focusRef: any // TODO: check type
+          ) => (setZoom(!zoom), setFocus(focusRef), scrollToIdea(s, i))}
           position={[s.position.x, s.position.y, s.position.z]}
-          title={s.title}
+          //title={s.title}
           isThreeDModeActive={isThreeDModeActive}
           isDotModeActive={isDotModeActive}
-          controlsRef={controlsRef}
-          setEnableCustomControls={(e) => setEnableCustomControls(e)}
+          //controlsRef={controlsRef}
+          setEnableCustomControls={(bool: boolean) =>
+            setEnableCustomControls(bool)
+          }
           activeIdea={activeIdea}
-          setActiveIdea={(e) => setActiveIdea(e)}
+          setActiveIdea={(idea: IdeaType) => setActiveIdea(idea)}
           isListModeActive={isListModeActive}
         />
       </>

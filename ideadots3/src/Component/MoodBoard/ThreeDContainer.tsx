@@ -1,16 +1,25 @@
-import React, { Suspense, useEffect, useRef, useState } from "react";
-import {
-  useKeyboardControls,
-  GizmoHelper,
-  GizmoViewport,
-} from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { GizmoHelper, GizmoViewport, Gltf, SpotLight } from "@react-three/drei";
+import * as React from "react";
+import { Canvas } from "@react-three/fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 import "./ThreeDContainer.css";
 import * as THREE from "three";
 import CameraControls from "camera-controls";
 import Content from "./Content";
+import { IdeaType } from "../../Entities";
 CameraControls.install({ THREE });
+
+interface ThreeDContainerProps {
+  scrollToIdea: (idea: IdeaType, i: number) => void;
+  cameraTarget: IdeaType; //TODO: check correct
+  setActiveIdea: (idea: IdeaType) => void;
+  isThreeDModeActive: boolean;
+  activeIdea: IdeaType;
+  gizmo: number;
+  isListModeActive: boolean;
+  isDotModeActive: boolean;
+}
 
 export default function ThreeDContainer({
   scrollToIdea,
@@ -21,12 +30,12 @@ export default function ThreeDContainer({
   gizmo,
   isListModeActive,
   isDotModeActive,
-}) {
+}: ThreeDContainerProps) {
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
-  const [newSphere, setNewSphere] = useState(null);
-  const [currentZoom, setCurrentZoom] = useState(false);
-  const controlsRef = useRef();
+  const [newSphere, setNewSphere] = useState<IdeaType | null>(null);
+  //const [currentZoom, setCurrentZoom] = useState(false);
+  const controlsRef = useRef(null); // TODO: check correct?
   const [enableCustomControls, setEnableCustomControls] = useState(true);
 
   useEffect(() => {
@@ -54,28 +63,36 @@ export default function ThreeDContainer({
             activeIdea={activeIdea}
             isThreeDModeActive={isThreeDModeActive}
             isDotModeActive={isDotModeActive}
-            setActiveIdea={(e) => setActiveIdea(e)}
+            setActiveIdea={(idea: IdeaType) => setActiveIdea(idea)}
             gizmo={gizmo}
-            scrollToIdea={(s, i) => scrollToIdea(s, i)}
+            scrollToIdea={(idea: IdeaType, i: number) => scrollToIdea(idea, i)}
             zoom={zoom}
             setZoom={setZoom}
             setFocus={setFocus}
             newSphere={newSphere}
             controlsRef={controlsRef}
-            setCurrentZoom={(z) => setCurrentZoom(z)}
+            //setCurrentZoom={(z) => setCurrentZoom(z)}
             setEnableCustomControls={setEnableCustomControls}
             isListModeActive={isListModeActive}
           />
 
-          <directionalLight position={[10, 10, 0]} intensity={1.5} />
+          {/* <directionalLight position={[10, 10, 0]} intensity={1.5} />
           <directionalLight position={[-10, 10, 5]} intensity={1} />
           <directionalLight position={[-10, 20, 0]} intensity={1.5} />
-          <directionalLight position={[0, -10, 0]} intensity={0.25} />
-          <Suspense fallback={<Model url="./Assets/WCPOM.gltf" />}>
-            <Model
+          <directionalLight position={[0, -10, 0]} intensity={0.25} /> */}
+          <SpotLight
+            distance={5}
+            angle={0.15}
+            attenuation={5}
+            anglePower={5} // Diffuse-cone anglePower (default: 5)
+          />
+          {/* <Suspense fallback={<Model url="./Assets/WCPOM.gltf" />}> */}
+          <Suspense fallback={<Gltf src={"./Assets/WCPOM.gltf"} />}>
+            {/* <Model
               url="./Assets/WCPOM.gltf"
-              setNewSphere={(e) => setNewSphere(e)}
-            />
+              setNewSphere={(idea: IdeaType) => setNewSphere(idea)}
+            /> */}
+            <Gltf src={"./Assets/WCPOM.gltf"} />
           </Suspense>
           <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
             <GizmoViewport labelColor="white" axisHeadScale={1} />
@@ -84,21 +101,5 @@ export default function ThreeDContainer({
         </Canvas>
       </Suspense>
     </div>
-  );
-}
-
-function Model({ url, setNewSphere }) {
-  const { scene } = useGLTF(url);
-
-  const handleDoubleClick = (e) => {
-    console.log("double click", e.point);
-    setNewSphere(e.point);
-  };
-
-  return (
-    <primitive
-      onDoubleClick={(e) => handleDoubleClick(e)}
-      object={scene}
-    ></primitive>
   );
 }

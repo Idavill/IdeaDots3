@@ -97,8 +97,8 @@ export default function App() {
             {isListModeActive ? (
               <DraggableUI
                 scrollToIdea={(idea:IdeaType, i:number) => scrollToIdea(idea, i)}
-                activeIdea={activeIdea}
-                setActiveIdea={(idea:IdeaType) => setActiveIdea(idea)}
+                //activeIdea={activeIdea}
+                //setActiveIdea={(idea:IdeaType) => setActiveIdea(idea)}
                 gizmo={gizmo}
                 setGizmo={(id:number) => setGizmo(id)}
                 titleIsChanged={titleIsChanged}

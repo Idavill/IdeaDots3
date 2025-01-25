@@ -1,6 +1,5 @@
 import axios from "axios";
 import Spheres from "../Data/sphere.json";
-
 type DataObjectName = "ideas" | "dots" | "spheres"; // Replace with actual API object names
 
 interface Item { //TODO: renmae 

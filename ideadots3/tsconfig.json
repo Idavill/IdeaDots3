@@ -5,6 +5,7 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],// Include DOM and ESNext APIs
     "jsx": "react-jsx",                      // Enable React JSX transform
     "strict": true,                          // Enable all strict type-checking options
+    "resolveJsonModule": true,
     "moduleResolution": "node",             // Resolve modules using Node.js conventions
     "esModuleInterop": true,                // Allow default imports from CommonJS modules
     "skipLibCheck": true,                   // Skip type checking for all declaration files
