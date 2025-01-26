@@ -1,5 +1,6 @@
 import React, { Suspense, useEffect, useRef, useState } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { GizmoHelper, GizmoViewport } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 import "./ThreeDContainer.css";
 import * as THREE from "three";
@@ -8,60 +9,16 @@ import Content from "./Content";
 
 CameraControls.install({ THREE });
 
-function CustomControls({
-  setCurrentZoom,
-  currentZoom,
-  controlsRef,
-  zoom,
-  focus,
-  gizmo,
-  enableCustomControls,
-}) {
-  const { camera, gl } = useThree();
-
-  useEffect(() => {
-    if (controlsRef.current) {
-      controlsRef.current.enableZoom = true;
-    }
-  }, []);
-
-  useFrame((state, delta) => {
-    if (controlsRef.current) {
-      const target = new THREE.Vector3();
-      if (zoom) {
-        //console.log("ZOOM :", controlsRef.current.object.position);
-        target.set(focus.x, focus.y, focus.z); // Set target to focus point
-        controlsRef.current.target.lerp(target, 0.1); // Smoothly move towards the target
-      } else {
-        controlsRef.current.target.set(0, 0, 0); // Reset target when not zooming
-      }
-
-      controlsRef.current.update(); // Update controls to apply changes
-    }
-  });
-
-  return (
-    <>
-      {!gizmo ? (
-        <OrbitControls
-          ref={controlsRef}
-          camera={camera}
-          gl={gl}
-          enableRotate={enableCustomControls ? true : false}
-          enablePan={true}
-          enableZoom={true}
-        />
-      ) : null}
-    </>
-  );
-}
-
 export default function ThreeDContainer({
   scrollToIdea,
   cameraTarget,
   setActiveIdea,
+  isThreeDModeActive,
+  activeIdea,
   gizmo,
   listActive,
+  isListModeActive,
+  isDotModeActive,
 }) {
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
@@ -72,18 +29,14 @@ export default function ThreeDContainer({
 
   useEffect(() => {
     if (cameraTarget) {
-      console.log("ct: ", cameraTarget.position);
       setZoom(true);
       setFocus(cameraTarget.position);
     }
   }, [cameraTarget]);
 
   useEffect(() => {
-    if (focus) {
-      console.log("focus ", focus);
-      setActiveIdea(focus);
-    }
-  }, [focus]);
+    console.log("customer contorls ", enableCustomControls);
+  }, [enableCustomControls]);
 
   return (
     <div style={{ height: "100vh" }}>
@@ -96,19 +49,20 @@ export default function ThreeDContainer({
           }}
         >
           <Content
-            listActive={listActive}
+            activeIdea={activeIdea}
+            isThreeDModeActive={isThreeDModeActive}
+            isDotModeActive={isDotModeActive}
+            setActiveIdea={(e) => setActiveIdea(e)}
             gizmo={gizmo}
             scrollToIdea={(s, i) => scrollToIdea(s, i)}
             zoom={zoom}
             setZoom={setZoom}
             setFocus={setFocus}
-            focusSphere={focus}
             newSphere={newSphere}
             controlsRef={controlsRef}
-            currentZoom={currentZoom}
             setCurrentZoom={(z) => setCurrentZoom(z)}
-            enableCustomControls={enableCustomControls}
-            setEnableCustomControls={(e) => setEnableCustomControls(e)}
+            setEnableCustomControls={setEnableCustomControls}
+            isListModeActive={isListModeActive}
           />
 
           <directionalLight position={[10, 10, 0]} intensity={1.5} />
@@ -121,15 +75,10 @@ export default function ThreeDContainer({
               setNewSphere={(e) => setNewSphere(e)}
             />
           </Suspense>
-          <CustomControls
-            controlsRef={controlsRef}
-            zoom={zoom}
-            focus={focus}
-            gizmo={gizmo}
-            currentZoom={currentZoom}
-            setCurrentZoom={(z) => setCurrentZoom(z)}
-            enableCustomControls={enableCustomControls}
-          />
+          <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
+            <GizmoViewport labelColor="white" axisHeadScale={1} />
+          </GizmoHelper>
+          <OrbitControls makeDefault />
         </Canvas>
       </Suspense>
     </div>

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider";
 
 export default function Overview({
   s,
@@ -8,6 +9,7 @@ export default function Overview({
   titleChangeId,
 }) {
   const [title, setTitle] = useState(s.title);
+  const ideaContext = useContext(ActiveIdeaContext);
 
   useEffect(() => {
     if (titleChangeId == s.id) {
@@ -15,15 +17,15 @@ export default function Overview({
     }
   }, [titleIsChanged]);
 
+  const handleClick = () => {
+    ideaContext.setActiveIdea(s);
+    scrollToIdea(s, i);
+  };
+
   useEffect(() => {
     const titleId = s.id + "title";
     const localStorageTitle = localStorage.getItem(titleId);
-
-    if (localStorageTitle) {
-      setTitle(localStorageTitle);
-    } else {
-      setTitle(s.title);
-    }
+    setTitle(localStorageTitle ? localStorageTitle : s.title);
   }, []);
 
   return (
@@ -32,7 +34,7 @@ export default function Overview({
         <a
           className="nav-link"
           href={`#scrollspyHeading${i}`}
-          onClick={() => scrollToIdea(s, i)}
+          onClick={handleClick}
         >
           {title}
         </a>

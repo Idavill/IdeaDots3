@@ -1,4 +1,4 @@
-import API from "../Services/API";
+import API from "../../Services/API";
 import React, { createContext, useState, useEffect, useContext } from "react";
 
 export const SphereContext = createContext();
@@ -9,7 +9,6 @@ export const SphereContextProvider = ({ children }) => {
 
   useEffect(() => {
     getSphereData();
-    //updateDataWithLocalStorage();
   }, []);
 
   const getSphereData = async () => {
