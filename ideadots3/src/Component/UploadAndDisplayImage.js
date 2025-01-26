@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState, useEffect, useContext } from "react";
 import { db } from "./Database";
-import { v4 as uuidv4 } from "uuid";
+import { ImageContext } from "./Contexts/ImageContextProvider";
+import Button from "./Button";
 
-const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
+const UploadAndDisplayImage = ({ ideaId, handleRemoveIdea }) => {
   const [selectedImages, setSelectedImages] = useState([]);
+  const imageContext = useContext(ImageContext);
   const inputId = `file-input-${ideaId}`;
+  const [initialUpload, setInitialUpload] = useState(false);
 
   useEffect(() => {
     downloadImages(ideaId);
+    setInitialUpload(true);
   }, [ideaId]);
-
-  useEffect(() => {
-    console.log("SELECTED IMAGES: ", selectedImages);
-  }, [selectedImages]);
 
   async function downloadImages(ideaId) {
     const data = await db.images.where("ideaId").equals(ideaId).toArray();
@@ -37,6 +37,8 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
 
   async function storeImage(file, ideaId) {
     try {
+      imageContext.setImageSrcList((prevs) => [...prevs, file.name]);
+      console.log("file: ", file.name);
       const img = new Image();
       const reader = new FileReader();
 
@@ -76,17 +78,6 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
     <div>
       {selectedImages.length > 0 && <div>{imageList()}</div>}
       <div>
-        {displayButtons ? (
-          <div className="IdeaButtons">
-            <button
-              className="btn btn-light"
-              onClick={() => document.getElementById(inputId).click()}
-            >
-              Image
-            </button>
-          </div>
-        ) : null}
-
         <input
           id={inputId}
           style={{ display: "none" }}
@@ -99,6 +90,13 @@ const UploadAndDisplayImage = ({ ideaId, displayButtons }) => {
           }}
         />
       </div>
+      <button
+        className="btn btn-light"
+        onClick={() => document.getElementById(inputId).click()}
+      >
+        Image
+      </button>
+      <Button onClick={handleRemoveIdea} text={"-"} />
     </div>
   );
 

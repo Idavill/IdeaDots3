@@ -1,30 +1,29 @@
-import React, { useEffect, useState, useContext } from "react";
-import "../App.css";
+import "../../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useEffect, useState, useContext } from "react";
 import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
-import { SphereContext } from "./SphereContextProvider";
+import { SphereContext } from "../Contexts/SphereContextProvider";
 import Idea from "./Idea";
 import Overview from "./Overview";
 
 export default function DraggableUI({
-  activeSphere,
-  setActiveSphere,
+  setActiveIdea,
   scrollToIdea,
   activeIdea,
   gizmo,
   setGizmo,
-  sphereIsChanging,
-  setSphereIsChanging,
+  titleIsChanged,
+  setTitleIsChanged,
 }) {
   const context = useContext(SphereContext);
   const [titleChangeId, setTitleChangeId] = useState("");
 
   useEffect(() => {
-    if (sphereIsChanging) {
-      setSphereIsChanging(false);
+    if (titleIsChanged) {
+      setTitleIsChanged(false);
     }
-  }, [sphereIsChanging]);
+  }, [titleIsChanged]);
 
   const deleteIdea = (s) => {
     const newList = context.spheres.filter((sphere) => sphere.id !== s.id);
@@ -34,13 +33,10 @@ export default function DraggableUI({
   const overview = () => {
     return context.spheres.map((s, i) => (
       <Overview
-        scrollToIdea={scrollToIdea}
-        activeSphere={activeSphere}
-        setActiveSphere={(e) => setActiveSphere(e)}
         s={s}
-        sphereArray={context.spheres}
         i={i}
-        titleIsChanged={sphereIsChanging}
+        scrollToIdea={scrollToIdea}
+        titleIsChanged={titleIsChanged}
         titleChangeId={titleChangeId}
       ></Overview>
     ));
@@ -64,20 +60,16 @@ export default function DraggableUI({
   const listContent = () => {
     return context.spheres.map((s, i) => (
       <Idea
-        gizmo={gizmo}
-        setGizmo={(e) => setGizmo(e)}
-        key={i}
-        activeI={activeIdea}
-        setActive={(s) => setActiveSphere(s)}
         s={s}
         i={i}
-        deleteThis={(s) => deleteIdea(s)}
-        setSpheres={(e) => context.setSpheres(e)}
-        sphereArray={context.spheres} // redundant, need to call context.spheres inside idea
-        setSphereArray={(e) => context.setSpheres(e)} // thereby also this is reduncant
-        titleIsChanged={sphereIsChanging}
-        setTitleIsChanged={(e) => setSphereIsChanging(e)}
-        titleChangeId={titleChangeId}
+        scrollToIdea={scrollToIdea}
+        key={i}
+        gizmo={gizmo}
+        setGizmo={(e) => setGizmo(e)}
+        activeIdea={activeIdea}
+        setActiveIdea={(s) => setActiveIdea(s)}
+        deleteIdea={(s) => deleteIdea(s)}
+        setTitleIsChanged={(e) => setTitleIsChanged(e)}
         setTitleChangeId={(e) => setTitleChangeId(e)}
       ></Idea>
     ));

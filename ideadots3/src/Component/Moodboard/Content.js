@@ -1,26 +1,24 @@
-import React, { useEffect, useContext, useState } from "react";
-
+import React, { useEffect, useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { SphereContext } from "./SphereContextProvider";
+import { SphereContext } from "../Contexts/SphereContextProvider";
 import Sphere from "./Sphere";
 
 export default function Content({
+  activeIdea,
+  setActiveIdea,
   zoom,
   setZoom,
   setFocus,
-  focusSphere,
   newSphere,
   scrollToIdea,
   gizmo,
-  listActive,
   controlsRef,
-  currentZoom,
-  setCurrentZoom,
-  enableCustomControls,
   setEnableCustomControls,
+  isThreeDModeActive,
+  isListModeActive,
+  isDotModeActive,
 }) {
   const context = useContext(SphereContext);
-  const [activeSphereId, setActiveSphereId] = useState(null);
 
   useEffect(() => {
     if (newSphere) {
@@ -44,27 +42,28 @@ export default function Content({
   };
 
   const sphereList = () => {
-    return context.spheres.map((s, i) => (
+    const spheres = context.spheres || [];
+
+    return spheres.map((s, i) => (
       <>
         <Sphere
-          listActive={listActive}
+          s={s}
+          key={uuidv4()}
+          id={s.id}
+          amountOfSpheres={context.spheres.length}
           gizmo={gizmo}
           zoomToView={(focusRef) => (
             setZoom(!zoom), setFocus(focusRef), scrollToIdea(s, i)
           )}
-          key={i}
           position={[s.position.x, s.position.y, s.position.z]}
           title={s.title}
-          text={s.text}
-          focus={focusSphere}
-          id={s.id}
+          isThreeDModeActive={isThreeDModeActive}
+          isDotModeActive={isDotModeActive}
           controlsRef={controlsRef}
-          currentZoom={currentZoom}
-          enableCustomControls={enableCustomControls}
           setEnableCustomControls={(e) => setEnableCustomControls(e)}
-          image={s.img}
-          activeSphereId={activeSphereId}
-          setActiveSphereId={(e) => setActiveSphereId(e)}
+          activeIdea={activeIdea}
+          setActiveIdea={(e) => setActiveIdea(e)}
+          isListModeActive={isListModeActive}
         />
       </>
     ));
