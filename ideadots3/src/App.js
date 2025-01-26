@@ -1,59 +1,58 @@
-import React, { Suspense, useEffect, useRef, useState } from "react";
 import "./App.css";
-import ThreeDContainer from "./Component/ThreeDContainer.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import image from "./Assets/shelf.jpg";
-import Draggable from "react-draggable";
-import { v4 as uuidv4 } from "uuid";
-import API from "./Services/API";
-import DraggableUI from "./Component/DraggableUI.js";
+import React, { Suspense, useEffect, useState } from "react";
+import Header from "./Component/Header.js";
+import ThreeDContainer from "./Component/Moodboard/ThreeDContainer.js";
+import DraggableUI from "./Component/Notebook/DraggableUI.js";
+import { SphereContextProvider } from "./Component/Contexts/SphereContextProvider.js";
+import { ImageContextProvider } from "./Component/Contexts/ImageContextProvider.js";
+import { ActiveIdeaContextProvider } from "./Component/Contexts/ActiveIdeaContextProvider.js";
 
 export default function App() {
-  const [spheres, setSpheres] = useState([]);
-  const [activeSphere, setActiveSphere] = useState(null);
+  const [titleIsChanged, setTitleIsChanged] = useState(false);
   const [cameraTarget, setCameraTarget] = useState(null);
   const [activeIdea, setActiveIdea] = useState(null);
   const [gizmo, setGizmo] = useState(null);
-  const apiInstance = API();
+  const [isListModeActive, setIsListModeActive] = useState(false);
+  const [isThreeDModeActive, setIsThreeDModeActive] = useState(false);
+  const [isDotModeActive, setIsDotModeActive] = useState(false);
+  const [dotModeButtonText, setDotModeButtonText] = useState("dot-mode");
+  const [modelListViewButtonText, setModelListViewButtonText] =
+    useState("model-focus-mode");
+  const [spatialModeButtonText, setSpatialModeButtonText] = useState("3D");
+  const [imageSrcList, setImageSrcList] = useState([]);
 
   useEffect(() => {
-    getSphereData();
-  }, []);
-
-  const getSphereData = async () => {
-    const spheres = apiInstance.handleGetLocalSpheresJsonData();
-    if (spheres) {
-      for (const s of spheres) {
-        setSpheres((prevs) => [...prevs, s]);
-      }
-    } else {
-      console.log("no spheres in App");
-    }
-  };
+    setModelListViewButtonText(
+      isListModeActive ? "list-mode" : "model-focus-mode"
+    );
+  }, [isListModeActive]);
 
   useEffect(() => {
-    if (gizmo) {
-      console.log("gizmo: ", gizmo);
-    } else {
-      console.log("gizmo null");
-    }
-  }, [gizmo]);
+    setSpatialModeButtonText(isThreeDModeActive ? "3D" : "2D");
+  }, [isThreeDModeActive]);
 
   useEffect(() => {
-    if (activeIdea) {
+    setDotModeButtonText(isDotModeActive ? "image-mode" : "dot-mode");
+  }, [isDotModeActive]);
+
+  useEffect(() => {
+    if (activeIdea && activeIdea.position) {
       setActiveIdea(activeIdea);
+      setCameraTarget(activeIdea);
+      console.log("active Idea is: ", activeIdea);
     }
   }, [activeIdea]);
 
   useEffect(() => {
-    if (activeSphere) {
-      setCameraTarget(activeSphere);
-      setActiveIdea(activeSphere);
+    if (activeIdea && activeIdea.position) {
+      setActiveIdea(activeIdea);
+      setCameraTarget(activeIdea);
+      console.log("active Idea is: ", activeIdea);
     }
-  }, [activeSphere]);
+  }, [activeIdea]);
 
   const scrollToIdea = (s, i) => {
-    setActiveSphere(s);
     setActiveIdea(s);
     //event.preventDefault(); // Prevent default anchor click behavior
     const target = document.getElementById(`scrollspyHeading${i}`);
@@ -67,28 +66,48 @@ export default function App() {
 
   return (
     <>
-      <Suspense fallback={null}>
-        <ThreeDContainer
-          gizmo={gizmo}
-          scrollToIdea={(s, i) => scrollToIdea(s, i)}
-          sphere={spheres}
-          setSpheres={(e) => setSpheres(e)}
-          setActiveIdea={(s) => setActiveIdea(s)}
-          activeIdea={activeIdea}
-          cameraTarget={cameraTarget}
-        />
-      </Suspense>
-      <DraggableUI
-        activeSphere={activeSphere}
-        setActiveSphere={(e) => setActiveSphere(e)}
-        scrollToIdea={scrollToIdea}
-        spheres={spheres}
-        setSpheres={(e) => setSpheres(e)}
-        activeIdea={activeIdea}
-        setActiveIdea={(e) => setActiveIdea(e)}
-        gizmo={gizmo}
-        setGizmo={(e) => setGizmo(e)}
-      />
+      <SphereContextProvider>
+        <ImageContextProvider value={{ imageSrcList, setImageSrcList }}>
+          <ActiveIdeaContextProvider>
+            <Header
+              activeIdea={activeIdea}
+              modelListViewButtonText={modelListViewButtonText}
+              isListModeActive={isListModeActive}
+              setIsListModeActive={setIsListModeActive}
+              isThreeDModeActive={isThreeDModeActive}
+              spatialModeButtonText={spatialModeButtonText}
+              setIsThreeDModeActive={setIsThreeDModeActive}
+              dotModeButtonText={dotModeButtonText}
+              setDotModeButtonText={setDotModeButtonText}
+              isDotModeActive={isDotModeActive}
+              setIsDotModeActive={setIsDotModeActive}
+            />
+            <Suspense fallback={null}>
+              <ThreeDContainer
+                isListModeActive={isListModeActive}
+                gizmo={gizmo}
+                scrollToIdea={(s, i) => scrollToIdea(s, i)}
+                setActiveIdea={(s) => setActiveIdea(s)}
+                activeIdea={activeIdea}
+                cameraTarget={cameraTarget}
+                isThreeDModeActive={isThreeDModeActive}
+                isDotModeActive={isDotModeActive}
+              />
+            </Suspense>
+            {isListModeActive ? (
+              <DraggableUI
+                scrollToIdea={(s, i) => scrollToIdea(s, i)}
+                activeIdea={activeIdea}
+                setActiveIdea={(e) => setActiveIdea(e)}
+                gizmo={gizmo}
+                setGizmo={(e) => setGizmo(e)}
+                titleIsChanged={titleIsChanged}
+                setTitleIsChanged={(e) => setTitleIsChanged(e)}
+              />
+            ) : null}
+          </ActiveIdeaContextProvider>
+        </ImageContextProvider>
+      </SphereContextProvider>
     </>
   );
 }
