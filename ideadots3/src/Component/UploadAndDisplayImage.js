@@ -4,13 +4,7 @@ import { db } from "./Database";
 import { ImageContext } from "./Contexts/ImageContextProvider";
 import Button from "./Button";
 
-const UploadAndDisplayImage = ({
-  ideaId,
-  displayButtons,
-  //handleGo,
-  //handleMoveClicked,
-  handleRemoveIdea,
-}) => {
+const UploadAndDisplayImage = ({ ideaId, handleRemoveIdea }) => {
   const [selectedImages, setSelectedImages] = useState([]);
   const imageContext = useContext(ImageContext);
   const inputId = `file-input-${ideaId}`;
@@ -84,17 +78,6 @@ const UploadAndDisplayImage = ({
     <div>
       {selectedImages.length > 0 && <div>{imageList()}</div>}
       <div>
-        {/* {displayButtons ? (
-          <div className="IdeaButtons">
-            <button
-              className="btn btn-light"
-              onClick={() => document.getElementById(inputId).click()}
-            >
-              Image
-            </button>
-          </div>
-        ) : null} */}
-
         <input
           id={inputId}
           style={{ display: "none" }}
@@ -113,8 +96,6 @@ const UploadAndDisplayImage = ({
       >
         Image
       </button>
-      {/* <Button onClick={handleGo} text={"Go"} /> */}
-      {/* <Button onClick={handleMoveClicked} text={"Move"} /> */}
       <Button onClick={handleRemoveIdea} text={"-"} />
     </div>
   );

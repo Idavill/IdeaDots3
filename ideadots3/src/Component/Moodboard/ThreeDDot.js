@@ -20,7 +20,6 @@ export default function ThreeDDot({
     position[1] * 2,
     position[2] * 2,
   ]);
-  //const [dotPosition, setDotPosition] = useState(position);
   const [hoverDot, setHoverDot] = useState(false);
   const [clicked, click] = useState(false);
   const sphereContext = useContext(SphereContext);
@@ -92,7 +91,7 @@ export default function ThreeDDot({
           id={id}
           setEnableCustomControls={setEnableCustomControls}
           ideaId={id}
-          position={ideaPosition} //iodeaPOsition
+          position={ideaPosition}
           scale={0.1}
           dimensions={[150, 150]}
         ></ThreeDDotImage>
@@ -127,7 +126,6 @@ export default function ThreeDDot({
                   position: "absolute",
                   top: `-${300 / 2}px`,
                   left: `-${300 / 2}px`,
-                  //border: "2px solid #202035",
                 }}
               ></div>
               <div

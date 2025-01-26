@@ -14,10 +14,8 @@ export default function Sphere({
   id,
   position,
   zoomToView,
-  //gizmo,
   activeIdea,
   setActiveIdea,
-  controlsRef,
   setEnableCustomControls,
   isThreeDModeActive,
   isListModeActive,
@@ -41,17 +39,9 @@ export default function Sphere({
     (img) => img.id === id // TODO: move this computation to parent
   );
 
-  //TODO: insteda useeffect
-  // useFrame(() => {
-  //   if (controlsRef.current) {
-  //     setDistanceFactorForZoom(controlsRef.current.object.position); // OrbitControls object.zoom
-  //   }
-  // });
-
   useEffect(() => {
     const positionId = s.id + "position";
     const localStoragePosition = localStorage.getItem(positionId);
-    //console.log("got positions from local? : ", localStoragePosition);
     if (localStoragePosition) {
       const lspos = JSON.parse(localStoragePosition);
       const lsposarr = [lspos.x, lspos.y, lspos.z];
@@ -89,7 +79,6 @@ export default function Sphere({
 
       matrix.decompose(matrixPosition, rotation, scale);
 
-      // Use the matrixPosition directly
       const x = currentPosition[0] + matrixPosition.x;
       const y = currentPosition[1] + matrixPosition.y;
       const z = currentPosition[2] + matrixPosition.z;
@@ -103,18 +92,13 @@ export default function Sphere({
           z,
         })
       );
-
-      //Directly update state
-      //updateCurrentPosition([x, y, z]);
-
       setCurrentPositionChanged(true);
     }
   };
 
-  const handleSavePositionToContext = (matrix) => {
+  const handleSavePositionToContext = () => {
     if (positiontest) {
-      updateCurrentPosition(positiontest); // Sync positiontest to state
-      //matrix.copy(matrix);
+      updateCurrentPosition(positiontest);
     }
   };
 
@@ -125,7 +109,6 @@ export default function Sphere({
         onDrag={(e) => handleSavePosition(e)}
         onDragEnd={(e) => handleSavePositionToContext()}
         matrix={matrix}
-        //enabled={true}
         autoTransform={true}
         visible={gizmo}
         activeAxes={[true, true, true]}

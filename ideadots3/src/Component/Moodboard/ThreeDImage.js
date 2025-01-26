@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 import { Html } from "@react-three/drei";
 
 export default function ThreeDImage({
-  ideaId,
   position,
   onClick,
   onPointerOver,
@@ -14,7 +13,7 @@ export default function ThreeDImage({
   isThreeDModeActive,
   filteredImages,
 }) {
-  const [currentImage, setCurrentImage] = useState(0); // 0, 1, or 2 for three images
+  const [currentImage, setCurrentImage] = useState(0);
   const [images, setImages] = useState(filteredImages || []);
   const [showButton, setShowButton] = useState(false);
 
@@ -45,14 +44,12 @@ export default function ThreeDImage({
             url={`./Assets/${filename.src}`}
             onError={(e) => {
               console.error(`Could not load ${filename.src}:`, e);
-              //e.target.src = "path/to/default/image.jpg"; // Fallback image
             }}
           />
         </Billboard>
       ) : (
         <Html key={uuidv4()} distanceFactor={10}>
-          {/* <Draggable> */}
-          <div /*className="threedImage"*/>
+          <div>
             <img
               draggable={false}
               style={{
@@ -81,7 +78,6 @@ export default function ThreeDImage({
               </button>
             ) : null}
           </div>
-          {/* </Draggable> */}
         </Html>
       )}
     </group>

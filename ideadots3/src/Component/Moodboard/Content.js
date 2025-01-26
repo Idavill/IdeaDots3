@@ -9,22 +9,16 @@ export default function Content({
   zoom,
   setZoom,
   setFocus,
-  //focusSphere,
   newSphere,
   scrollToIdea,
   gizmo,
-  //listActive,
   controlsRef,
-  //currentZoom,
-  //setCurrentZoom,
-  //enableCustomControls,
   setEnableCustomControls,
   isThreeDModeActive,
   isListModeActive,
   isDotModeActive,
 }) {
   const context = useContext(SphereContext);
-  //const [activeSphereId, setActiveSphereId] = useState(null);
 
   useEffect(() => {
     if (newSphere) {
@@ -48,7 +42,7 @@ export default function Content({
   };
 
   const sphereList = () => {
-    const spheres = context.spheres || []; // Fallback to an empty array if undefined
+    const spheres = context.spheres || [];
 
     return spheres.map((s, i) => (
       <>
@@ -57,7 +51,6 @@ export default function Content({
           key={uuidv4()}
           id={s.id}
           amountOfSpheres={context.spheres.length}
-          //listActive={listActive}
           gizmo={gizmo}
           zoomToView={(focusRef) => (
             setZoom(!zoom), setFocus(focusRef), scrollToIdea(s, i)
@@ -66,16 +59,10 @@ export default function Content({
           title={s.title}
           isThreeDModeActive={isThreeDModeActive}
           isDotModeActive={isDotModeActive}
-          //focus={focusSphere}
           controlsRef={controlsRef}
-          //currentZoom={currentZoom}
-          //enableCustomControls={enableCustomControls}
           setEnableCustomControls={(e) => setEnableCustomControls(e)}
-          //image={s.img}
           activeIdea={activeIdea}
           setActiveIdea={(e) => setActiveIdea(e)}
-          //activeSphereId={activeSphereId}
-          //setActiveSphereId={(e) => setActiveSphereId(e)}
           isListModeActive={isListModeActive}
         />
       </>

@@ -4,14 +4,12 @@ import { ActiveIdeaContext } from "./Contexts/ActiveIdeaContextProvider";
 
 export default function Header({
   modelListViewButtonText,
-  activeIdea,
   setIsListModeActive,
   setIsThreeDModeActive,
   isListModeActive,
   spatialModeButtonText,
   isThreeDModeActive,
   dotModeButtonText,
-  setDotModeButtonText,
   isDotModeActive,
   setIsDotModeActive,
 }) {
