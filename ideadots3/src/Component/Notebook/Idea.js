@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import { SphereContext } from "./SphereContextProvider";
-import UploadAndDisplayImage from "./UploadAndDisplayImage";
-import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
+import { SphereContext } from "../Contexts/SphereContextProvider";
+import UploadAndDisplayImage from "../UploadAndDisplayImage";
+import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider";
 
 export default function Idea({
   s,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
+import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider";
 
 export default function Overview({
   s,

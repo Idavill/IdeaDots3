@@ -1,6 +1,6 @@
-import React, { Suspense, useEffect, useState, useContext } from "react";
+import React, { useContext } from "react";
 import Button from "./Button";
-import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
+import { ActiveIdeaContext } from "./Contexts/ActiveIdeaContextProvider";
 
 export default function Header({
   modelListViewButtonText,

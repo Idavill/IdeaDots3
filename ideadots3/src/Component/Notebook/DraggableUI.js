@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useContext } from "react";
-import "../App.css";
+import "../../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useEffect, useState, useContext } from "react";
 import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
-import { SphereContext } from "./SphereContextProvider";
+import { SphereContext } from "../Contexts/SphereContextProvider";
 import Idea from "./Idea";
 import Overview from "./Overview";
 

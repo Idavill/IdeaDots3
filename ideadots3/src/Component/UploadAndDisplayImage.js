@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState, useEffect, useContext } from "react";
 import { db } from "./Database";
-import { v4 as uuidv4 } from "uuid";
-import { ImageContext } from "./ImageContextProvider";
+import { ImageContext } from "./Contexts/ImageContextProvider";
 import Button from "./Button";
 
 const UploadAndDisplayImage = ({

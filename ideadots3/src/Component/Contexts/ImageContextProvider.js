@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { db } from "./Database";
+import { db } from "./../Database";
 
 export const ImageContext = createContext();
 

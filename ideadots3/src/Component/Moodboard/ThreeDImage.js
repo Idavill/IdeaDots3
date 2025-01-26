@@ -1,10 +1,7 @@
 import { Billboard, Image } from "@react-three/drei";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { ImageContext } from "./ImageContextProvider";
-import { Html, Sphere } from "@react-three/drei";
-import Draggable from "react-draggable";
-import { flushGlobalEffects } from "@react-three/fiber";
+import { Html } from "@react-three/drei";
 
 export default function ThreeDImage({
   ideaId,

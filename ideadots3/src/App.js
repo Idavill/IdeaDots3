@@ -1,13 +1,12 @@
-import React, { Suspense, useEffect, useState } from "react";
 import "./App.css";
-import ThreeDContainer from "./Component/ThreeDContainer.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import DraggableUI from "./Component/DraggableUI.js";
-import { SphereContextProvider } from "./Component/SphereContextProvider.js";
-import { ImageContextProvider } from "./Component/ImageContextProvider.js";
-import { ActiveIdeaContextProvider } from "./Component/ActiveIdeaContextProvider.js";
-
+import React, { Suspense, useEffect, useState } from "react";
 import Header from "./Component/Header.js";
+import ThreeDContainer from "./Component/Moodboard/ThreeDContainer.js";
+import DraggableUI from "./Component/Notebook/DraggableUI.js";
+import { SphereContextProvider } from "./Component/Contexts/SphereContextProvider.js";
+import { ImageContextProvider } from "./Component/Contexts/ImageContextProvider.js";
+import { ActiveIdeaContextProvider } from "./Component/Contexts/ActiveIdeaContextProvider.js";
 
 export default function App() {
   const [titleIsChanged, setTitleIsChanged] = useState(false);

@@ -1,4 +1,4 @@
-import API from "../Services/API";
+import API from "../../Services/API";
 import React, { createContext, useState, useEffect, useContext } from "react";
 
 export const SphereContext = createContext();

@@ -3,8 +3,8 @@ import Draggable from "react-draggable";
 import { Sphere } from "@react-three/drei";
 import { v4 as uuidv4 } from "uuid";
 import { Html, Line } from "@react-three/drei";
-import { SphereContext } from "./SphereContextProvider";
-import { ActiveIdeaContext } from "./ActiveIdeaContextProvider";
+import { SphereContext } from "../Contexts/SphereContextProvider";
+import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider";
 import ThreeDDotImage from "./ThreeDDotImage";
 
 export default function ThreeDDot({
