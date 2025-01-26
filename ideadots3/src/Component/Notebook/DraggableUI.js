@@ -30,12 +30,8 @@ export default function DraggableUI({
     context.setSpheres(newList);
   };
 
-  useEffect(() => {
-    console.log(spheres);
-  }, [spheres]);
-
   const updateText = ({ id, text }) => {
-    setSpheres((prevSpheres) =>
+    context.setSpheres((prevSpheres) =>
       prevSpheres.map((sphere) =>
         sphere.id === id ? { ...sphere, text } : sphere
       )
@@ -43,7 +39,7 @@ export default function DraggableUI({
   };
 
   const updateTitle = ({ id, title }) => {
-    setSpheres((prevSpheres) =>
+    context.setSpheres((prevSpheres) =>
       prevSpheres.map((sphere) =>
         sphere.id === id ? { ...sphere, title } : sphere
       )
@@ -56,8 +52,8 @@ export default function DraggableUI({
         updateTitle={(e) => updateTitle(e)}
         updateText={(e) => updateText(e)} // Pass the updateText function
         scrollToIdea={scrollToIdea}
-        activeSphere={activeSphere}
-        setActiveSphere={(e) => setActiveSphere(e)}
+        activeSphere={activeIdea}
+        setActiveSphere={(e) => setActiveIdea(e)}
         s={s}
         i={i}
         //scrollToIdea={scrollToIdea}
