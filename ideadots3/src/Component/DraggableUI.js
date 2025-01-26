@@ -31,9 +31,31 @@ export default function DraggableUI({
     context.setSpheres(newList);
   };
 
+  useEffect(() => {
+    console.log(spheres);
+  }, [spheres]);
+
+  const updateText = ({ id, text }) => {
+    setSpheres((prevSpheres) =>
+      prevSpheres.map((sphere) =>
+        sphere.id === id ? { ...sphere, text } : sphere
+      )
+    );
+  };
+
+  const updateTitle = ({ id, title }) => {
+    setSpheres((prevSpheres) =>
+      prevSpheres.map((sphere) =>
+        sphere.id === id ? { ...sphere, title } : sphere
+      )
+    );
+  };
+
   const overview = () => {
     return context.spheres.map((s, i) => (
       <Overview
+        updateTitle={(e) => updateTitle(e)}
+        updateText={(e) => updateText(e)} // Pass the updateText function
         scrollToIdea={scrollToIdea}
         activeSphere={activeSphere}
         setActiveSphere={(e) => setActiveSphere(e)}

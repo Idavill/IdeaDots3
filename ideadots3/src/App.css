@@ -40,6 +40,15 @@
   font-size: 20px;
 }
 
+h4:focus-visible {
+  /* background-color: yellow; */
+  outline: none;
+}
+p:focus-visible {
+  /* background-color: yellow; */
+  outline: none;
+}
+
 .header{
   display:flex;
   justify-content:end;
