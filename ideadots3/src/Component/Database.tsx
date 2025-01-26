@@ -1,8 +1,8 @@
 import Dexie, { Table } from "dexie";
-import { Image } from "../Entities";
+import { ImageType } from "../Entities";
 
 export class IdeaDotsDatabase extends Dexie {
-  images!: Table<Image, number>; // Table definition with Image interface and primary key type (number)
+  images!: Table<ImageType, number>; // Table definition with Image interface and primary key type (number)
 
   constructor() {
     super("IdeaDotsDatabase");

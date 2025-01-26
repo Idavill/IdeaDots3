@@ -1,5 +1,14 @@
 import { Suspense, useEffect, useRef, useState } from "react";
-import { GizmoHelper, GizmoViewport, Gltf, SpotLight } from "@react-three/drei";
+import {
+  Backdrop,
+  Environment,
+  GizmoHelper,
+  GizmoViewport,
+  Gltf,
+  Lightformer,
+  Sky,
+  SpotLight,
+} from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 import "./ThreeDContainer.css";
@@ -9,6 +18,7 @@ import Content from "./Content";
 import { IdeaType } from "../../Entities";
 import { Group } from "three";
 CameraControls.install({ THREE });
+import { Model } from "./Model";
 
 interface ThreeDContainerProps {
   scrollToIdea: (idea: IdeaType, i: number) => void;
@@ -16,7 +26,7 @@ interface ThreeDContainerProps {
   setActiveIdea: (idea: IdeaType) => void;
   isThreeDModeActive: boolean;
   activeIdea: IdeaType | null;
-  gizmo: number | null;
+  gizmo: string | null;
   isListModeActive: boolean;
   isDotModeActive: boolean;
 }
@@ -86,12 +96,21 @@ export default function ThreeDContainer({
             attenuation={5}
             anglePower={5} // Diffuse-cone anglePower (default: 5)
           />
+          {/* <Sky
+            distance={450000}
+            sunPosition={[0, 1, 0]}
+            inclination={0}
+            azimuth={0.25}
+            // {...props}
+          /> */}
+
           {/* <Suspense fallback={<Model url="./Assets/WCPOM.gltf" />}> */}
           <Suspense fallback={<Gltf src={"./Assets/WCPOM.gltf"} />}>
             {/* <Model
               url="./Assets/WCPOM.gltf"
               setNewSphere={(idea: IdeaType) => setNewSphere(idea)}
             /> */}
+            <Model filePath=""></Model>
             <Gltf src={"./Assets/WCPOM.gltf"} />
           </Suspense>
           <GizmoHelper alignment="bottom-right" margin={[100, 100]}>

@@ -1,21 +1,21 @@
 import { useEffect, useState, useContext } from "react";
-import "../App.css";
+import "../../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
 import { SphereContext } from "../Contexts/SphereContextProvider";
 import Idea from "./Idea";
 import Overview from "./Overview";
-import {IdeaType} from '../../Entities';
+import { IdeaType } from "../../Entities";
 
-interface DraggableUIProps{
+interface DraggableUIProps {
   //setActiveIdea:(isActive: boolean) => void;
-  scrollToIdea:(sphere:IdeaType, id:number) => void;
+  scrollToIdea: (sphere: IdeaType, id: number) => void;
   //activeIdea: IdeaType | null;
-  gizmo:number | null;
-  setGizmo:(ideaId:number) => void;
-  titleIsChanged:boolean;
-  setTitleIsChanged:(titleIsChanged: boolean) => void;
+  gizmo: string | null;
+  setGizmo: (ideaId: string) => void;
+  titleIsChanged: boolean;
+  setTitleIsChanged: (titleIsChanged: boolean) => void;
 }
 
 export default function DraggableUI({
@@ -26,8 +26,8 @@ export default function DraggableUI({
   setGizmo,
   titleIsChanged,
   setTitleIsChanged,
-}:DraggableUIProps) {
-  const context = useContext<SphereContextType>(SphereContext); // TODO: correct type?
+}: DraggableUIProps) {
+  const context = useContext(SphereContext); // TODO: correct type?
   const [titleChangeId, setTitleChangeId] = useState("");
 
   useEffect(() => {
@@ -36,13 +36,15 @@ export default function DraggableUI({
     }
   }, [titleIsChanged]);
 
-  const deleteIdea = (idea:IdeaType) => {
-    const newList = context.spheres.filter((ideaElement:IdeaType) => ideaElement.id !== idea.id);
-    context.setSpheres(newList);
+  const deleteIdea = (idea: IdeaType) => {
+    const newList: IdeaType[] | undefined = context.spheres?.filter(
+      (ideaElement: IdeaType) => ideaElement.id !== idea.id
+    );
+    if (newList) context.setSpheres(newList);
   };
 
   const overview = () => {
-    return context.spheres.map((s:IdeaType, i:number) => (
+    return context.spheres?.map((s: IdeaType, i: number) => (
       <Overview
         s={s}
         i={i}
@@ -61,7 +63,8 @@ export default function DraggableUI({
       text: "New Idea Text",
       img: "",
     };
-    context.setSpheres((prevs:IdeaType) => [...prevs, newIdea]);
+    context.setSpheres((prevs) => [...(prevs || []), newIdea]);
+
     const newSTitleID = newIdea.id + "title";
     const newSTextID = newIdea.id + "text";
     localStorage.setItem(newSTitleID, newIdea.title);
@@ -69,19 +72,19 @@ export default function DraggableUI({
   };
 
   const listContent = () => {
-    return context.spheres.map((s:IdeaType, i:number) => (
+    return context.spheres?.map((s: IdeaType, i: number) => (
       <Idea
         s={s}
         i={i}
         scrollToIdea={scrollToIdea}
         key={i}
         gizmo={gizmo}
-        setGizmo={(e:number) => setGizmo(e)}
+        setGizmo={(gizmoId: string) => setGizmo(gizmoId)}
         //activeIdea={activeIdea}
         //setActiveIdea={(idea:IdeaType) => setActiveIdea(idea)}
-        deleteIdea={(idea:IdeaType) => deleteIdea(idea)}
-        setTitleIsChanged={(bool:boolean) => setTitleIsChanged(bool)}
-        setTitleChangeId={(id:string) => setTitleChangeId(id)}
+        deleteIdea={(idea: IdeaType) => deleteIdea(idea)}
+        setTitleIsChanged={(bool: boolean) => setTitleIsChanged(bool)}
+        setTitleChangeId={(id: string) => setTitleChangeId(id)}
       ></Idea>
     ));
   };

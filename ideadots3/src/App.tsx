@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useState } from "react";
 import "./App.css";
-import ThreeDContainer from "./Component/MoodBoard/ThreeDContainer.js";
+import ThreeDContainer from "./Component/MoodBoard/ThreeDContainer";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DraggableUI from "./Component/Notebook/DraggableUI";
 import { SphereContextProvider } from "./Component/Contexts/SphereContextProvider";
@@ -13,7 +13,7 @@ export default function App() {
   const [titleIsChanged, setTitleIsChanged] = useState(false);
   const [cameraTarget, setCameraTarget] = useState<IdeaType | null>(null);
   const [activeIdea, setActiveIdea] = useState<IdeaType | null>(null);
-  const [gizmo, setGizmo] = useState<number | null>(null);
+  const [gizmo, setGizmo] = useState<string | null>(null);
   const [isListModeActive, setIsListModeActive] = useState(false);
   const [isThreeDModeActive, setIsThreeDModeActive] = useState(false);
   const [isDotModeActive, setIsDotModeActive] = useState(false);
@@ -104,7 +104,7 @@ export default function App() {
                 //activeIdea={activeIdea}
                 //setActiveIdea={(idea:IdeaType) => setActiveIdea(idea)}
                 gizmo={gizmo}
-                setGizmo={(id: number) => setGizmo(id)}
+                setGizmo={(id: string) => setGizmo(id)}
                 titleIsChanged={titleIsChanged}
                 setTitleIsChanged={(bool: boolean) => setTitleIsChanged(bool)}
               />

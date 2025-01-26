@@ -5,10 +5,9 @@ import { useControls } from "leva";
 import { Vector3, Quaternion, Vector3 as ThreeVector3 } from "three";
 import { PivotControls } from "@react-three/drei";
 import ThreeDImage from "./ThreeDImage";
-import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider.js";
-import { ImageContext } from "../Contexts/ImageContextProvider.js";
-import { SphereContext } from "../Contexts/SphereContextProvider.js";
-import { IdeaType, ImageType } from "../../Entities.js";
+import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider";
+import { ImageContext } from "../Contexts/ImageContextProvider";
+import { IdeaType, ImageType } from "../../Entities";
 
 interface SphereProps {
   s: IdeaType;

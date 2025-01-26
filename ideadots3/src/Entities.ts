@@ -14,4 +14,3 @@ export type ImageType = {
     size: number; // Size of the image in bytes
     image: Blob | any; // The actual image data
   }
-  

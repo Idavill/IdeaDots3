@@ -21,23 +21,41 @@
 
 // useGLTF.preload('/Poimandres.gltf')
 
-// // import React from "react";
-// // import { LoaderProto, PrimitiveProps, useLoader } from "@react-three/fiber";
-// // import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-// // import { Group } from "three";
+import React from "react";
+import {
+  extend,
+  LoaderProto,
+  PrimitiveProps,
+  useLoader,
+} from "@react-three/fiber";
+import { Sphere } from "@react-three/drei";
 
-// // interface ModelProps {
-// //   filePath: string;
-// // }
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { Group, SphereGeometry } from "three";
+//import Sphere from "./Sphere";
 
-// // // Extend JSX.IntrinsicElements to support 'primitive'
-// // // declare global {
-// // //   namespace JSX {
-// // //     interface IntrinsicElements {
-// // //       primitive: PrimitiveProps;
-// // //     }
-// // //   }
-// // // }
+interface ModelProps {
+  filePath: string;
+}
+
+export const Model = ({ filePath }: ModelProps) => {
+  const gltf = useLoader(GLTFLoader, filePath);
+  const scene: Group = gltf.scene as Group;
+
+  // return <primitive object={scene} />;
+  return <Sphere />;
+};
+
+extend({ Model });
+
+// Extend JSX.IntrinsicElements to support 'primitive'
+// declare global {
+//   namespace JSX {
+//     interface IntrinsicElements {
+//       primitive: PrimitiveProps;
+//     }
+//   }
+// }
 
 // // // Extend JSX.IntrinsicElements to recognize the 'primitive' tag
 // // declare global {
@@ -47,16 +65,6 @@
 // //       }
 // //     }
 // //   }
-
-// // const Model: React.FC<ModelProps> = ({ filePath }) => {
-// //   //const gltf = useLoader<GLTFLoader, string, LoaderProto<GLTFLoader>, string>(GLTFLoader, filePath);
-// //   // Load the GLTF model
-// //   const gltf = useLoader(GLTFLoader, filePath);
-// //   // Ensure TypeScript knows we're returning a Three.js Group object
-// //   const scene: Group = gltf.scene as Group;
-
-// //   return <primitive object={scene} />;
-// // };
 
 // // export default Model;
 

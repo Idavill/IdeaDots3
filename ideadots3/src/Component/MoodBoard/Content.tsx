@@ -13,7 +13,7 @@ interface ContentProps {
   setFocus: (ref: any) => void; // TODO: find type
   newSphere: Vector3 | null; // or IdeaType;
   scrollToIdea: (idea: IdeaType, i: number) => void;
-  gizmo: number | null;
+  gizmo: string | null;
   controlsRef: any; // TODO: find type
   setEnableCustomControls: (bool: boolean) => void;
   isThreeDModeActive: boolean;

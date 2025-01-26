@@ -1,15 +1,23 @@
-import React, { PropsWithChildren, createContext, useState, useEffect, useContext } from "react";
+import React, {
+  PropsWithChildren,
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+} from "react";
 import { db } from "../Database";
-import { Image } from "../../Entities";
+import { ImageType } from "../../Entities";
 
 interface ImageContextType {
-  imageSrcList: Image[] | null;
-  setImageSrcList: React.Dispatch<React.SetStateAction<Image[] | null>>;
+  imageSrcList: ImageType[] | null;
+  setImageSrcList: React.Dispatch<React.SetStateAction<ImageType[] | null>>;
 }
-export const ImageContext =React.createContext<ImageContextType>( {} as ImageContextType);
+export const ImageContext = React.createContext<ImageContextType>(
+  {} as ImageContextType
+);
 
-export const ImageContextProvider = ({children}:PropsWithChildren) => {
-  const [imageSrcList, setImageSrcList] = useState<Image[]|null>([]);
+export const ImageContextProvider = ({ children }: PropsWithChildren) => {
+  const [imageSrcList, setImageSrcList] = useState<ImageType[] | null>([]);
 
   useEffect(() => {
     getAllImageNames();
@@ -19,19 +27,18 @@ export const ImageContextProvider = ({children}:PropsWithChildren) => {
     console.log("inside image context provider: ", imageSrcList);
   }, [imageSrcList]);
 
-
   //TODO: TEST THIS::
   async function getAllImageNames() {
     const data = await db.images.toArray();
     if (data.length > 0) {
       setImageSrcList((prevs) => [
         ...(prevs || []),
-        ...data.map((e: Image) => ({
+        ...data.map((e: ImageType) => ({
           ideaId: e.ideaId,
           src: e.src || "no name was found", // Fill with defaults if not present
-          type: e.type || "no file path",  // Use type from the database or a default
-          size: e.size || 0,          // Use size from the database or a default
-          image: e.image || null,        // Ensure `image` is included
+          type: e.type || "no file path", // Use type from the database or a default
+          size: e.size || 0, // Use size from the database or a default
+          image: e.image || null, // Ensure `image` is included
         })),
       ]);
     }

@@ -2,17 +2,17 @@ import React, { useEffect, useState, useContext } from "react";
 import { SphereContext } from "../Contexts/SphereContextProvider";
 import UploadAndDisplayImage from "../UploadAndDisplayImage";
 import { ActiveIdeaContext } from "../Contexts/ActiveIdeaContextProvider";
-import {IdeaType} from '../../Entities';
+import { IdeaType } from "../../Entities";
 
-interface IdeaProps{
-  s:IdeaType;
-  i:number;
-  deleteIdea: (s:IdeaType) => void;
-  gizmo:number,
-  setGizmo:(ideaId:number) => void;
-  setTitleIsChanged:(titleIsChanged: boolean) => void;
-  scrollToIdea:(sphere:IdeaType, id:number) => void;
-  setTitleChangeId:(id:string) => void;
+interface IdeaProps {
+  s: IdeaType;
+  i: number;
+  deleteIdea: (s: IdeaType) => void;
+  gizmo: string | null;
+  setGizmo: (ideaId: string) => void;
+  setTitleIsChanged: (titleIsChanged: boolean) => void;
+  scrollToIdea: (sphere: IdeaType, id: number) => void;
+  setTitleChangeId: (id: string) => void;
 }
 
 export default function Idea({
@@ -24,7 +24,7 @@ export default function Idea({
   setTitleIsChanged,
   scrollToIdea,
   setTitleChangeId,
-}:IdeaProps) {
+}: IdeaProps) {
   const [isActive, setIsActive] = useState(false);
   const [title, setTitle] = useState(s.title);
   const [text, setText] = useState(s.text);
@@ -53,7 +53,7 @@ export default function Idea({
   }, [ideaContext]);
 
   const handleGo = () => {
-    if(ideaContext){
+    if (ideaContext) {
       ideaContext.setActiveIdea(s);
       setIsActive(true);
     }
@@ -64,8 +64,8 @@ export default function Idea({
   };
 
   //TODO: WHen title is edited, then context should
-  const editTitle = (id:string, textContext:any) => {
-    if (ideaContext && sphereContext){
+  const editTitle = (id: string, textContext: any) => {
+    if (ideaContext && sphereContext) {
       ideaContext.setActiveIdea(s);
       setIsActive(true);
       const titleId = id + "title";
@@ -78,11 +78,10 @@ export default function Idea({
       setTitleIsChanged(true);
       setTitleChangeId(id);
     }
-
   };
 
-  const editText = (id:string, textContext:string) => {
-    if(ideaContext){
+  const editText = (id: string, textContext: string) => {
+    if (ideaContext) {
       ideaContext.setActiveIdea(s);
       setIsActive(true);
       s.text = textContext;
@@ -92,11 +91,11 @@ export default function Idea({
   };
 
   const handleMoveClicked = () => {
-    setGizmo(gizmo ? null : s.id);
+    setGizmo(gizmo ? "" : s.id);
   };
 
   const handleClick = () => {
-    if(ideaContext){
+    if (ideaContext) {
       ideaContext.setActiveIdea(s);
     }
   };
@@ -123,32 +122,32 @@ export default function Idea({
       <p
         contentEditable="true"
         onDoubleClick={handleSelectAllText()}
-        onInput={(e:any) => editText(s.id, e.currentTarget.textContent)}
+        onInput={(e: any) => editText(s.id, e.currentTarget.textContent)}
       >
         {text}
       </p>
       <div className="IdeaButtons">
         <UploadAndDisplayImage
-          handleGo={handleGo}
-          handleMoveClicked={handleMoveClicked}
+          //handleGo={handleGo}
+          //handleMoveClicked={handleMoveClicked}
           handleRemoveIdea={handleRemoveIdea}
           ideaId={s.id}
-          displayButtons={true}
+          //displayButtons={true}
         />
       </div>
     </div>
   );
 
   function handleSelectAllText() {
-    return (e:any) => {
+    return (e: any) => {
       const range = document.createRange();
       range.selectNodeContents(e.currentTarget);
       const selection = window.getSelection();
-      if(selection){
+      if (selection) {
         selection.removeAllRanges();
         selection.addRange(range);
       } else {
-        console.log("selection null")
+        console.log("selection null");
       }
     };
   }
