@@ -2,7 +2,7 @@
 
 Dot down your ideas in any 3D model! For brainstorming, registering, collaboration with clients and collegues.
 
-![alt text](https://github.com/[idavill]/[ideadots3]/blob/[branch]/WIP.png?raw=true)
+![alt text](https://github.com/[idavill]/[ideadots3]/blob/[dev]/WIP.png?raw=true)
 
 ## Running the app
 
